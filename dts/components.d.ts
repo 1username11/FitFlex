@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     AuthHeader: typeof import('./../src/views/auth/components/AuthHeader.vue')['default']
     Compute: typeof import('./../src/components/Compute.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCaed: typeof import('element-plus/es')['ElCaed']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElForm: typeof import('element-plus/es')['ElForm']
@@ -34,6 +35,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     RunningMan: typeof import('./../src/components/RunningMan.vue')['default']
+    SocialAuth: typeof import('./../src/views/auth/components/SocialAuth.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

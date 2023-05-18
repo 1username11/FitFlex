@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-max bg-gray-50"
-  >
+  <div class="bg-gray-50">
     <ElConfigProvider
       :locale="{
         name: locale,
