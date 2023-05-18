@@ -5,7 +5,9 @@
   >
     <GoogleIcon />
 
-    <p class="w-full text-center">Sign up with Google</p>
+    <p class="w-full text-center">
+      {{ router.currentRoute.value.path === '/auth/login' ? 'Login' : 'Sign up' }} with Google
+    </p>
   </div>
   <div
     class="flex items-center border border-gray-400 rounded-lg h-10
@@ -13,7 +15,9 @@
   >
     <AppleIcon />
 
-    <p class="w-full text-center">Sign up with Apple</p>
+    <p class="w-full text-center">
+      {{ router.currentRoute.value.path === '/auth/login' ? 'Login' : 'Sign up' }} with Apple
+    </p>
   </div>
 
   <div
@@ -22,6 +26,12 @@
   >
     <FacebookIcon />
 
-    <p class="w-full text-center">Sign up with Facebook</p>
+    <p class="w-full text-center">
+      {{ router.currentRoute.value.path === '/auth/login' ? 'Login' : 'Sign up' }} with Facebook
+    </p>
   </div>
 </template>
+
+<script lang="ts" setup>
+const router = useRouter()
+</script>

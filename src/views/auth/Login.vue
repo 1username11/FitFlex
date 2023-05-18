@@ -14,6 +14,7 @@
           Or with email
         </p>
       </div>
+
       <el-form>
         <el-form-item>
           <el-input v-model="email" class="h-10 rounded-lg" placeholder="Email" />
@@ -27,6 +28,7 @@
           <el-button class="h-10 w-full rounded-lg" :type="$elComponentType.primary">Sign Up</el-button>
         </el-form-item>
       </el-form>
+
       <div class="flex flex-col justify-center items-center">
         <button class="bg-gray-50 border-none underline text-sm text-primary hover:bg-gray-50">Forgot password?</button>
 
