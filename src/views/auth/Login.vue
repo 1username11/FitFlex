@@ -38,11 +38,9 @@
       </div>
     </div>
 
-    <div class="hidden lg:flex justify-center bg-gray-200 p-10 h-full lg:w-[50%]">
-      <RunningMan />
-    </div>
+    <RunningMan />
   </div>
-  
+
   <AuthFooter class="max-h-[40px]" />
 </template>
 
