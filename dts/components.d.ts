@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     AuthHeader: typeof import('./../src/views/auth/components/AuthHeader.vue')['default']
     Compute: typeof import('./../src/components/Compute.vue')['default']
     copy: typeof import('./../src/components/icons/FeedIcon copy.vue')['default']
+    ElButt: typeof import('element-plus/es')['ElButt']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCaed: typeof import('element-plus/es')['ElCaed']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -45,6 +46,7 @@ declare module '@vue/runtime-core' {
     RoutinesIcon: typeof import('./../src/components/icons/RoutinesIcon.vue')['default']
     RunningMan: typeof import('./../src/components/RunningMan.vue')['default']
     SocialAuth: typeof import('./../src/views/auth/components/SocialAuth.vue')['default']
+    WorkoutLog: typeof import('./../src/views/main/components/WorkoutLog.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
