@@ -60,7 +60,7 @@
           </el-button>
         </el-form-item>
       </el-form>
-      
+
       <div class="flex justify-center items-center space-x-1">
         <span>Already have an account?</span>
 
