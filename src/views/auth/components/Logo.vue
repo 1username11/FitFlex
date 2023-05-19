@@ -23,6 +23,20 @@
       </g>
     </svg>
 
-    <p class="text-2xl font-bold tracking-widest">FitFlex</p>
+    <p
+      class="text-2xl font-bold tracking-widest lg:block"
+      :class="{'hidden': isNameHidden}"
+    >
+      FitFlex
+    </p>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { router } from '@/router'
+import { routeNames } from '@/router/route-names'
+
+const isNameHidden = computed(() => {
+  return !(router.currentRoute.value.name === routeNames.login || router.currentRoute.value.name === routeNames.signUp)
+})
+</script>
