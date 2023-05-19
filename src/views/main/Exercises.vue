@@ -1,0 +1,4 @@
+<template>
+  <NavBar/>
+  Exercises
+</template>

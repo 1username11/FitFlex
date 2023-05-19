@@ -6,6 +6,7 @@ import { authRoutes } from '@/views/auth/auth.routes'
 import { exampleViewRoutes } from '@/views/example-view/example-view.routes'
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { mainRoutes } from '@/views/main/main.routes'
 
 const defaultLayoutRoutes: RouteRecordRaw = {
   path: '/',
@@ -25,7 +26,8 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   authRoutes,
-  defaultLayoutRoutes
+  defaultLayoutRoutes,
+  mainRoutes
 ]
 
 export {
