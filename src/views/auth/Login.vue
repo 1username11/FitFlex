@@ -17,11 +17,19 @@
 
       <el-form>
         <el-form-item>
-          <el-input v-model="email" class="h-10 rounded-lg" placeholder="Email" />
+          <el-input
+            v-model="email"
+            class="h-10 rounded-lg"
+            placeholder="Email"
+          />
         </el-form-item>
 
         <el-form-item>
-          <el-input v-model="password" class="h-10 rounded-lg" placeholder="Password" />
+          <el-input
+            v-model="password"
+            class="h-10 rounded-lg"
+            placeholder="Password"
+          />
         </el-form-item>
 
         <el-form-item>
