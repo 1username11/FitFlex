@@ -1,5 +1,5 @@
 <template>
-  <div class="h-7 flex space-x-4">
+  <div class="h-7 flex space-x-4 items-center">
     <svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" height="25px" width="25px" version="1.1" viewBox="0 0 23.758 23.758" xml:space="preserve">
       <g>
         <g>
@@ -23,6 +23,20 @@
       </g>
     </svg>
 
-    <p class="text-2xl font-bold tracking-widest">FitFlex</p>
+    <p
+      class="text-2xl font-bold tracking-widest lg:block"
+      :class="{'hidden': isNameHidden}"
+    >
+      FitFlex
+    </p>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { router } from '@/router'
+import { routeNames } from '@/router/route-names'
+
+const isNameHidden = computed(() => {
+  return !(router.currentRoute.value.name === routeNames.login || router.currentRoute.value.name === routeNames.signUp)
+})
+</script>
