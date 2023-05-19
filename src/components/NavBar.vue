@@ -12,9 +12,9 @@
           >
             <!-- TODO change SVG color on active -->
             <FeedIcon v-if="route.name === routeNames.feed" class="svg-icon" />
-            <RoutinesIcon v-if="route.name === routeNames.routines" />
-            <ExercisesIcon v-if="route.name === routeNames.exercises" />
-            <ProfileIcon v-if="route.name === routeNames.profile" />
+            <RoutinesIcon v-else-if="route.name === routeNames.routines" />
+            <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
+            <ProfileIcon v-else-if="route.name === routeNames.profile" />
 
             <span class="hidden capitalize lg:flex lg:items-center h-full">{{ route.name }}</span>
           </RouterLink>
@@ -23,16 +23,24 @@
 
       <div class="flex justify-end items-center">
         <div class="relative">
-          <el-image class="w-[34px] h-[34px] rounded-full overflow-hidden" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" @click="isImageClicked = !isImageClicked" />
+          <el-image
+            class="w-[34px] h-[34px] rounded-full overflow-hidden"
+            src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
+            @click="isImageClicked = !isImageClicked"
+          />
+
           <div
             v-if="isImageClicked"
-            class="absolute top-[26px] right-[-20px] bg-white border border-gray-200 rounded-md shadow-sm w-40 h-24"
+            class="flex flex-col justify-between py-2 absolute top-[35px] right-[-5px]
+            bg-white border border-gray-200 rounded-md shadow-sm w-40 h-24"
+            @click="isImageClicked = !isImageClicked"
           >
-            <div class="p-2">
-              <p class="cursor-pointer w-full hover:bg-gray-200">Settings</p>
+            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer">
+              Settings
             </div>
-            <div class="p-2">
-              <p class="cursor-pointer w-full hover:bg-gray-200">Logout</p>
+
+            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer">
+              Logout
             </div>
           </div>
         </div>
