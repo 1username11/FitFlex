@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     AuthHeader: typeof import('./../src/views/auth/components/AuthHeader.vue')['default']
     Compute: typeof import('./../src/components/Compute.vue')['default']
     copy: typeof import('./../src/components/icons/FeedIcon copy.vue')['default']
+    ElButt: typeof import('element-plus/es')['ElButt']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCaed: typeof import('element-plus/es')['ElCaed']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -30,6 +31,7 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ExampleViewComponent: typeof import('./../src/views/example-view/components/ExampleViewComponent.vue')['default']
+    Exercise: typeof import('./../src/views/main/components/Exercise.vue')['default']
     ExercisesIcon: typeof import('./../src/components/icons/ExercisesIcon.vue')['default']
     FacebookIcon: typeof import('./../src/views/auth/components/FacebookIcon.vue')['default']
     FeedIcon: typeof import('./../src/components/icons/FeedIcon.vue')['default']
@@ -42,9 +44,11 @@ declare module '@vue/runtime-core' {
     ProfileIcon: typeof import('./../src/components/icons/ProfileIcon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Routine: typeof import('./../src/views/main/components/Routine.vue')['default']
     RoutinesIcon: typeof import('./../src/components/icons/RoutinesIcon.vue')['default']
     RunningMan: typeof import('./../src/components/RunningMan.vue')['default']
     SocialAuth: typeof import('./../src/views/auth/components/SocialAuth.vue')['default']
+    WorkoutLog: typeof import('./../src/views/main/components/WorkoutLog.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

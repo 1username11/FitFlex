@@ -1,4 +1,0 @@
-<template>
-  <NavBar/>
-  Routines
-</template>
