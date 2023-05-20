@@ -88,5 +88,4 @@ function getTotalReps (log: ILog) {
     }, 0)
   }, 0)
 }
-
 </script>

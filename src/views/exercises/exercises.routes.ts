@@ -3,7 +3,6 @@ import Exercises from './Exercises.vue'
 
 export const exercisesViewRouteNames = {
   exercises: 'exercises'
-
 }
 
 export const exercisesViewRoutes: Array<RouteRecordRaw> = [

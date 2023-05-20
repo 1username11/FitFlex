@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import WorkoutLog from './components/WorkoutLog.vue'
-import { ILog, ISet, IExercise, IUser, IWorkout, IComment } from '@/types'
+
 const sampleSet: ISet = {
   id: 'set1',
   reps: 10,

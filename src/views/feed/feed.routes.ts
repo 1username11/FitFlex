@@ -3,12 +3,11 @@ import Feed from './Feed.vue'
 
 export const feedViewRouteNames = {
   feed: 'feed'
-
 }
 
 export const feedViewRoutes: Array<RouteRecordRaw> = [
   {
-    path: '/feed',
+    path: '/',
     name: feedViewRouteNames.feed,
     component: Feed
   }
