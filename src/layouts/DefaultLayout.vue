@@ -1,3 +1,4 @@
 <template>
-  <router-view/>
+  <NavBar />
+  <router-view />
 </template>
