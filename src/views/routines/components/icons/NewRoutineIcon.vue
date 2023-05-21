@@ -1,0 +1,36 @@
+<template>
+  <svg
+    width="30px"
+    height="30px"
+    viewBox="0 0 30 30"
+    xmlns="http://www.w3.org/2000/svg"
+    tint="#1D83EA"
+    type="routine"
+    dark="#1D83EA"
+    light="#1D83EA"
+    style="margin-left: 8px; margin-right: 8px;"
+  >
+    <g
+      transform="translate(8.5 3.8)"
+      stroke="#1D83EA"
+      stroke-width="1.5"
+      fill="none"
+      fill-rule="evenodd"
+    >
+      <rect
+        y="5.689"
+        width="13"
+        height="15"
+        rx="0.941"
+      />
+      <path
+        d="M4.68 2.76h.054a1.913 1.913 0 013.26-.178l.123.177h.163c.95 0 1.72.77 1.72
+  1.72h0v1.21H3v-1.25c0-.928.752-1.68 1.68-1.68z"
+      />
+      <path
+        stroke-linecap="round"
+        d="M3 11.189h7M3 15.689h7"
+      />
+    </g>
+  </svg>
+</template>

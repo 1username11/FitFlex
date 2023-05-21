@@ -198,7 +198,6 @@ declare global {
   const useLink: typeof import('vue-router')['useLink']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
-  const useMainStore: typeof import('../src/views/main/main.store')['useMainStore']
   const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
   const useMaxLenRule: typeof import('../src/composables/form-config')['useMaxLenRule']
   const useMediaControls: typeof import('@vueuse/core')['useMediaControls']

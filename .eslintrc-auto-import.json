@@ -201,7 +201,6 @@
     "useLink": true,
     "useLocalStorage": true,
     "useMagicKeys": true,
-    "useMainStore": true,
     "useManualRefHistory": true,
     "useMaxLenRule": true,
     "useMediaControls": true,
