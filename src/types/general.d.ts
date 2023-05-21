@@ -26,7 +26,9 @@ interface IUser {
 
 interface IWorkout {
   id: string
+  name: string
   exercises: IExercise[]
+  user: IUser
 }
 
 interface IComment {

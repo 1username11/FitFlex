@@ -1,15 +1,28 @@
 import type { RouteRecordRaw } from 'vue-router'
-import Routines from './Routines.vue'
+import RoutinesList from './RoutinesList.vue'
+import RoutineDetail from './components/RoutineDetail.vue'
+import Exercise from './components/Exercise.vue'
 
 export const routinesViewRouteNames = {
-  routines: 'routines'
-
+  routinesList: 'routinesList',
+  routineDetail: 'routineDetail',
+  exercise: 'exercise'
 }
 
 export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/routines',
-    name: routinesViewRouteNames.routines,
-    component: Routines
+    name: routinesViewRouteNames.routinesList,
+    component: RoutinesList
+  },
+  {
+    path: '/routine-deatil/:id',
+    name: routinesViewRouteNames.routineDetail,
+    component: RoutineDetail
+  },
+  {
+    path: '/exercise',
+    name: routinesViewRouteNames.exercise,
+    component: Exercise
   }
 ]

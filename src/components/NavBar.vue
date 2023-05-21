@@ -12,7 +12,7 @@
           >
             <!-- TODO change SVG color on active -->
             <FeedIcon v-if="route.name === routeNames.feed" class="svg-icon" />
-            <RoutinesIcon v-else-if="route.name === routeNames.routines" />
+            <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
             <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
             <ProfileIcon v-else-if="route.name === routeNames.profile" />
 
@@ -35,11 +35,13 @@
             bg-white border border-gray-200 rounded-md shadow-sm w-40 h-24"
             @click="isImageClicked = !isImageClicked"
           >
-            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer">
+            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500">
+              <SettingsIcon />
               Settings
             </div>
 
-            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer">
+            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500">
+              <LogoutIcon />
               Logout
             </div>
           </div>
@@ -54,7 +56,7 @@ import { routeNames } from '@/router/route-names'
 
 const routes = [
   { name: routeNames.feed },
-  { name: routeNames.routines },
+  { name: routeNames.routinesList },
   { name: routeNames.exercises },
   { name: routeNames.profile }
 ]

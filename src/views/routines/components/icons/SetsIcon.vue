@@ -1,0 +1,19 @@
+<template>
+  <svg
+    width="30"
+    height="30"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g
+      fill="none"
+      fill-rule="evenodd"
+      stroke-linecap="round"
+      stroke="#6D727F"
+      stroke-width="1.5"
+    >
+      <path
+        d="M10 10.5h3M10 14.5h7M10 18.5h10"
+      />
+    </g>
+  </svg>
+</template>
