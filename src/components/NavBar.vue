@@ -11,10 +11,9 @@
             class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600 px-5 h-full"
           >
             <!-- TODO change SVG color on active -->
-            <FeedIcon v-if="route.name === routeNames.feed" class="svg-icon" />
+            <FeedIcon v-if="route.name === routeNames.home" class="svg-icon" />
             <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
             <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
-            <ProfileIcon v-else-if="route.name === routeNames.profile" />
 
             <span class="hidden capitalize lg:flex lg:items-center h-full">{{ route.name }}</span>
           </RouterLink>
@@ -55,10 +54,9 @@
 import { routeNames } from '@/router/route-names'
 
 const routes = [
-  { name: routeNames.feed },
+  { name: routeNames.home },
   { name: routeNames.routinesList },
-  { name: routeNames.exercises },
-  { name: routeNames.profile }
+  { name: routeNames.exercises }
 ]
 const isImageClicked = ref(false)
 

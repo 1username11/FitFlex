@@ -2,7 +2,7 @@
   <div class="bg-white px-4 pt-4 border border-gray-300 rounded-lg">
     <p class="pb-4 text-3xl font-bold">{{ workout.name }}</p>
     <div class="flex space-x-3">
-      <el-image class="w-5 h-5 rounded-full overflow-hidden" :src="workout.user.avatar"/>
+      <el-image class="w-5 h-5 rounded-full overflow-hidden" :src="workout.user.avatar" />
       <p>Created by {{ workout.user.name }}</p>
     </div>
     <div>

@@ -4,7 +4,7 @@ import RoutineDetail from './components/RoutineDetail.vue'
 import Exercise from './components/Exercise.vue'
 
 export const routinesViewRouteNames = {
-  routinesList: 'routinesList',
+  routinesList: 'routines',
   routineDetail: 'routineDetail',
   exercise: 'exercise'
 }

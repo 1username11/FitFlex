@@ -1,8 +1,7 @@
 import { exampleViewRouteNames } from '@/views/example-view/example-view.routes'
 import { authRouteNames } from '@/views/auth/auth.routes'
 import { routinesViewRouteNames } from '@/views/routines/routines.routes'
-import { profileViewRouteNames } from '@/views/profile/profile.routes'
-import { feedViewRouteNames } from '@/views/feed/feed.routes'
+import { homeViewRouteNames } from '@/views/home/home.routes'
 import { exercisesViewRouteNames } from '@/views/exercises/exercises.routes'
 
 export const routeNames = {
@@ -10,10 +9,9 @@ export const routeNames = {
 
   ...exampleViewRouteNames,
   ...authRouteNames,
-  ...feedViewRouteNames,
+  ...homeViewRouteNames,
   ...exercisesViewRouteNames,
   ...routinesViewRouteNames,
-  ...profileViewRouteNames,
 
   additionalDefaultLayoutRoute: 'additionalDefaultLayoutRoute',
   additionalNoLayoutRoute: 'additionalNoLayoutRoute'

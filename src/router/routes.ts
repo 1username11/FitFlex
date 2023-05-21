@@ -6,23 +6,21 @@ import { authRoutes } from '@/views/auth/auth.routes'
 import { exampleViewRoutes } from '@/views/example-view/example-view.routes'
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import { feedViewRoutes } from '@/views/feed/feed.routes'
+import { homeViewRoutes } from '@/views/home/home.routes'
 import { routinesViewRoutes } from '@/views/routines/routines.routes'
 import { exercisesViewRoutes } from '@/views/exercises/exercises.routes'
-import { profileViewRoutes } from '@/views/profile/profile.routes'
 
 const defaultLayoutRoutes: RouteRecordRaw = {
   path: '/',
   name: routeNames.rootPage,
-  redirect: { name: routeNames.feed },
+  redirect: { name: routeNames.home },
   component: DefaultLayout,
   children: [
     // list of views that use default layout
     ...exampleViewRoutes,
-    ...feedViewRoutes,
+    ...homeViewRoutes,
     ...routinesViewRoutes,
-    ...exercisesViewRoutes,
-    ...profileViewRoutes
+    ...exercisesViewRoutes
   ]
 }
 
