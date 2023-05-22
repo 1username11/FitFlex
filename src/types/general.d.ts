@@ -13,8 +13,10 @@ interface ISet {
 interface IExercise {
   id: string
   name: string
+  primary?: string
   img: string
   sets: ISet[]
+  equipment?: string
 }
 
 interface IUser {
@@ -48,4 +50,12 @@ interface ILog {
   workout: IWorkout
   likes: number
   comments: IComment[]
+}
+
+interface IRoutine {
+  id: string
+  title: string
+  description?: string
+  exersices: IExercise[]
+  restTime?: number
 }

@@ -1,4 +1,5 @@
 export const useRoutinesStore = defineStore('routinesStore', () => {
+
   const feedList = ref([
     {
       id: 'log1',
@@ -183,17 +184,21 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
     }
   ]
 
-  const exercises = ref< IExercise[]  >([
+  const exercises = ref<IExercise[] >([
     {
       id: 'exercise1',
       name: 'Bench Press',
       img: 'bench_press.jpg',
+      primary: 'Chest',
+      equipment: 'Barbell',
       sets: [sets[0], sets[1]]
     },
     {
       id: 'exercise2',
       name: 'Squats',
       img: 'squats.jpg',
+      primary: 'Legs',
+      equipment: 'Machine',
       sets: [sets[2]]
     }
   ])
@@ -214,7 +219,7 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
 
   return {
     workouts,
-    exercises
+    exercises,
   }
 })
 
