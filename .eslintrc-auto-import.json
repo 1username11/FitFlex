@@ -235,6 +235,7 @@
     "useResizeObserver": true,
     "useRoute": true,
     "useRouter": true,
+    "useRoutinesStore": true,
     "useScreenOrientation": true,
     "useScreenSafeArea": true,
     "useScriptTag": true,

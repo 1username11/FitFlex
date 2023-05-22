@@ -1,10 +1,15 @@
 <template>
-  <div class="flex flex-col items-center mx-auto px-3">
-    <WorkoutLog
-      v-for="testDataItem in testData"
-      :key="testDataItem.id"
-      :log="testDataItem"
-    />
+  <div class="flex">
+    <div class="flex flex-col items-center mx-auto px-3 mr-2">
+      <WorkoutLog
+        v-for="testDataItem in testData"
+        :key="testDataItem.id"
+        :log="testDataItem"
+      />
+    </div>
+    <div>
+      Statistics
+    </div>
   </div>
 </template>
 

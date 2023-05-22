@@ -64,7 +64,7 @@ declare module '@vue/runtime-core' {
     SetsIcon: typeof import('./../src/views/routines/components/icons/SetsIcon.vue')['default']
     SettingsIcon: typeof import('./../src/components/icons/SettingsIcon.vue')['default']
     SocialAuth: typeof import('./../src/views/auth/components/SocialAuth.vue')['default']
-    WorkoutLog: typeof import('../src/views/home/components/WorkoutLog.vue')['default']
+    WorkoutLog: typeof import('./../src/views/home/components/WorkoutLog.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
