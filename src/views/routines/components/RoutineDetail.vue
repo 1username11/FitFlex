@@ -10,8 +10,7 @@
       </button>
 
       <button
-        plain
-        class="w-full lg:w-[300px] h-9 rounded-md bg-white cursor-pointer mr-2 border  hover:bg-gray-100" 
+        class="w-full lg:w-[300px] h-9 rounded-md bg-white cursor-pointer mr-2 border  hover:bg-gray-100"
         @click="copyLink"
       >
         Copy Link
@@ -23,6 +22,7 @@
 
       <div class="flex space-x-3">
         <el-image class="w-5 h-5 rounded-full overflow-hidden" :src=" workout ? workout.user.avatar : ''" />
+
         <p>Created by {{ workout ? workout.user.name : '' }}</p>
       </div>
 

@@ -183,7 +183,7 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
     }
   ]
 
-  const exercises: IExercise[] = [
+  const exercises = ref< IExercise[]  >([
     {
       id: 'exercise1',
       name: 'Bench Press',
@@ -196,7 +196,7 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
       img: 'squats.jpg',
       sets: [sets[2]]
     }
-  ]
+  ])
 
   const user: IUser = {
     id: 'user1',
@@ -213,7 +213,8 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
   }])
 
   return {
-    workouts
+    workouts,
+    exercises
   }
 })
 

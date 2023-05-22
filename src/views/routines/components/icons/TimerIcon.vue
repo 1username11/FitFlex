@@ -1,0 +1,3 @@
+<template>
+  <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke="#1D83EA" stroke-width="1.5"><path d="M8 14.5A7.5 7.5 0 1015.5 7M15.5 7v2.885M14.692 13.692l-4.461-4.461"></path></g></svg>
+</template>
