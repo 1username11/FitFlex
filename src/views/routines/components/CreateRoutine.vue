@@ -6,11 +6,13 @@
         <el-button class="w-[200px]" type="primary" disabled>Save Routine</el-button>
       </div>
       <div class="bg-white p-4 rounded-lg border border-gray-200">
-        <el-input
-          v-model="title"
-          class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
-          placeholder="Routine Title"
-        />
+        <div class="title-wrapper">
+          <el-input
+            v-model="title"
+            class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
+            placeholder="Routine Title"
+          />
+        </div>
         <ExerciseCard
           v-for="exercise in exercises"
           :key="exercise.id"
@@ -36,11 +38,15 @@ function addExercise (exercise: IExercise) {
 
 </script>
 
-<style>
-.el-input__wrapper{
-  box-shadow: none !important;
-  .is-focus{
-    box-shadow: none !important;
+<style lang="scss">
+.title-wrapper {
+  .el-input {
+    .el-input__wrapper {
+      box-shadow: none
+    }
+    .el-input__inner {
+      height: fit-content;
+    }
   }
 }
 </style>

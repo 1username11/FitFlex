@@ -12,7 +12,7 @@
       </span>
 
       <template #dropdown>
-        <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer">
+        <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
           <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
             <EditIcon />
             Edit Routine
@@ -43,10 +43,14 @@ defineProps<{
 }>()
 </script>
 
-<style scoped>
+<style>
 .example-showcase .el-dropdown-link {
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+.el-button:hover{
+  background-color: #e6e6e6;
+  border-color: #e6e6e6;
 }
 </style>

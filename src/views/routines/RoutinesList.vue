@@ -2,14 +2,18 @@
   <div class="lg:flex gap-5">
     <div>
       <p class="mb-5 text-xl font-bold">My Routines</p>
-      <el-button
-        class="bg-white border border-gray-300 pr-4 rounded-md w-[180px] h-[45px] mb-5"
+
+      <button
+        class="flex justify-center items-center bg-white border border-gray-300 pr-4 rounded-md w-[180px] h-[45px] mb-5
+          hover:bg-gray-100 hover:border-gray-200 active:bg-gray-200 active:border-gray-300"
         @click="navigate"
       >
         <NewRoutineIcon />
 
-        New Routine
-      </el-button>
+        <p>
+          New Routine
+        </p>
+      </button>
     </div>
     <div class="bg-white rounded-lg p-5 border border-gray-300 w-full">
       <p class="text-gray-400">

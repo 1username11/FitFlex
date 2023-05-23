@@ -7,10 +7,13 @@
       {{ serial }}
     </div>
 
-    <el-input v-model="setModel.weight" class="max-w-[50px] border-none ml-10" type="text" placeholder="-" />
+    <div class="input-wrapper">
+      <el-input v-model="setModel.weight" class="max-w-[50px] border-none ml-10" type="text" placeholder="-" />
+    </div>
 
-    <el-input v-model="setModel.reps" class="max-w-[50px] ml-7" type="text" placeholder="-" />
-
+    <div class="input-wrapper">
+      <el-input v-model="setModel.reps" class="max-w-[50px] ml-7" type="text" placeholder="-" />
+    </div>
     <button @click="$emit('deleteSet')">
       <DeleteIcon />
     </button>
@@ -27,12 +30,17 @@ defineEmits(['deleteSet'])
 const setModel = ref<ISet>({} as ISet)
 </script>
 
-<style>
-.el-input__wrapper{
-  box-shadow: none !important;
-  background: none !important;
-  .is-focus{
-    box-shadow: none !important;
+<style lang="scss">
+.input-wrapper {
+  .el-input {
+    .el-input__wrapper {
+      box-shadow: none;
+      background-color: transparent;
+    }
+    .el-input__inner {
+      text-align: center;
+      height: fit-content;
+    }
   }
 }
 </style>
