@@ -8,7 +8,6 @@
     type="routine"
     dark="#1D83EA"
     light="#1D83EA"
-    style="margin-left: 8px; margin-right: 8px;"
   >
     <g
       transform="translate(8.5 3.8)"

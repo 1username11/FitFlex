@@ -12,18 +12,18 @@
       </span>
 
       <template #dropdown>
-        <el-dropdown-menu class="text-base text-gray-400 py-2 px-3 space-y-2 min-w-[208px]">
-          <el-dropdown-item>
+        <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
             <EditIcon />
             Edit Routine
           </el-dropdown-item>
 
-          <el-dropdown-item>
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
             <DuplicateIcon />
             Duplicate Routine
           </el-dropdown-item>
 
-          <el-dropdown-item>
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
             <DeleteIcon />
             Delete Routine
           </el-dropdown-item>

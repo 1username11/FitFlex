@@ -3,7 +3,7 @@
     <div>
       <p class="mb-5 text-xl font-bold">My Routines</p>
       <el-button
-        class="bg-white border border-gray-300 pr-4 py-1 rounded-lg w-[180px] mb-5"
+        class="bg-white border border-gray-300 pr-4 rounded-md w-[180px] h-[45px] mb-5"
         @click="navigate"
       >
         <NewRoutineIcon />

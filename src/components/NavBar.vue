@@ -1,24 +1,29 @@
 <template>
   <div class="w-full bg-white border-b border-gray-300">
     <div class="flex justify-between bg-white mx-auto h-[60px] max-w-[1024px] px-3">
-      <div class="flex justify-start items-center">
+      <nav class="flex justify-start items-center">
         <Logo />
-        <div class="flex px-3 h-full">
-          <RouterLink
+        <ul class="flex px-3 h-full">
+          <li
             v-for="route in routes"
             :key="route.name"
-            :to="{name: route.name}"
-            class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600 px-5 h-full"
           >
-            <!-- TODO change SVG color on active -->
-            <FeedIcon v-if="route.name === routeNames.home" class="svg-icon" />
-            <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
-            <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
+            <RouterLink
+              :to="{name: route.name}"
+              class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600 px-5 h-full"
+            >
+              <!-- TODO change SVG color on active -->
+              <FeedIcon v-if="route.name === routeNames.home" class="svg-icon" />
+              <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
+              <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
 
-            <span class="hidden capitalize lg:flex lg:items-center h-full">{{ route.name }}</span>
-          </RouterLink>
-        </div>
-      </div>
+              <span class="hidden capitalize lg:flex lg:items-center h-full">
+                {{ route.name }}
+              </span>
+            </RouterLink>
+          </li>
+        </ul>
+      </nav>
 
       <div class="flex justify-end items-center">
         <div class="relative">
@@ -66,8 +71,5 @@ const isImageClicked = ref(false)
 .router-link-active.router-link-exact-active {
   border-bottom: 2px solid #1D83EA;
   color: black;
-  .svg-icon {
-    fill: black;
-  }
 }
 </style>
