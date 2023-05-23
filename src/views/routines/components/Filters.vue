@@ -1,25 +1,30 @@
 <template>
   <div class="flex flex-col p-4 bg-white rounded-lg border border-gray-200">
     <p class="mb-5 text-gray-400">Filters</p>
-    <el-select v-model="equipmentForFiltering" class="mb-4" placeholder="All Equipment">
-      <el-option
-        v-for="equipmentsItem in equipments"
-        :key="equipmentsItem"
-        :value="equipmentsItem"
-      />
-    </el-select>
+    <div class="select-wrapper">
+      <el-select v-model="equipmentForFiltering" class="mb-4" placeholder="All Equipment">
+        <el-option
+          v-for="equipmentsItem in equipments"
+          :key="equipmentsItem"
+          :value="equipmentsItem"
+        />
+      </el-select>
+    </div>
 
-    <el-select v-model="primaryForFIltering" class="mb-4" placeholder="Primary">
-      <el-option
-        v-for="primaryItem in primaries"
-        :key="primaryItem"
-        :value="primaryItem"
-      />
-    </el-select>
+    <div class="select-wrapper">
+      <el-select v-model="primaryForFIltering" class="mb-4" placeholder="Primary">
+        <el-option
+          v-for="primaryItem in primaries"
+          :key="primaryItem"
+          :value="primaryItem"
+        />
+      </el-select>
+    </div>
 
     <div>
       <div class="flex justify-between mb-4">
         <div class="text-gray-400">Library</div>
+
         <div>
           <p class="text-[#1D83EA]">+ Create Exercises</p>
         </div>
@@ -87,3 +92,19 @@ const filteredExercises = computed(() => {
   })
 })
 </script>
+
+<style lang="scss">
+.select-wrapper {
+  .el-select {
+    .el-input__wrapper {
+      background: #f0f0f0;
+    }
+    .el-input.is-focus .el-input__wrapper {
+      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
+    }
+    :hover:not(.el-select--disabled) .el-input__wrapper{
+      box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
+    }
+  }
+}
+</style>

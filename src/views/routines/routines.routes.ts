@@ -3,14 +3,15 @@ import RoutinesList from './RoutinesList.vue'
 import RoutineDetail from './components/RoutineDetail.vue'
 import Exercise from './components/Exercise.vue'
 import CreateRoutine from './components/CreateRoutine.vue'
-import Filters from './components/Filters.vue'
+import EditRoutine from './components/EditRoutine.vue'
 
 export const routinesViewRouteNames = {
   routinesList: 'routines',
   routineDetail: 'routineDetail',
   exercise: 'exercise',
   createRoutine: 'createRoutine',
-  filters: 'filters'
+  filters: 'filters',
+  editRoutine: 'editRoutine'
 }
 
 export const routinesViewRoutes: Array<RouteRecordRaw> = [
@@ -35,8 +36,8 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
     component: CreateRoutine
   },
   {
-    path: '/filters',
-    name: routinesViewRouteNames.filters,
-    component: Filters
+    path: '/editRoutine/:id',
+    name: routinesViewRouteNames.editRoutine,
+    component: EditRoutine
   }
 ]

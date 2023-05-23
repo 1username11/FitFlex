@@ -22,7 +22,11 @@
 
       <draggable v-model="workouts" :animation="300" item-key="id" class="cursor-move">
         <template #item="{ element: workout }">
-          <RoutinesItem :workout="workout" />
+          <RoutinesItem
+            :workout="workout"
+            @duplicate="duplicateWorkout(workout)"
+            @delete="deleteWorkout(workout)"
+          />
         </template>
       </draggable>
     </div>
@@ -40,5 +44,19 @@ const router = useRouter()
 
 function navigate () {
   router.push({ name: routeNames.createRoutine })
+}
+
+function duplicateWorkout (workout: IWorkout) {
+  const duplicatedWorkout = {
+    ...workouts.value.find((w) => w.id === workout.id),
+    id: workout.id + 'duplicated'
+  }
+  workouts.value.push(duplicatedWorkout)
+}
+
+function deleteWorkout (workout: IWorkout) {
+  const deletedWorkout = workouts.value.find((w) => w.id === workout.id)
+  const index = workouts.value.indexOf(deletedWorkout)
+  workouts.value.splice(index, 1)
 }
 </script>

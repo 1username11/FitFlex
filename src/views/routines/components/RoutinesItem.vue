@@ -13,17 +13,17 @@
 
       <template #dropdown>
         <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
-          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="navigate()">
             <EditIcon />
             Edit Routine
           </el-dropdown-item>
 
-          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('duplicate', workout)">
             <DuplicateIcon />
             Duplicate Routine
           </el-dropdown-item>
 
-          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('delete', workout)">
             <DeleteIcon />
             Delete Routine
           </el-dropdown-item>
@@ -34,13 +34,21 @@
 </template>
 
 <script lang="ts" setup>
+import { routeNames } from '@/router/route-names'
 import DeleteIcon from './icons/DeleteIcon.vue'
 import DuplicateIcon from './icons/DuplicateIcon.vue'
 import EditIcon from './icons/EditIcon.vue'
 
-defineProps<{
+const props = defineProps<{
   workout: IWorkout
 }>()
+defineEmits(['duplicate', 'delete'])
+
+const router = useRouter()
+
+function navigate () {
+  router.push({ name: routeNames.editRoutine, params: { id: props.workout.id } })
+}
 </script>
 
 <style>
