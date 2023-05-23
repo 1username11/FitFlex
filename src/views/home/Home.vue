@@ -37,7 +37,7 @@ const sampleUser: IUser = {
   avatar: 'avatar.jpg'
 }
 
-const sampleWorkout: IWorkout = {
+const sampleWorkout: IRoutine = {
   id: 'workout1',
   exercises: [sampleExercise]
 }

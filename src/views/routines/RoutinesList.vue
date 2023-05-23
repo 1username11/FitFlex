@@ -17,10 +17,10 @@
     </div>
     <div class="bg-white rounded-lg p-5 border border-gray-300 w-full">
       <p class="text-gray-400">
-        My Routines {{ workouts.length > 1 ? `(${workouts.length})` : '' }}
+        {{ routines.length > 1 ? `My Routines(${routines.length})` : 'My Routine' }}
       </p>
 
-      <draggable v-model="workouts" :animation="300" item-key="id" class="cursor-move">
+      <draggable v-model="routines" :animation="300" item-key="id" class="cursor-move">
         <template #item="{ element: workout }">
           <RoutinesItem
             :workout="workout"
@@ -38,7 +38,7 @@ import { routeNames } from '@/router/route-names'
 import draggable from 'vuedraggable'
 
 const routinesStore = useRoutinesStore()
-const { workouts } = storeToRefs(routinesStore)
+const { routines } = storeToRefs(routinesStore)
 
 const router = useRouter()
 
@@ -46,17 +46,17 @@ function navigate () {
   router.push({ name: routeNames.createRoutine })
 }
 
-function duplicateWorkout (workout: IWorkout) {
+function duplicateWorkout (workout: IRoutine) {
   const duplicatedWorkout = {
-    ...workouts.value.find((w) => w.id === workout.id),
+    ...routines.value.find((w) => w.id === workout.id),
     id: workout.id + 'duplicated'
   }
-  workouts.value.push(duplicatedWorkout)
+  routines.value.push(duplicatedWorkout)
 }
 
-function deleteWorkout (workout: IWorkout) {
-  const deletedWorkout = workouts.value.find((w) => w.id === workout.id)
-  const index = workouts.value.indexOf(deletedWorkout)
-  workouts.value.splice(index, 1)
+function deleteWorkout (workout: IRoutine) {
+  const deletedWorkout = routines.value.find((w) => w.id === workout.id)
+  const index = routines.value.indexOf(deletedWorkout)
+  routines.value.splice(index, 1)
 }
 </script>

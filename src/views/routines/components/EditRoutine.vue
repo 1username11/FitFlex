@@ -29,9 +29,9 @@
 
 <script lang="ts" setup>
 const routinesStore = useRoutinesStore()
-const { workouts } = storeToRefs(routinesStore)
+const { routines } = storeToRefs(routinesStore)
 const params = useRouter().currentRoute.value.params.id
-const routine = ref(workouts.value.find((workout) => workout.id === params))
+const routine = ref(routines.value.find((workout) => workout.id === params))
 const title = ref<string>(routine.value?.name || '')
 
 function addExercise (exercise: IExercise) {

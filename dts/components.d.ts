@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     LogoutIcon: typeof import('./../src/components/icons/LogoutIcon.vue')['default']
     NavBar: typeof import('./../src/components/NavBar.vue')['default']
     NewRoutineIcon: typeof import('./../src/views/routines/components/icons/NewRoutineIcon.vue')['default']
+    NoItemsIcon: typeof import('./../src/views/routines/components/icons/NoItemsIcon.vue')['default']
     PlusIcon: typeof import('./../src/views/routines/components/icons/PlusIcon.vue')['default']
     ProfileIcon: typeof import('./../src/components/icons/ProfileIcon.vue')['default']
     RepsIcon: typeof import('./../src/views/routines/components/icons/RepsIcon.vue')['default']

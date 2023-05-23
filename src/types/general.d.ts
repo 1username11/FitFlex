@@ -20,7 +20,13 @@ interface IExercise {
   primary?: string
   img: string
   sets: ISet[]
-  equipment?: string
+  equipment: string
+}
+
+interface IRoutine {
+  id: string
+  name: string
+  exercises: IExercise[]
 }
 
 interface IUser {
@@ -29,16 +35,9 @@ interface IUser {
   age: number
   bio?: string
   avatar: string
-  workouts?: IWorkout[]
+  routines?: IRoutine[]
   followers?: IUser[]
   following?: IUser[]
-}
-
-interface IRoutine {
-  id: string
-  name: string
-  exercises: IExercise[]
-  user: IUser
 }
 
 interface IComment {
@@ -55,7 +54,7 @@ interface ILog {
   description: string
   duration: string
   reps: number
-  workout: IWorkout
+  workout: IRoutine
   likes: number
   comments: IComment[]
 }

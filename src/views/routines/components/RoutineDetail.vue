@@ -45,10 +45,10 @@
 const currentRoute = useRoute()
 
 const routinesStore = useRoutinesStore()
-const { workouts } = storeToRefs(routinesStore)
+const { routines } = storeToRefs(routinesStore)
 
 const workout = computed(() => {
-  const result = workouts.value.find((workout) => workout.id === currentRoute.params.id)
+  const result = routines.value.find((workout) => workout.id === currentRoute.params.id)
   if (result) {
     return result
   }

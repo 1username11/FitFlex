@@ -3,15 +3,17 @@
     <div class="w-full">
       <div class="flex justify-between mb-4">
         <p class="font-bold text-xl">Create routine</p>
+
         <el-button
           class="w-[200px]"
           type="primary"
-          :disabled="routine.name && routine.exercises"
+          :disabled="!title"
           @click="$emit('save', routine)"
         >
           Save Routine
         </el-button>
       </div>
+
       <div class="bg-white p-4 rounded-lg border border-gray-200">
         <div class="title-wrapper">
           <el-input
@@ -20,16 +22,32 @@
             placeholder="Routine Title"
           />
         </div>
-        <ExerciseCard
-          v-for="exercise in exercises"
-          :key="exercise.id"
-          :exercise="exercise"
-          :sets="exercise.sets"
-          @addSet="exercise.sets.push({} as ISet)"
-          @deleteSet="exercise.sets.splice($event, 1)"
-        />
+
+        <div v-if="exercises.length">
+          <ExerciseCard
+            v-for="exercise in exercises"
+            :key="exercise.id"
+            :exercise="exercise"
+            :sets="exercise.sets"
+            @addSet="exercise.sets.push({} as ISet)"
+            @deleteSet="exercise.sets.splice($event, 1)"
+          />
+        </div>
+        <div
+          v-else
+          class="flex flex-col justify-center items-center"
+        >
+          <NoItemsIcon />
+          <p class="text-lg font-bold mt-4">
+            Get started
+          </p>
+          <p class="mt-1">
+            Start by adding an exercise to your routine.
+          </p>
+        </div>
       </div>
     </div>
+
     <Filters class="hidden w-[320px] lg:block" @addExercise="addExercise($event)" />
   </div>
 </template>
@@ -37,19 +55,17 @@
 <script lang="ts" setup>
 defineEmits(['save'])
 
-const routinesStore = useRoutinesStore()
-const { exercises, user } = storeToRefs(routinesStore)
+// const routinesStore = useRoutinesStore()
+// const { exercises } = storeToRefs(routinesStore)
 const title = ref<string>('')
+const exercises = ref<IExercise[]>([])
 
 function addExercise (exercise: IExercise) {
   exercises.value.push(exercise)
 }
 
 const routine = computed(() => ({
-  id: title.value,
-  name: title.value,
-  exercises: exercises.value,
-  user: user.value
+
 }))
 
 </script>

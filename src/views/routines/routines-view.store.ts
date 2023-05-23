@@ -1,226 +1,154 @@
 export const useRoutinesStore = defineStore('routinesStore', () => {
-
-  const feedList = ref([
+  const sets = ref<ISet[]>([
     {
-      id: 'log1',
-      user: {
-        id: 'user1',
-        name: 'John',
-        age: 25,
-        avatar: 'avatar1.jpg'
-      },
-      publishTime: new Date(),
-      title: 'My First Workout',
-      description: 'Completed my first workout today. Feeling great!',
-      duration: '1 hour',
+      id: '1',
       reps: 10,
-      workout: {
-        id: 'workout1',
-        name: 'Full Body Workout',
-        exercises: [
-          {
-            id: 'exercise1',
-            name: 'Push-ups',
-            img: 'pushups.jpg',
-            sets: [
-              {
-                id: 'set1',
-                reps: 10,
-                description: 'Standard push-ups',
-                weight: 0
-              },
-              {
-                id: 'set2',
-                reps: 8,
-                description: 'Diamond push-ups',
-                weight: 0
-              }
-            ]
-          },
-          {
-            id: 'exercise2',
-            name: 'Squats',
-            img: 'squats.jpg',
-            sets: [
-              {
-                id: 'set3',
-                reps: 12,
-                description: 'Bodyweight squats',
-                weight: 0
-              }
-            ]
-          }
-        ],
-        user: {
-          id: 'user1',
-          name: 'John',
-          age: 25,
-          avatar: 'avatar1.jpg'
-        }
-      },
-      likes: 5,
-      comments: [
-        {
-          id: 'comment1',
-          user: {
-            id: 'user2',
-            name: 'Alice',
-            age: 30,
-            avatar: 'avatar2.jpg'
-          },
-          content: 'Great job, John! Keep it up!'
-        },
-        {
-          id: 'comment2',
-          user: {
-            id: 'user3',
-            name: 'Bob',
-            age: 28,
-            avatar: 'avatar3.jpg'
-          },
-          content: 'Impressive progress!'
-        }
-      ]
+      description: 'Set 1 description'
     },
     {
-      id: 'log2',
-      user: {
-        id: 'user1',
-        name: 'John',
-        age: 25,
-        avatar: 'avatar1.jpg'
-      },
-      publishTime: new Date(),
-      title: 'My First Workout',
-      description: 'Completed my first workout today. Feeling great!',
-      duration: '1 hour',
-      reps: 10,
-      workout: {
-        id: 'workout1',
-        name: 'Full Body Workout',
-        exercises: [
-          {
-            id: 'exercise1',
-            name: 'Push-ups',
-            img: 'pushups.jpg',
-            sets: [
-              {
-                id: 'set1',
-                reps: 10,
-                description: 'Standard push-ups',
-                weight: 0
-              },
-              {
-                id: 'set2',
-                reps: 8,
-                description: 'Diamond push-ups',
-                weight: 0
-              }
-            ]
-          },
-          {
-            id: 'exercise2',
-            name: 'Squats',
-            img: 'squats.jpg',
-            sets: [
-              {
-                id: 'set3',
-                reps: 12,
-                description: 'Bodyweight squats',
-                weight: 0
-              }
-            ]
-          }
-        ],
-        user: {
-          id: 'user1',
-          name: 'John',
-          age: 25,
-          avatar: 'avatar1.jpg'
-        }
-      },
-      likes: 5,
-      comments: [
-        {
-          id: 'comment1',
-          user: {
-            id: 'user2',
-            name: 'Alice',
-            age: 30,
-            avatar: 'avatar2.jpg'
-          },
-          content: 'Great job, John! Keep it up!'
-        },
-        {
-          id: 'comment2',
-          user: {
-            id: 'user3',
-            name: 'Bob',
-            age: 28,
-            avatar: 'avatar3.jpg'
-          },
-          content: 'Impressive progress!'
-        }
-      ]
-    }
-  ])
-  const sets: ISet[] = [
-    {
-      id: 'set1',
-      reps: 10,
-      description: 'Standard set',
+      id: '2',
+      type: 'Type A',
+      reps: 8,
+      description: 'Set 2 description',
       weight: 50
     },
     {
-      id: 'set2',
-      reps: 8,
-      description: 'Heavy set',
-      weight: 80
-    },
-    {
-      id: 'set3',
+      id: '3',
       reps: 12,
-      description: 'Light set'
-    }
-  ]
-
-  const exercises = ref<IExercise[] >([
-    {
-      id: 'exercise1',
-      name: 'Bench Press',
-      img: 'bench_press.jpg',
-      primary: 'Chest',
-      equipment: 'Barbell',
-      sets: [sets[0], sets[1]]
-    },
-    {
-      id: 'exercise2',
-      name: 'Squats',
-      img: 'squats.jpg',
-      primary: 'Legs',
-      equipment: 'Machine',
-      sets: [sets[2]]
+      description: 'Set 3 description',
+      weight: 40
     }
   ])
 
-  const user: IUser = {
-    id: 'user1',
-    name: 'John',
-    age: 25,
-    avatar: 'avatar1.jpg'
-  }
+  const exercises = ref<IExercise[]>([
+    {
+      id: '1',
+      name: 'Exercise 1',
+      img: 'exercise1.jpg',
+      equipment: 'Other',
+      sets: [sets.value[0], sets.value[1], sets.value[2]]
+    },
+    {
+      id: '2',
+      name: 'Exercise 2',
+      restTime: '60 seconds',
+      description: 'Exercise 2 description',
+      primary: 'Primary muscle group',
+      img: 'exercise2.jpg',
+      sets: [sets.value[0], sets.value[1], sets.value[2]],
+      equipment: 'Dumbbells'
+    },
+    {
+      id: '3',
+      name: 'Exercise 3',
+      img: 'exercise3.jpg',
+      equipment: 'Barbell',
+      sets: [sets.value[0], sets.value[1], sets.value[2]]
+    }
+  ])
 
-  const workouts = ref<IWorkout[]>([{
-    id: 'workout1',
-    name: 'Chest and Legs Workout',
-    exercises,
-    user
-  }])
+  const routines = ref<IRoutine[]>([
+    {
+      id: '1',
+      name: 'Routine 1',
+      exercises: [exercises.value[0], exercises.value[1], exercises.value[2]]
+    },
+    {
+      id: '2',
+      name: 'Routine 2',
+      exercises: [exercises.value[1], exercises.value[2], exercises.value[0]]
+    },
+    {
+      id: '3',
+      name: 'Routine 3',
+      exercises: [exercises.value[2], exercises.value[0], exercises.value[1]]
+    }
+  ])
+
+  const users = ref<IUser[]>([
+    {
+      id: '1',
+      name: 'John',
+      age: 25,
+      avatar: 'john.jpg',
+      routines: [routines.value[0], routines.value[1]]
+    },
+    {
+      id: '2',
+      name: 'Emily',
+      age: 30,
+      avatar: 'emily.jpg',
+      routines: [routines.value[1], routines.value[2]]
+    },
+    {
+      id: '3',
+      name: 'Mike',
+      age: 28,
+      avatar: 'mike.jpg',
+      routines: [routines.value[2], routines.value[0]]
+    }
+  ])
+
+  const comments = ref<IComment[]>([
+    {
+      id: '1',
+      user: users.value[0],
+      content: 'Comment 1'
+    },
+    {
+      id: '2',
+      user: users.value[1],
+      content: 'Comment 2'
+    },
+    {
+      id: '3',
+      user: users.value[2],
+      content: 'Comment 3'
+    }
+  ])
+
+  const logs = ref<ILog[]>([
+    {
+      id: '1',
+      user: users.value[0],
+      publishTime: new Date(),
+      title: 'Log 1',
+      description: 'Log 1 description',
+      duration: '30 minutes',
+      reps: 10,
+      workout: routines.value[0],
+      likes: 5,
+      comments: [comments.value[0], comments.value[1]]
+    },
+    {
+      id: '2',
+      user: users.value[1],
+      publishTime: new Date(),
+      title: 'Log 2',
+      description: 'Log 2 description',
+      duration: '45 minutes',
+      reps: 8,
+      workout: routines.value[1],
+      likes: 3,
+      comments: [comments.value[1], comments.value[2]]
+    },
+    {
+      id: '3',
+      user: users.value[2],
+      publishTime: new Date(),
+      title: 'Log 3',
+      description: 'Log 3 description',
+      duration: '60 minutes',
+      reps: 12,
+      workout: routines.value[2],
+      likes: 7,
+      comments: [comments.value[0], comments.value[2]]
+    }
+  ])
 
   return {
-    workouts,
-    exercises,
-    user
+    routines,
+    exercises
   }
 })
 

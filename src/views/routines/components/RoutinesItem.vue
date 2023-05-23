@@ -40,7 +40,7 @@ import DuplicateIcon from './icons/DuplicateIcon.vue'
 import EditIcon from './icons/EditIcon.vue'
 
 const props = defineProps<{
-  workout: IWorkout
+  workout: IRoutine
 }>()
 defineEmits(['duplicate', 'delete'])
 
