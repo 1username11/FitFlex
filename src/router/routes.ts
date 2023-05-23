@@ -9,6 +9,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { homeViewRoutes } from '@/views/home/home.routes'
 import { routinesViewRoutes } from '@/views/routines/routines.routes'
 import { exercisesViewRoutes } from '@/views/exercises/exercises.routes'
+import { profileRoutes } from '@/views/profile-settings/profile.routes'
 
 const defaultLayoutRoutes: RouteRecordRaw = {
   path: '/',
@@ -20,7 +21,8 @@ const defaultLayoutRoutes: RouteRecordRaw = {
     ...exampleViewRoutes,
     ...homeViewRoutes,
     ...routinesViewRoutes,
-    ...exercisesViewRoutes
+    ...exercisesViewRoutes,
+    ...profileRoutes
   ]
 }
 

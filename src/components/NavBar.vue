@@ -34,12 +34,18 @@
             bg-white border border-gray-200 rounded-md shadow-sm w-40 h-24"
             @click="isImageClicked = !isImageClicked"
           >
-            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500">
+            <div
+              class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500"
+              @click="navigateTo(routeNames.profileSettings)"
+            >
               <SettingsIcon />
               Settings
             </div>
 
-            <div class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500">
+            <div
+              class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500"
+              @click="navigateTo(routeNames.auth)"
+            >
               <LogoutIcon />
               Logout
             </div>
@@ -60,6 +66,11 @@ const routes = [
 ]
 const isImageClicked = ref(false)
 
+const router = useRouter()
+
+function navigateTo (routeName: string) {
+  router.push({ name: routeName })
+}
 </script>
 
 <style lang="scss">
