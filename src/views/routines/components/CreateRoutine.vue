@@ -3,7 +3,14 @@
     <div class="w-full">
       <div class="flex justify-between mb-4">
         <p class="font-bold text-xl">Create routine</p>
-        <el-button class="w-[200px]" type="primary" disabled>Save Routine</el-button>
+        <el-button
+          class="w-[200px]"
+          type="primary"
+          :disabled="routine.name && routine.exercises"
+          @click="$emit('save', routine)"
+        >
+          Save Routine
+        </el-button>
       </div>
       <div class="bg-white p-4 rounded-lg border border-gray-200">
         <div class="title-wrapper">
@@ -28,13 +35,22 @@
 </template>
 
 <script lang="ts" setup>
+defineEmits(['save'])
+
 const routinesStore = useRoutinesStore()
-const { exercises } = storeToRefs(routinesStore)
+const { exercises, user } = storeToRefs(routinesStore)
 const title = ref<string>('')
 
 function addExercise (exercise: IExercise) {
   exercises.value.push(exercise)
 }
+
+const routine = computed(() => ({
+  id: title.value,
+  name: title.value,
+  exercises: exercises.value,
+  user: user.value
+}))
 
 </script>
 

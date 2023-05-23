@@ -6,13 +6,17 @@ type TCallbackFn<T extends unknown[] = [], R = void> = (...args: T) => R
 
 interface ISet {
   id: string
+  type?: string
   reps: number
   description: string
   weight?: number
 }
+
 interface IExercise {
   id: string
   name: string
+  restTime?: string
+  description?: string
   primary?: string
   img: string
   sets: ISet[]
@@ -23,10 +27,14 @@ interface IUser {
   id: string
   name: string
   age: number
+  bio?: string
   avatar: string
+  workouts?: IWorkout[]
+  followers?: IUser[]
+  following?: IUser[]
 }
 
-interface IWorkout {
+interface IRoutine {
   id: string
   name: string
   exercises: IExercise[]
@@ -50,12 +58,4 @@ interface ILog {
   workout: IWorkout
   likes: number
   comments: IComment[]
-}
-
-interface IRoutine {
-  id: string
-  title: string
-  description?: string
-  exersices: IExercise[]
-  restTime?: number
 }

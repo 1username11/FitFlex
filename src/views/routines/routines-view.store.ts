@@ -219,7 +219,8 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
 
   return {
     workouts,
-    exercises
+    exercises,
+    user
   }
 })
 
