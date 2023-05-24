@@ -1,14 +1,36 @@
 <template>
-  <div class="flex">
-    <div class="flex flex-col items-center mx-auto px-3 mr-2">
-      <WorkoutLog
-        v-for="testDataItem in testData"
-        :key="testDataItem.id"
-        :log="testDataItem"
+  <div class="flex flex-col">
+    <div class="flex bg-white border border-gray-300 rounded-xl mb-4 p-5">
+      <el-image
+        :src="sampleUser.avatar"
+        :alt="sampleUser.name"
+        class="w-[100px] h-[100px] rounded-full mr-4"
       />
+      <div>
+        <p class="text-xl font-bold mb-2">{{ sampleUser.name }}</p>
+        <div class="text-sm w-fit">
+          <p class="flex text-gray-400">Workouts</p>
+          <p class="flex justify-center">{{ testData.length }}</p>
+        </div>
+      </div>
     </div>
-    <div>
-      Statistics
+    <div class="flex justify-between">
+      <div>
+        <p class="text-xl font-bold mb-4">Workouts</p>
+        <div class="flex flex-col items-center mr-4">
+          <WorkoutLog
+            v-for="testDataItem in testData"
+            :key="testDataItem.id"
+            :log="testDataItem"
+          />
+        </div>
+      </div>
+      <div class="w-full">
+        <p class="text-xl font-bold mb-4">Statistics</p>
+        <div class="flex bg-white border border-gray-300 rounded-xl p-4">
+          Statistics
+        </div>
+      </div>
     </div>
   </div>
 </template>
