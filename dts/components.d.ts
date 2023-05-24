@@ -11,7 +11,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     2: typeof import('./../src/components/icons/FeedIcon copy 2.vue')['default']
     3: typeof import('./../src/components/icons/FeedIcon copy 3.vue')['default']
+    AccountIcon: typeof import('./../src/views/profile-settings/components/AccountIcon.vue')['default']
     AppleIcon: typeof import('./../src/views/auth/components/AppleIcon.vue')['default']
+    ArrowIcon: typeof import('./../src/views/profile-settings/components/ArrowIcon.vue')['default']
     AuthButton: typeof import('./../src/views/auth/components/AuthButton.vue')['default']
     AuthFooter: typeof import('./../src/views/auth/components/AuthFooter.vue')['default']
     AuthHeader: typeof import('./../src/views/auth/components/AuthHeader.vue')['default']
@@ -40,6 +42,8 @@ declare module '@vue/runtime-core' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
     ExampleViewComponent: typeof import('./../src/views/example-view/components/ExampleViewComponent.vue')['default']
     Exercise: typeof import('./../src/views/routines/components/Exercise.vue')['default']
     ExerciseCard: typeof import('./../src/views/routines/components/ExerciseCard.vue')['default']
