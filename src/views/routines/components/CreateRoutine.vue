@@ -1,6 +1,6 @@
 <template>
   <div class="flex gap-4 justify-between">
-    <div class="w-full">
+    <div class="grow">
       <div class="flex justify-between mb-4">
         <p class="font-bold text-xl">Create routine</p>
 
@@ -35,7 +35,7 @@
         </div>
         <div
           v-else
-          class="flex flex-col justify-center items-center"
+          class="flex flex-col justify-center items-center h-full"
         >
           <NoItemsIcon />
           <p class="text-lg font-bold mt-4">
@@ -48,15 +48,16 @@
       </div>
     </div>
 
-    <Filters class="hidden w-[320px] lg:block" @addExercise="addExercise($event)" />
+    <Filters
+      class="sticky  hidden h-[600px] lg:flex"
+      @addExercise="addExercise($event)"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 defineEmits(['save'])
 
-// const routinesStore = useRoutinesStore()
-// const { exercises } = storeToRefs(routinesStore)
 const title = ref<string>('')
 const exercises = ref<IExercise[]>([])
 

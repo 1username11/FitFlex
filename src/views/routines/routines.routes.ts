@@ -36,7 +36,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
     component: CreateRoutine
   },
   {
-    path: '/editRoutine/:id',
+    path: '/edit-routine/:id',
     name: routinesViewRouteNames.editRoutine,
     component: EditRoutine
   }

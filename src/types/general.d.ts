@@ -23,21 +23,21 @@ interface IExercise {
   equipment: string
 }
 
-interface IRoutine {
-  id: string
-  name: string
-  exercises: IExercise[]
-}
-
 interface IUser {
   id: string
   name: string
   age: number
   bio?: string
   avatar: string
-  routines?: IRoutine[]
   followers?: IUser[]
   following?: IUser[]
+}
+
+interface IRoutine {
+  id: string
+  name: string
+  exercises: IExercise[]
+  user: IUser
 }
 
 interface IComment {

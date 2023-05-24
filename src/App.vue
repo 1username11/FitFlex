@@ -1,14 +1,12 @@
 <template>
-  <div class="bg-gray-50 max-h-max min-h-full">
-    <ElConfigProvider
-      :locale="{
-        name: locale,
-        el: messages[locale]?.el as TranslatePair
-      }"
-    >
-      <router-view />
-    </ElConfigProvider>
-  </div>
+  <ElConfigProvider
+    :locale="{
+      name: locale,
+      el: messages[locale]?.el as TranslatePair
+    }"
+  >
+    <router-view />
+  </ElConfigProvider>
 </template>
 
 <script lang="ts" setup>

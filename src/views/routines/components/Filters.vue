@@ -1,8 +1,11 @@
 <template>
-  <div class="flex flex-col p-4 bg-white rounded-lg border border-gray-200">
+  <div
+    class="flex flex-col p-4 bg-white rounded-lg border border-gray-200
+    w-[320px] h-[830px]"
+  >
     <p class="mb-5 text-gray-400">Filters</p>
     <div class="select-wrapper">
-      <el-select v-model="equipmentForFiltering" class="mb-4" placeholder="All Equipment">
+      <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment">
         <el-option
           v-for="equipmentsItem in equipments"
           :key="equipmentsItem"
@@ -12,7 +15,7 @@
     </div>
 
     <div class="select-wrapper">
-      <el-select v-model="primaryForFIltering" class="mb-4" placeholder="Primary">
+      <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary">
         <el-option
           v-for="primaryItem in primaries"
           :key="primaryItem"

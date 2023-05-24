@@ -23,7 +23,7 @@
       <div class="flex space-x-3">
         <el-image class="w-5 h-5 rounded-full overflow-hidden" :src=" workout ? workout.user.avatar : ''" />
 
-        <p>Created by {{ workout ? workout.user.name : '' }}</p>
+        <p>Created by {{ workout ? workout.user.name: '' }}</p>
       </div>
 
       <div>
@@ -58,5 +58,4 @@ function copyLink () {
   const url = window.location.href
   navigator.clipboard.writeText(url)
 }
-
 </script>

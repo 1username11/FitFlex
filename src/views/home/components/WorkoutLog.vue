@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-4 w-full md:w-[700px] bg-white rounded-xl border border-gray-300 mt-4">
+  <div class="flex flex-col p-4 w-full md:w-[700px] bg-white rounded-xl border border-gray-300 mb-4">
     <div>
       <div class="flex mb-4">
         <el-image :src="log.user.avatar" class="w-12 h-12 rounded-full overflow-hidden mr-4" />

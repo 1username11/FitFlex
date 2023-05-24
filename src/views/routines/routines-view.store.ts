@@ -47,45 +47,45 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
     }
   ])
 
-  const routines = ref<IRoutine[]>([
-    {
-      id: '1',
-      name: 'Routine 1',
-      exercises: [exercises.value[0], exercises.value[1], exercises.value[2]]
-    },
-    {
-      id: '2',
-      name: 'Routine 2',
-      exercises: [exercises.value[1], exercises.value[2], exercises.value[0]]
-    },
-    {
-      id: '3',
-      name: 'Routine 3',
-      exercises: [exercises.value[2], exercises.value[0], exercises.value[1]]
-    }
-  ])
-
   const users = ref<IUser[]>([
     {
       id: '1',
       name: 'John',
       age: 25,
       avatar: 'john.jpg',
-      routines: [routines.value[0], routines.value[1]]
     },
     {
       id: '2',
       name: 'Emily',
       age: 30,
       avatar: 'emily.jpg',
-      routines: [routines.value[1], routines.value[2]]
     },
     {
       id: '3',
       name: 'Mike',
       age: 28,
       avatar: 'mike.jpg',
-      routines: [routines.value[2], routines.value[0]]
+    }
+  ])
+
+  const routines = ref<IRoutine[]>([
+    {
+      id: '1',
+      name: 'Routine 1',
+      exercises: [exercises.value[0], exercises.value[1], exercises.value[2]],
+      user: users.value[0]
+    },
+    {
+      id: '2',
+      name: 'Routine 2',
+      exercises: [exercises.value[1], exercises.value[2], exercises.value[0]],
+      user: users.value[1]
+    },
+    {
+      id: '3',
+      name: 'Routine 3',
+      exercises: [exercises.value[2], exercises.value[0], exercises.value[1]],
+      user: users.value[2]
     }
   ])
 

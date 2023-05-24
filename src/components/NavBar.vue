@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full bg-white border-b border-gray-300">
-    <div class="flex justify-between bg-white mx-auto h-[60px] max-w-[1024px] px-3">
+  <div class="sticky top-0 w-full bg-white border-b border-gray-300">
+    <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
       <nav class="flex justify-start items-center">
         <Logo />
         <ul class="flex px-3 h-full">
