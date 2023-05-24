@@ -7,14 +7,14 @@
         <el-button
           class="w-[200px]"
           type="primary"
-          :disabled="!title"
-          @click="$emit('save', routine)"
+          :disabled="createdRoutineModel"
+          @click="$emit('save', createdRoutineModel)"
         >
           Save Routine
         </el-button>
       </div>
 
-      <div class="bg-white p-4 rounded-lg border border-gray-200">
+      <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
           <el-input
             v-model="title"
@@ -31,11 +31,12 @@
             :sets="exercise.sets"
             @addSet="exercise.sets.push({} as ISet)"
             @deleteSet="exercise.sets.splice($event, 1)"
+            @deleteExercise="exercises.splice($event, 1)"
           />
         </div>
         <div
           v-else
-          class="flex flex-col justify-center items-center h-full"
+          class="flex flex-col justify-center items-center h-full my-auto"
         >
           <NoItemsIcon />
           <p class="text-lg font-bold mt-4">
@@ -65,8 +66,8 @@ function addExercise (exercise: IExercise) {
   exercises.value.push(exercise)
 }
 
-const routine = computed(() => ({
-
+const createdRoutineModel = computed(() => ({
+  
 }))
 
 </script>

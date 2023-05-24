@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 w-full bg-white border-b border-gray-300">
+  <div class="sticky top-0 z-50 w-full bg-white border-b border-gray-300">
     <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
       <nav class="flex justify-start items-center">
         <Logo />

@@ -1,9 +1,26 @@
 <template>
   <div class="bg-white p-4 rounded-md w-full">
-    <div class="flex space-x-2">
-      <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" />
-      
-      <p class="font-bold text-lg">{{ exercise.name }}</p>
+    <div class="flex justify-between mb-6">
+      <div class="flex space-x-2">
+        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" />
+
+        <p class="font-bold text-lg">{{ exercise.name }}</p>
+      </div>
+
+      <el-dropdown trigger="click">
+        <span>
+          <ExerciseCardButtonIcon />
+        </span>
+
+        <template #dropdown>
+          <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
+            <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise)">
+              <DeleteIcon />
+              Delete Exercise
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
     <div>
       <div class="flex">
@@ -51,7 +68,8 @@ defineProps<{
   exercise: IExercise
   sets: ISet[]
 }>()
-defineEmits(['addSet', 'deleteSet'])
+defineEmits(['addSet', 'deleteSet', 'deleteExercise'])
+
 
 const restTime = ref<number>()
 const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])

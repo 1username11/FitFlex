@@ -43,6 +43,7 @@ declare module '@vue/runtime-core' {
     ExampleViewComponent: typeof import('./../src/views/example-view/components/ExampleViewComponent.vue')['default']
     Exercise: typeof import('./../src/views/routines/components/Exercise.vue')['default']
     ExerciseCard: typeof import('./../src/views/routines/components/ExerciseCard.vue')['default']
+    ExerciseCardButtonIcon: typeof import('./../src/views/routines/components/icons/ExerciseCardButtonIcon.vue')['default']
     ExercisesIcon: typeof import('./../src/components/icons/ExercisesIcon.vue')['default']
     Exersise: typeof import('./../src/views/routines/components/Exersise.vue')['default']
     FacebookIcon: typeof import('./../src/views/auth/components/FacebookIcon.vue')['default']
