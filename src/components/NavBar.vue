@@ -10,7 +10,8 @@
           >
             <RouterLink
               :to="{name: route.name}"
-              class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600 px-5 h-full"
+              class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600
+              hover:border-b-2 hover:border-b-[#c6e0fa] px-5 h-full"
             >
               <!-- TODO change SVG color on active -->
               <FeedIcon v-if="route.name === routeNames.home" class="svg-icon" />
@@ -80,7 +81,8 @@ function navigateTo (routeName: string) {
 
 <style lang="scss">
 .router-link-active.router-link-exact-active {
-  border-bottom: 2px solid #1D83EA;
-  color: black;
+  border-bottom: 2px solid #1D83EA !important;
+  color: black !important;
 }
+
 </style>

@@ -1,0 +1,52 @@
+<template>
+  <svg
+    width="65px"
+    height="35px"
+    viewBox="0 0 65 35"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g
+      stroke="#1D83EA"
+      stroke-width="3.5"
+      fill="none"
+      fill-rule="evenodd"
+    >
+      <path
+        d="M47.45 16.7v1.1h-29.5v-1.1h29.5z"
+      />
+      <rect
+        x="48.25"
+        y="1.75"
+        width="8"
+        height="31"
+        rx="2"
+      />
+
+      <rect
+        x="8.25"
+        y="1.75"
+        width="8"
+        height="31"
+        rx="2"
+      />
+      <rect
+        x="56.25"
+        y="8.25"
+        width="6.5"
+        height="17.5"
+        rx="2"
+      />
+      <rect
+        transform="matrix(-1 0 0 1 10 0)"
+        x="1.75"
+        y="8.25"
+        width="6.5"
+        height="17.5"
+        rx="2"
+      />
+      <path
+        d="M56.575 6.9v19.716"
+      />
+    </g>
+  </svg>
+</template>
