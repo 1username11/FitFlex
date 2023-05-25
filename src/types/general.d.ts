@@ -58,3 +58,13 @@ interface ILog {
   likes: number
   comments: IComment[]
 }
+
+interface IExerciseStatistics {
+  id: string
+  exerciseId: IExercise['id']
+  heaviestWeight: number
+  oneRepMax: number
+  bestSetVolume: number
+  mostReps: number
+  bestTime: string
+}

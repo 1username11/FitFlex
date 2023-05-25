@@ -10,6 +10,7 @@ import { homeViewRoutes } from '@/views/home/home.routes'
 import { routinesViewRoutes } from '@/views/routines/routines.routes'
 import { exercisesViewRoutes } from '@/views/exercises/exercises.routes'
 import { profileRoutes } from '@/views/profile-settings/profile.routes'
+import CreateExercise from '@/components/CreateExercise.vue'
 
 const defaultLayoutRoutes: RouteRecordRaw = {
   path: '/',
@@ -22,7 +23,12 @@ const defaultLayoutRoutes: RouteRecordRaw = {
     ...homeViewRoutes,
     ...routinesViewRoutes,
     ...exercisesViewRoutes,
-    ...profileRoutes
+    ...profileRoutes,
+    {
+      path: 'create-exercise',
+      name: routeNames.createExercise,
+      component: CreateExercise
+    }
   ]
 }
 
