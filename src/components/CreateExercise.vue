@@ -10,7 +10,7 @@
 
     <div class="border-b border-b-gray-300 py-4 w-full element-input-wrapper">
       <el-input
-      v-model="title"
+        v-model="title"
         class="text-xl text-gray-400"
         placeholder="Exercise Name"
       />

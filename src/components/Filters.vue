@@ -29,7 +29,12 @@
         <div class="text-gray-400">Library</div>
 
         <div>
-          <p class="text-[#1D83EA]" @click="isCreateExerciseVisible = !isCreateExerciseVisible">+ Create Exercises</p>
+          <p
+            class="text-[#1D83EA] cursor-pointer"
+            @click="isCreateExerciseVisible = !isCreateExerciseVisible"
+          >
+            + Create Exercises
+          </p>
         </div>
       </div>
 
@@ -60,11 +65,15 @@
       </div>
     </div>
   </div>
-  <CreateExercise
+  <div
     v-if="isCreateExerciseVisible"
-    class="popup-wrapper"
-    @close="isCreateExerciseVisible = false"
-  />
+  >
+    <CreateExercise
+      class="popup-wrapper"
+      @close="isCreateExerciseVisible = false"
+    />
+    <div class="overlay" @click="isCreateExerciseVisible = !isCreateExerciseVisible" />
+  </div>
 </template>
 <script lang="ts" setup>
 const emits = defineEmits(['addExercise', 'seeDetails'])
@@ -133,5 +142,15 @@ function emitExercise (exercise: IExercise) {
     margin-right: -50%;
     transform: translate(-50%, -50%);
     max-height: 90vh;
+    z-index: 99999;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
 }
 </style>
