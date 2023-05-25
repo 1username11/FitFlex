@@ -67,7 +67,6 @@ function addExercise (exercise: IExercise) {
 }
 
 const createdRoutineModel = computed(() => ({
-  
 }))
 
 </script>

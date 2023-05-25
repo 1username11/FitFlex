@@ -8,11 +8,11 @@
     </div>
 
     <div class="input-wrapper">
-      <el-input v-model="setModel.weight" class="max-w-[50px] border-none ml-10" type="text" placeholder="-" />
+      <el-input v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-" />
     </div>
 
     <div class="input-wrapper">
-      <el-input v-model="setModel.reps" class="max-w-[50px] ml-7" type="text" placeholder="-" />
+      <el-input v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-" />
     </div>
     <button @click="$emit('deleteSet')">
       <DeleteIcon />

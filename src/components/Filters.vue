@@ -29,7 +29,12 @@
         <div class="text-gray-400">Library</div>
 
         <div>
-          <p class="text-[#1D83EA]">+ Create Exercises</p>
+          <p
+            class="text-[#1D83EA] cursor-pointer"
+            @click="isCreateExerciseVisible = !isCreateExerciseVisible"
+          >
+            + Create Exercises
+          </p>
         </div>
       </div>
 
@@ -38,31 +43,41 @@
       </div>
 
       <div
-        v-for="exersice in filteredExercises"
-        :key="exersice.id"
+        v-for="exercise in filteredExercises"
+        :key="exercise.id"
       >
         <div
           class="flex items-center border-b border-b-gray-200 h-[90px]"
-          @click="$emit('addExercise', exersice)"
+          @click="emitExercise(exercise)"
         >
           <PlusIcon />
-          <el-image :src="exersice.img" class="w-8 h-8 rounded-full overflow-hidden" />
+          <el-image :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden" />
 
           <div class="ml-2">
             <div>
-              {{ exersice.name }}
+              {{ exercise.name }}
             </div>
             <div class="text-gray-400">
-              {{ exersice.primary }}
+              {{ exercise.primary }}
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div
+    v-if="isCreateExerciseVisible"
+  >
+    <CreateExercise
+      class="popup-wrapper"
+      @close="isCreateExerciseVisible = false"
+    />
+    <div class="overlay" @click="isCreateExerciseVisible = !isCreateExerciseVisible" />
+  </div>
 </template>
 <script lang="ts" setup>
-defineEmits(['addExercise'])
+const emits = defineEmits(['addExercise', 'seeDetails'])
+const isCreateExerciseVisible = ref(false)
 
 const routinesStore = useRoutinesStore()
 const { exercises } = storeToRefs(routinesStore)
@@ -94,6 +109,11 @@ const filteredExercises = computed(() => {
     return meetsEquipmentFilter && meetsPrimaryFilter && meetsSearchFilter
   })
 })
+
+function emitExercise (exercise: IExercise) {
+  emits('seeDetails', exercise)
+  emits('addExercise', exercise)
+}
 </script>
 
 <style lang="scss">
@@ -109,5 +129,28 @@ const filteredExercises = computed(() => {
       box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;
     }
   }
+}
+.popup-wrapper {
+  position: absolute;
+    inset: 50% auto auto 50%;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(252, 252, 252);
+    overflow: auto;
+    border-radius: 8px;
+    outline: none;
+    padding: 20px;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    max-height: 90vh;
+    z-index: 99999;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
 }
 </style>

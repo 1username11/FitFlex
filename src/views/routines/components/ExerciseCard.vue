@@ -70,7 +70,6 @@ defineProps<{
 }>()
 defineEmits(['addSet', 'deleteSet', 'deleteExercise'])
 
-
 const restTime = ref<number>()
 const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])
 </script>

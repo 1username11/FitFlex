@@ -7,7 +7,7 @@ import { profileRouteNames } from '@/views/profile-settings/profile.routes'
 
 export const routeNames = {
   rootPage: 'rootPage',
-
+  createExercise: 'createExercise',
   ...exampleViewRouteNames,
   ...authRouteNames,
   ...homeViewRouteNames,
