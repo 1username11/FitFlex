@@ -1,10 +1,16 @@
 import { supabase } from '@/supabase'
 
 class AuthService {
-  async signUp (payload: { email: string; password: string }) {
-    return await supabase.auth.signUp({
+  signUp(payload: IAuthForm) {
+    return supabase.auth.signUp({
       email: payload.email,
       password: payload.password
+    })
+  }
+
+  signInWithOAuth () {
+    return supabase.auth.signInWithOAuth({
+      provider: 'google'
     })
   }
 }

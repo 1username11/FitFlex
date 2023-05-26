@@ -55,7 +55,6 @@
             class="h-12 w-full"
             :type="$elComponentType.primary"
             :disabled="isFormValid"
-            @click="handleSignUp()"
           >
             Sign Up
           </el-button>
@@ -81,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-import { supabase } from '@/supabase'
+import { ElNotification } from 'element-plus'
 import SocialAuth from './components/SocialAuth.vue'
 
 const signUpRef = ref()
@@ -119,24 +118,25 @@ const isFormValid = computed(() => {
 })
 
 function submit () {
-  // signUpRef.value?.validate((isValid: boolean) => {
-  //   if (isValid) {
-  //     console.log('form is valid')
-  //   }
-  // })
-}
-
-const handleSignUp = async () => {
-  try {
-    const { email, password } = signUpModel
-    console.log(email, password)
-    const { data, error } = await authService.signUp({
-      email,
-      password
-    })
-    console.log(data, error)
-  } catch (error) {
-    console.log(error)
-  }
+  signUpRef.value?.validate(async (isValid: boolean) => {
+    if (isValid) {
+      console.log('form is valid')
+      try {
+        const { email, password } = signUpModel
+        await authService.signUp({
+          email,
+          password
+        })
+        ElNotification({
+          title: 'Confirmation Email Sent',
+          message: 'Check your email to verify your account',
+          type: 'info',
+          duration: 8000
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
 }
 </script>

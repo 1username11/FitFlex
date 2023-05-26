@@ -2,6 +2,7 @@
   <div
     class="flex items-center border border-gray-200 rounded-lg h-10
        bg-white cursor-pointer px-2.5 py-1.5 mb-4 space-x-5 hover:bg-gray-100 active:shadow-inner"
+    @click="signUpWithGoogle"
   >
     <GoogleIcon />
 
@@ -34,4 +35,11 @@
 
 <script lang="ts" setup>
 const router = useRouter()
+async function signUpWithGoogle () {
+  try {
+    await authService.signInWithOAuth()
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
