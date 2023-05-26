@@ -28,13 +28,17 @@
       <div class="mt-4">
         <p>Current Password</p>
 
-        <el-input class="w-[300px] mt-4" />
+        <div class="account-input">
+          <el-input v-model="currentPassword" />
+        </div>
       </div>
 
       <div class="mt-4">
         <p>New Password</p>
 
-        <el-input class="w-[300px] mt-4" />
+        <div class="account-input">
+          <el-input v-model="newPassword" />
+        </div>
       </div>
 
       <el-button type="primary" class="w-[180px] my-4" disabled>Update Password</el-button>
@@ -54,4 +58,18 @@ const options = [
   }
 ]
 const privacySettings = ref('private')
+
+const currentPassword = ref('')
+const newPassword = ref('')
 </script>
+
+<style lang="scss">
+.account-input {
+  width: 100%;
+  margin-top: 16px;
+  max-width: 300px;
+  .el-input__wrapper {
+    background: #F8F8F7 !important;
+  }
+}
+</style>

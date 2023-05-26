@@ -1,5 +1,7 @@
 <template>
-  <div class="sticky top-0 z-50 w-full bg-white border-b border-gray-300">
+  <div
+    class="sticky top-0 z-49 w-full bg-white border-b border-gray-300"
+  >
     <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
       <nav class="flex justify-start items-center">
         <Logo />
@@ -10,11 +12,14 @@
           >
             <RouterLink
               :to="{name: route.name}"
-              class="flex items-center space-x-2 text-[#6D727F] hover:text-gray-600
+              class="flex items-center space-x-2 text-[#6D727F] border-b-2 border-b-white hover:text-gray-600
               hover:border-b-2 hover:border-b-[#c6e0fa] px-5 h-full"
             >
               <!-- TODO change SVG color on active -->
-              <FeedIcon v-if="route.name === routeNames.home" class="svg-icon" />
+              <FeedIcon
+                v-if="route.name === routeNames.home"
+                :isHovered="isHovered"
+              />
               <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
               <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
 
@@ -27,36 +32,32 @@
       </nav>
 
       <div class="flex justify-end items-center">
-        <div class="relative">
+        <el-dropdown trigger="click" class="relative">
           <el-image
-            class="w-[34px] h-[34px] rounded-full overflow-hidden"
+            class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
             src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-            @click="isImageClicked = !isImageClicked"
           />
-
-          <div
-            v-if="isImageClicked"
-            class="flex flex-col justify-between py-2 absolute top-[35px] right-[-5px]
-            bg-white border border-gray-200 rounded-md shadow-sm w-40 h-24"
-            @click="isImageClicked = !isImageClicked"
-          >
-            <div
-              class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500"
-              @click="navigateTo(routeNames.profileSettings)"
-            >
-              <SettingsIcon />
-              Settings
-            </div>
-
-            <div
-              class="py-1.5 px-6 hover:bg-gray-200 cursor-pointer text-gray-500"
-              @click="navigateTo(routeNames.auth)"
-            >
-              <LogoutIcon />
-              Logout
-            </div>
-          </div>
-        </div>
+          <template #dropdown>
+            <el-dropdown-menu class="flex flex-col justify-between w-fit py-3">
+              <el-dropdown-item
+                class="flex items-center py-1.5 px-6
+              hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
+                @click="navigateTo(routeNames.profileSettings)"
+              >
+                <SettingsIcon />
+                <p>Settings</p>
+              </el-dropdown-item>
+              <el-dropdown-item
+                class="flex items-center py-1.5 px-6
+              hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
+                @click="navigateTo(routeNames.auth)"
+              >
+                <LogoutIcon />
+                <p>Logout</p>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </div>
@@ -70,9 +71,10 @@ const routes = [
   { name: routeNames.routinesList },
   { name: routeNames.exercises }
 ]
-const isImageClicked = ref(false)
-
 const router = useRouter()
+
+const isHovered = ref(false)
+
 
 function navigateTo (routeName: string) {
   router.push({ name: routeName })
@@ -84,5 +86,4 @@ function navigateTo (routeName: string) {
   border-bottom: 2px solid #1D83EA !important;
   color: black !important;
 }
-
 </style>

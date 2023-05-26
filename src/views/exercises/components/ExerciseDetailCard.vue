@@ -94,7 +94,8 @@
   </div>
 
   <div v-else class="flex flex-col py-[30%] items-center grow h-full">
-    <DumbellPlaceholder />
+    <DumbellPlaceholder  @click="$emit('createExercise')" />
+
     <p class="text-xl font-bold mt-4">Select an exercise</p>
   </div>
 </template>
@@ -108,6 +109,7 @@ defineProps<{
   exercise: IExercise
   statistics: IExerciseStatistics
 }>()
+defineEmits(['createExercise'])
 
 const duration = ref<string>()
 const timeOptions = ref(['last 12 week', 'Year', 'All time'])

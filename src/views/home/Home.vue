@@ -10,14 +10,16 @@
         <p class="text-xl font-bold mb-2">{{ sampleUser.name }}</p>
         <div class="text-sm w-fit">
           <p class="flex text-gray-400">Workouts</p>
+
           <p class="flex justify-center">{{ testData.length }}</p>
         </div>
       </div>
     </div>
     <div class="flex justify-between">
-      <div>
+      <div class="w-full">
         <p class="text-xl font-bold mb-4">Workouts</p>
-        <div class="flex flex-col items-center mr-4">
+
+        <div class="flex flex-col items-center lg:mr-4">
           <WorkoutLog
             v-for="testDataItem in testData"
             :key="testDataItem.id"
@@ -25,8 +27,10 @@
           />
         </div>
       </div>
-      <div class="w-full">
+
+      <div class="hidden lg:block w-full max-w-[377px]">
         <p class="text-xl font-bold mb-4">Statistics</p>
+
         <div class="flex bg-white border border-gray-300 rounded-xl p-4">
           Statistics
         </div>

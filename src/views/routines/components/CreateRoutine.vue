@@ -39,9 +39,11 @@
           class="flex flex-col justify-center items-center h-full my-auto"
         >
           <NoItemsIcon />
+
           <p class="text-lg font-bold mt-4">
             Get started
           </p>
+
           <p class="mt-1">
             Start by adding an exercise to your routine.
           </p>

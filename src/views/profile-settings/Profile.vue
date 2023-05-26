@@ -8,18 +8,31 @@
     <button class="text-sm text-[#1d83ea] mt-4">Change Picture</button>
     <div class="flex py-4 border-b border-b-gray-200 w-full gap-8">
       <div class="w-12">
-        <p class="flex items-center font-light">Name</p>
+        <p class="flex items-center font-light">Name:</p>
       </div>
 
-      <el-input class="w-[300px]" label="Name" />
+      <div class="customization-input">
+        <el-input label="Name" />
+      </div>
     </div>
     <div class="flex py-4 border-b border-b-gray-200 w-full gap-8">
       <div class="w-12">
-        <p class="flex items-cente  font-light">Bio</p>
+        <p class="flex items-cente  font-light">Bio:</p>
       </div>
 
-      <el-input class="w-[300px]" label="Bio" />
+      <div class="customization-input">
+        <el-input label="Bio" />
+      </div>
     </div>
-    <el-button type="primary" class="w-[300px] mt-4">Save</el-button>
+    <el-button type="primary" class="px-8 lg:w-[300px] lg:px-0 mt-4" disabled>Save</el-button>
   </div>
 </template>
+
+<style lang="scss">
+.customization-input {
+  width: 100%;
+  .el-input__wrapper {
+    box-shadow: none !important;
+  }
+}
+</style>

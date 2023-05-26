@@ -3,6 +3,7 @@
     <Filters
       @seeDetails="seeDetails($event)"
     />
+
     <ExerciseDetailCard :exercise="seeDetailExercise" :statistics="{} as IExerciseStatistics" />
   </div>
 </template>
@@ -16,5 +17,4 @@ function seeDetails (exercise: IExercise) {
 }
 
 const seeDetailExercise = ref({} as IExercise)
-
 </script>

@@ -4,30 +4,60 @@
     :class="{'bg-gray-200': serial % 2 === 0}"
   >
     <div class="flex justify-center bg-white rounded-md items-center border border-gray-200 w-[30px] h-[30px]">
-      {{ serial }}
+      {{ props.serial }}
     </div>
 
-    <div class="input-wrapper">
-      <el-input v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-" />
+    <div
+      class="input-wrapper"
+    >
+      <el-input
+        v-if="router.currentRoute.value.fullPath.split('/')[1] === 'createRoutine' || 'edit-routine'"
+        v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-"
+      />
+      <p v-else-if="router.currentRoute.value.fullPath.split('/')[1] === 'start-workout'">{{ props.set.weight }}</p>
     </div>
 
-    <div class="input-wrapper">
-      <el-input v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-" />
+    <div
+      class="input-wrapper"
+    >
+      <el-input
+        v-if="router.currentRoute.value.fullPath.split('/')[1] === 'createRoutine' || 'edit-routine'"
+        v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-"
+      />
+      <p v-else>{{ props.set.reps }}</p>
     </div>
-    <button @click="$emit('deleteSet')">
+
+    <button
+      v-if="router.currentRoute.value.fullPath.split('/')[1] === 'start-workout'"
+      class="w-[30px] h-[30px] bg-white border border-gray-200 rounded-md flex justify-center items-center"
+      :class="{'bg-[#1D83EA]': setDone}"
+      @click="done()"
+    />
+
+    <button v-else @click="$emit('deleteSet')">
       <DeleteIcon />
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   set: ISet
   serial: number
 }>()
-defineEmits(['deleteSet'])
+const emits = defineEmits(['deleteSet', 'setComplete'])
 
-const setModel = ref<ISet>({} as ISet)
+const router = useRouter()
+const setModel = ref<ISet>({
+  weight: props.set.weight,
+  reps: props.set.reps
+} as ISet)
+const setDone = ref<boolean>(false)
+
+function done () {
+  emits('setComplete', setModel.value)
+  setDone.value = true
+}
 </script>
 
 <style lang="scss">

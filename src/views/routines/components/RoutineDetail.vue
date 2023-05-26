@@ -1,11 +1,17 @@
 <template>
   <div class=" lg:flex lg:flex-row-reverse lg:justify-between">
     <div class="flex flex-row space-x-3 mb-3 lg:flex lg:flex-col lg:justify-start lg:space-y-3 lg:space-x-0">
-      <button class="w-full lg:w-[300px] h-9 rounded-md bg-[#1D83EA] text-white cursor-pointer mr-2 hover:bg-[#056DD7]">
+      <button
+        class="w-full lg:w-[300px] h-9 rounded-md bg-[#1D83EA] text-white cursor-pointer mr-2 hover:bg-[#056DD7]"
+        @click="navigate(routeNames.startWorkout)"
+      >
         Start Routine
       </button>
 
-      <button class="w-full lg:w-[300px] h-9 rounded-md bg-white cursor-pointer mr-2 border hover:bg-gray-100">
+      <button
+        class="w-full lg:w-[300px] h-9 rounded-md bg-white cursor-pointer mr-2 border hover:bg-gray-100"
+        @click="navigate(routeNames.editRoutine)"
+      >
         Edit Routine
       </button>
 
@@ -41,6 +47,8 @@
 </template>
 
 <script lang="ts" setup>
+import { routeNames } from '@/router/route-names'
+import { ElNotification } from 'element-plus'
 
 const currentRoute = useRoute()
 
@@ -54,8 +62,19 @@ const workout = computed(() => {
   }
 })
 
-function copyLink () {
+const router = useRouter()
+function navigate (name: string) {
+  router.push({ name, params: { id: router.currentRoute.value.params.id } })
+}
+
+const copyLink = () => {
   const url = window.location.href
   navigator.clipboard.writeText(url)
+  ElNotification({
+    title: 'Success',
+    message: 'Link copied to clipboard',
+    type: 'success',
+    duration: 2000
+  })
 }
 </script>

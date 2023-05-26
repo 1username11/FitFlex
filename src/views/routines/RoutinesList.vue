@@ -15,6 +15,7 @@
         </p>
       </button>
     </div>
+    
     <div class="bg-white rounded-lg p-5 border border-gray-300 w-full">
       <p class="text-gray-400">
         {{ routines.length > 1 ? `My Routines(${routines.length})` : 'My Routine' }}

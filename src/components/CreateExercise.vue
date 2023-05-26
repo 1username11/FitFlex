@@ -8,7 +8,7 @@
       Add Image
     </button>
 
-    <div class="border-b border-b-gray-300 py-4 w-full element-input-wrapper">
+    <div class="border-b border-b-gray-300 py-6 w-full element-input-wrapper">
       <el-input
         v-model="title"
         class="text-xl text-gray-400"
@@ -17,9 +17,11 @@
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
-      <p>Exercise type</p>
+      <p class="flex items-center">
+        Exercise type
+      </p>
 
-      <el-select v-model="type">
+      <el-select v-model="type" class="w-5/12">
         <el-option
           v-for="exerciseType in exerciseTypes"
           :key="exerciseType"
@@ -29,9 +31,11 @@
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
-      <p>Equipment</p>
+      <p class="flex items-center">
+        Equipment
+      </p>
 
-      <el-select v-model="equipment">
+      <el-select v-model="equipment" class="w-5/12">
         <el-option
           v-for="equipmentItem in equipments"
           :key="equipmentItem"
@@ -41,9 +45,11 @@
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
-      <p>Primary Muscle Group</p>
+      <p class="flex items-center">
+        Primary Muscle Group
+      </p>
 
-      <el-select v-model="primary">
+      <el-select v-model="primary" class="w-5/12">
         <el-option
           v-for="primaryMuscleGroup in muscleGroups"
           :key="primaryMuscleGroup"
@@ -53,9 +59,11 @@
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
-      <p>Secondary Muscle Group</p>
+      <p class="flex items-center">
+        Secondary Muscle Group
+      </p>
 
-      <el-select v-model="secondary">
+      <el-select v-model="secondary" class="w-5/12">
         <el-option
           v-for="secondaryMuscleGroup in muscleGroups"
           :key="secondaryMuscleGroup"
@@ -73,7 +81,6 @@
 </template>
 
 <script lang="ts" setup>
-
 const title = ref('')
 const type = ref('')
 const equipment = ref('')
@@ -127,4 +134,5 @@ const muscleGroups = [
   padding: 1px 0px 1px 0px !important;
 }
 }
+
 </style>
