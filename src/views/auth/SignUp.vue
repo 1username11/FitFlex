@@ -54,7 +54,8 @@
             native-type="submit"
             class="h-12 w-full"
             :type="$elComponentType.primary"
-            :disabled="!isFormValid"
+            :disabled="isFormValid"
+            @click="handleSignUp()"
           >
             Sign Up
           </el-button>
@@ -80,6 +81,7 @@
 </template>
 
 <script lang="ts" setup>
+import { supabase } from '@/supabase'
 import SocialAuth from './components/SocialAuth.vue'
 
 const signUpRef = ref()
@@ -89,7 +91,7 @@ const signUpModel = reactive({
   confirmPassword: ''
 })
 
-const confirmPasswordValidator = (_, value: string, callback: Function) => {
+const confirmPasswordValidator = (_, value: string, callback) => {
   if (value !== signUpModel.password) {
     callback(new Error('Password does not match'))
   } else {
@@ -117,10 +119,24 @@ const isFormValid = computed(() => {
 })
 
 function submit () {
-  signUpRef.value?.validate((isValid: boolean) => {
-    if (isValid) {
-      console.log('form is valid')
-    }
-  })
+  // signUpRef.value?.validate((isValid: boolean) => {
+  //   if (isValid) {
+  //     console.log('form is valid')
+  //   }
+  // })
+}
+
+const handleSignUp = async () => {
+  try {
+    const { email, password } = signUpModel
+    console.log(email, password)
+    const { data, error } = await authService.signUp({
+      email,
+      password
+    })
+    console.log(data, error)
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
