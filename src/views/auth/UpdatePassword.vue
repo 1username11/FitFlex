@@ -5,22 +5,26 @@
     <div class="flex flex-col items-center mx-auto p-6">
       <el-card class="max-w-[450px] p-1.5 rounded-lg">
         <p class="text-center text-lg font-bold mb-5">
-          Password recovery
-        </p>
-
-        <p class="mb-7 font-medium">
-          Enter your email and if an account exists we will send you an email with a link to recover your password.
+          Update Password
         </p>
 
         <el-form
-          ref="forgetPasswordRef"
+          ref="updatePasswordRef"
           :rules="forgetPasswordRules"
-          :model="forgetPasswordModel"
-          @submit="submit"
+          :model="updatePasswordModel"
+          @submit.prevent="submit"
         >
+          <el-form-item prop="passwod" class="h-11">
+            <el-input
+              v-model="updatePasswordModel.newPassword"
+              class="h-11"
+              placeholder="Email"
+            />
+          </el-form-item>
+
           <el-form-item prop="email" class="h-11">
             <el-input
-              v-model="forgetPasswordModel.email"
+              v-model="updatePasswordModel.confirmPassword"
               class="h-11"
               placeholder="Email"
             />
@@ -51,28 +55,42 @@
 </template>
 
 <script lang="ts" setup>
-const forgetPasswordRef = ref()
-const forgetPasswordModel = reactive({
-  email: ''
+const updatePasswordRef = ref()
+const updatePasswordModel = reactive({
+  newPassword: '',
+  confirmPassword: ''
 })
 
+const confirmPasswordValidator = (_, value: string, callback) => {
+  if (value !== updatePasswordModel.newPassword) {
+    callback(new Error('Password does not match'))
+  } else {
+    callback()
+  }
+}
+
 const forgetPasswordRules = reactive({
-  email: [
-    { required: true, message: 'Please enter your email', trigger: 'blur' },
-    { type: 'email', message: 'Please enter a valid email', trigger: 'blur' }
+  newPassword: [
+    { required: true, message: 'Please input password', trigger: 'blur' },
+    { min: 6, message: 'Password must be at least 6 characters', trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { validator: confirmPasswordValidator, trigger: 'blur' },
+    { required: true, message: 'Please enter your password', trigger: 'blur ' },
+    { min: 6, message: 'Password must be at least 6 characters', trigger: 'blur' }
   ]
 })
 
 const isFormValid = computed(() => {
-  return forgetPasswordRef.value?.validate()
+  return updatePasswordRef.value?.validate()
 })
 
 function submit () {
-  forgetPasswordRef.value?.validate(async (isValid: boolean) => {
+  updatePasswordRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
       console.log('form is valid')
       try {
-        await authService.resetPasswordForEmail(forgetPasswordModel.email)
+        await authService.updatePassword(updatePasswordModel.newPassword)
       } catch (error) {
         console.log(error)
       }

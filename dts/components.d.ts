@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     EditIcon: typeof import('./../src/views/routines/components/icons/EditIcon.vue')['default']
     EditRoutine: typeof import('./../src/views/routines/components/EditRoutine.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']

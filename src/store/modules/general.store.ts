@@ -11,10 +11,12 @@ export const useGeneralStore = defineStore('generalStore', () => {
       generalLoading.value = false
     }
   }
+  const isIosBrowser = computed(() => /iPhone|iPad|Safari/i.test(navigator.userAgent))
 
   return {
     exampleGeneralVar,
     generalLoading,
+    isIosBrowser,
     getGeneralStoreVar
   }
 })

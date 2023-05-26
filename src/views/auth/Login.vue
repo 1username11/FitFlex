@@ -80,9 +80,12 @@
 </template>
 
 <script lang="ts" setup>
+import { routeNames } from '@/router/route-names';
+import { ElNotification } from 'element-plus'
+
 const loginRef = ref()
 
-const loginModel = ref({
+const loginModel = reactive({
   email: '',
   password: ''
 })
@@ -99,13 +102,28 @@ const loginRules = ref({
 })
 
 const isFormValid = computed(() => {
-  return !loginRef.value?.validate()
+  return loginRef.value?.validate()
 })
-
+const router = useRouter()
 function submit () {
-  loginRef.value?.validate((isValid: boolean) => {
+  loginRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
       console.log('form is valid')
+      try {
+        const { email, password } = loginModel
+        await authService.signInWithPassword({
+          email,
+          password
+        })
+        ElNotification({
+          title: 'Login success',
+          type: 'success',
+          duration: 8000
+        })
+        router.push({ name: routeNames.home })
+      } catch (error) {
+        console.log(error)
+      }
     }
   })
 }
