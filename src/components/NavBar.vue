@@ -45,15 +45,19 @@
                 @click="navigateTo(routeNames.profileSettings)"
               >
                 <SettingsIcon />
-                <p>Settings</p>
+                <p>
+                  Settings
+                </p>
               </el-dropdown-item>
               <el-dropdown-item
                 class="flex items-center py-1.5 px-6
               hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
-                @click="navigateTo(routeNames.auth)"
+                @click="logout()"
               >
                 <LogoutIcon />
-                <p>Logout</p>
+                <p>
+                  Logout
+                </p>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -75,9 +79,13 @@ const router = useRouter()
 
 const isHovered = ref(false)
 
-
 function navigateTo (routeName: string) {
   router.push({ name: routeName })
+}
+
+async function logout () {
+  navigateTo(routeNames.auth)
+  return await authService.signOut()
 }
 </script>
 

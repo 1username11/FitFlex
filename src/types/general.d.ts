@@ -29,8 +29,6 @@ interface IUser {
   age: number
   bio?: string
   avatar: string
-  followers?: IUser[]
-  following?: IUser[]
 }
 
 interface IRoutine {
@@ -38,12 +36,6 @@ interface IRoutine {
   name: string
   exercises: IExercise[]
   user: IUser
-}
-
-interface IComment {
-  id: string
-  user: IUser
-  content: string
 }
 
 interface ILog {
@@ -56,7 +48,6 @@ interface ILog {
   reps: number
   workout: IRoutine
   likes: number
-  comments: IComment[]
 }
 
 interface IExerciseStatistics {

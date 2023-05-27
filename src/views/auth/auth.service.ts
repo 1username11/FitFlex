@@ -14,7 +14,7 @@ class AuthService {
     })
   }
 
-  signInWithPassword(payload: IAuthForm) {
+  signInWithPassword (payload: IAuthForm) {
     return supabase.auth.signInWithPassword({
       email: payload.email,
       password: payload.password
@@ -25,8 +25,12 @@ class AuthService {
     return supabase.auth.resetPasswordForEmail(payload, { redirectTo: 'http://localhost:5173/auth/update-password' })
   }
 
-  updatePassword(password: IAuthForm['password']) {
+  updatePassword (password: string) {
     return supabase.auth.updateUser({ password })
+  }
+
+  signOut () {
+    return supabase.auth.signOut()
   }
 }
 

@@ -82,6 +82,7 @@
 <script lang="ts" setup>
 import { ElNotification } from 'element-plus'
 import SocialAuth from './components/SocialAuth.vue'
+import { routeNames } from '@/router/route-names'
 
 const signUpRef = ref()
 const signUpModel = reactive({
@@ -116,7 +117,7 @@ const signUpRules = ref({
 const isFormValid = computed(() => {
   return !signUpRef.value?.validate()
 })
-
+const router = useRouter()
 function submit () {
   signUpRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
@@ -126,12 +127,13 @@ function submit () {
         await authService.signUp({
           email,
           password
-        })
-        ElNotification({
-          title: 'Confirmation Email Sent',
-          message: 'Check your email to verify your account',
-          type: 'info',
-          duration: 8000
+        }).then(() => {
+          ElNotification({
+            title: 'Email Verification',
+            message: 'Check your email to verify your account',
+            type: 'info'
+          })
+          router.push({ name: routeNames.login })
         })
       } catch (error) {
         console.log(error)

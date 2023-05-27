@@ -16,7 +16,7 @@
           ref="forgetPasswordRef"
           :rules="forgetPasswordRules"
           :model="forgetPasswordModel"
-          @submit="submit"
+          @submit.prevent="submit"
         >
           <el-form-item prop="email" class="h-11">
             <el-input
@@ -51,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ElNotification } from 'element-plus'
+
 const forgetPasswordRef = ref()
 const forgetPasswordModel = reactive({
   email: ''
@@ -72,7 +74,12 @@ function submit () {
     if (isValid) {
       console.log('form is valid')
       try {
-        await authService.resetPasswordForEmail(forgetPasswordModel.email)
+        await authService.resetPasswordForEmail(forgetPasswordModel.email).then(() => {
+          ElNotification({
+            message: 'Password recovery email sent',
+            type: 'success'
+          })
+        })
       } catch (error) {
         console.log(error)
       }

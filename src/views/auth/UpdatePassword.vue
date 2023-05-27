@@ -18,7 +18,7 @@
             <el-input
               v-model="updatePasswordModel.newPassword"
               class="h-11"
-              placeholder="Email"
+              placeholder="New Password"
             />
           </el-form-item>
 
@@ -26,7 +26,7 @@
             <el-input
               v-model="updatePasswordModel.confirmPassword"
               class="h-11"
-              placeholder="Email"
+              placeholder="Confirm Password"
             />
           </el-form-item>
 
@@ -37,15 +37,11 @@
               :type="$elComponentType.primary"
               :disabled="!isFormValid"
             >
-              Send Password Recovery
+              Update Password
             </el-button>
           </el-form-item>
         </el-form>
       </el-card>
-
-      <router-link :to="{name: $routeNames.login}" class="underline text-primary max-w-fit mt-5">
-        Back to Login
-      </router-link>
     </div>
 
     <RunningMan />
@@ -55,6 +51,8 @@
 </template>
 
 <script lang="ts" setup>
+import { routeNames } from '@/router/route-names'
+
 const updatePasswordRef = ref()
 const updatePasswordModel = reactive({
   newPassword: '',
@@ -85,12 +83,21 @@ const isFormValid = computed(() => {
   return updatePasswordRef.value?.validate()
 })
 
+const router = useRouter()
+
 function submit () {
   updatePasswordRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
       console.log('form is valid')
       try {
-        await authService.updatePassword(updatePasswordModel.newPassword)
+        await authService.updatePassword(updatePasswordModel.newPassword).then(() => {
+          ElNotification({
+            title: 'Success',
+            message: 'Password updated successfully',
+            type: 'success'
+          })
+          router.push({ name: routeNames.login })
+        })
       } catch (error) {
         console.log(error)
       }
