@@ -1,12 +1,13 @@
 <template>
   <div
     v-if="isLargeScreen"
+    v-loading="isLoading"
     class="flex flex-col p-4 bg-white rounded-lg border border-gray-200
-    w-[320px] h-[830px]"
+    w-[320px] h-[830px] overflow-auto"
   >
     <p class="mb-5 text-gray-400">Filters</p>
     <div class="select-wrapper">
-      <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment">
+      <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment" clearable>
         <el-option
           v-for="equipmentsItem in equipments"
           :key="equipmentsItem"
@@ -16,7 +17,7 @@
     </div>
 
     <div class="select-wrapper">
-      <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary">
+      <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary" clearable>
         <el-option
           v-for="primaryItem in primaries"
           :key="primaryItem"
@@ -66,6 +67,7 @@
       </div>
     </div>
   </div>
+  
   <div v-if="!isLargeScreen">
     <el-button
       type="primary"
@@ -85,7 +87,7 @@
       <p class="mb-5 text-gray-400">Filters</p>
 
       <div class="select-wrapper">
-        <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment">
+        <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment" clearable>
           <el-option
             v-for="equipmentsItem in equipments"
             :key="equipmentsItem"
@@ -95,7 +97,7 @@
       </div>
 
       <div class="select-wrapper">
-        <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary">
+        <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary" clearable>
           <el-option
             v-for="primaryItem in primaries"
             :key="primaryItem"
@@ -162,16 +164,45 @@ import { useMediaQuery } from '@vueuse/core'
 
 const emits = defineEmits(['addExercise', 'seeDetails'])
 const isCreateExerciseVisible = ref(false)
+const isLoading = ref(false)
 
-const routinesStore = useRoutinesStore()
-const { exercises } = storeToRefs(routinesStore)
+const exerciseStore = useExercisesStore()
+const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
+const {
+  exercises,
+  exerciseRes,
+  muscleGroupsRes,
+  equipmentRes
+} = storeToRefs(exerciseStore)
 
-const equipments = ref(exercises.value.map(exercise => exercise.equipment)
-  .filter((equipment, index, array) => array.indexOf(equipment) === index))
+const equipments = computed(() => {
+  return exerciseRes.value.map((exercise) => {
+    return equipmentRes.value.find((item) => item.id === exercise.equipment_category)?.title
+  }).sort((a, b) => {
+    if (a < b) {
+      return -1
+    }
+    if (a > b) {
+      return 1
+    }
+    return 0
+  })
+})
+console.log('equipments', equipments.value)
 
-const primaries = ref(exercises.value
-  .map((exercise) => exercise.primary)
-  .filter((primary, index, array) => array.indexOf(primary) === index))
+const primaries = computed(() => {
+  return exerciseRes.value.map((exercise) => {
+    return muscleGroupsRes.value.find((item) => item.id === exercise.muscle_group)?.title
+  }).sort((a, b) => {
+    if (a < b) {
+      return -1
+    }
+    if (a > b) {
+      return 1
+    }
+    return 0
+  })
+})
 
 const equipmentForFiltering = ref<string>('')
 const primaryForFIltering = ref<string>('')
@@ -204,8 +235,36 @@ const isMediumScreen = useMediaQuery('(min-width: 768px)')
 const drawer = ref(false)
 
 const currentRoute = useRouter().currentRoute.value.path
-console.log(currentRoute);
+console.log(currentRoute)
 
+onMounted(async () => {
+  isLoading.value = true
+  Promise.allSettled([
+    getExercises(),
+    getMuscleGroups(),
+    getExerciseTypes(),
+    getEquipment()
+  ]).then(() => {
+    exercises.value = exerciseRes.value.map((exercise: IExerciseRes) => {
+      const muscleGroup = muscleGroupsRes.value.find((item) => item.id === exercise.muscle_group)?.title
+      const equipment = equipmentRes.value.find((item) => item.id === exercise.equipment_category)?.title
+
+      return {
+        id: exercise.id,
+        name: exercise.title,
+        primary: muscleGroup,
+        equipment,
+        img: exercise.exercise_media_url
+      }
+    })
+  }).finally(() => {
+    isLoading.value = false
+  })
+  // console.log(exerciseRes.value)
+  // console.log(muscleGroupsRes.value)
+  // console.log(exerciseTypesRes.value)
+  // console.log(equipmentRes.value)
+})
 </script>
 
 <style lang="scss">

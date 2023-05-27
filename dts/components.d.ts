@@ -70,4 +70,7 @@ declare module '@vue/runtime-core' {
     WorkoutCard: typeof import('./../src/views/routines/components/WorkoutCard.vue')['default']
     WorkoutLog: typeof import('./../src/views/home/components/WorkoutLog.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

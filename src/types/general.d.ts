@@ -19,8 +19,8 @@ interface IExercise {
   description?: string
   primary?: string
   img: string
-  sets: ISet[]
-  equipment: string
+  sets?: ISet[]
+  equipment?: string
 }
 
 interface IUser {

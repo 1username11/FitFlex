@@ -5,7 +5,6 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
-  const ElNotification: typeof import('element-plus/es')['ElNotification']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const authService: typeof import('../src/views/auth/auth.service')['authService']
@@ -35,6 +34,7 @@ declare global {
   const effectScope: typeof import('vue')['effectScope']
   const exampleGeneralService: typeof import('../src/services/example-general.service')['exampleGeneralService']
   const exampleViewService: typeof import('../src/views/example-view/example-view.service')['exampleViewService']
+  const exercisesService: typeof import('../src/views/exercises/exercises.service')['exercisesService']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
@@ -172,6 +172,7 @@ declare global {
   const useEventListener: typeof import('@vueuse/core')['useEventListener']
   const useEventSource: typeof import('@vueuse/core')['useEventSource']
   const useExampleViewStore: typeof import('../src/views/example-view/example-view.store')['useExampleViewStore']
+  const useExercisesStore: typeof import('../src/views/exercises/exercises.store')['useExercisesStore']
   const useEyeDropper: typeof import('@vueuse/core')['useEyeDropper']
   const useFavicon: typeof import('@vueuse/core')['useFavicon']
   const useFetch: typeof import('@vueuse/core')['useFetch']
