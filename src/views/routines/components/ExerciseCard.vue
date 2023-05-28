@@ -9,7 +9,7 @@
 
       <el-dropdown trigger="click">
         <span>
-          <ExerciseCardButtonIcon />
+          <IconExerciseCardButton />
         </span>
 
         <template #dropdown>
@@ -24,7 +24,7 @@
     </div>
     <div>
       <div class="flex">
-        <TimerIcon />
+        <IconTimer />
 
         <p class="text-[#1d83ea] ml-1 mr-2">
           Rest timer

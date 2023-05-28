@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 z-49 w-full bg-white border-b border-gray-300">
+  <div class="sticky top-0 z-10 w-full bg-white border-b border-gray-300">
     <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
       <nav class="flex items-center">
         <Logo />
@@ -14,9 +14,9 @@
               class="nav-link flex items-center space-x-2 text-[#6D727F] border-b-2 border-b-white px-5 h-full
               group-hover:text-gray-600 group-hover:border-b-2 group-hover:border-b-[#c6e0fa]"
             >
-              <HomeIcon v-if="route.name === routeNames.home" />
-              <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
-              <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
+              <IconHome v-if="route.name === routeNames.home" />
+              <IconRoutines v-else-if="route.name === routeNames.routinesList" />
+              <IconExercises v-else-if="route.name === routeNames.exercises" />
 
               <span class="hidden capitalize lg:flex lg:items-center h-full">
                 {{ route.name }}
@@ -39,7 +39,7 @@
               hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
                 @click="navigateTo(routeNames.profileSettings)"
               >
-                <SettingsIcon />
+                <IconSettings />
                 <p>
                   Settings
                 </p>
@@ -62,7 +62,6 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import HomeIcon from '@/components/icons/HomeIcon.vue'
 
 const routes = [
   { name: routeNames.home },

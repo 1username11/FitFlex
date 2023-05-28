@@ -10,14 +10,14 @@
         <div class="ml-4">
           <p class="mb-2 text-gray-400">Info</p>
           <div class="flex mb-2">
-            <EquipmentIcon />
+            <IconEquipment />
             <p>
               Equipment:
             </p>
             <p class="capitalize">&nbsp; {{ exercise.equipment }}</p>
           </div>
           <div class="flex">
-            <PrimaryIcon />
+            <IconPrimary />
             <p>
               Primary:
             </p>
@@ -94,17 +94,13 @@
   </div>
 
   <div v-else class="flex flex-col py-[30%] items-center grow h-full">
-    <DumbellPlaceholder  @click="$emit('createExercise')" />
+    <IconDumbell @click="$emit('createExercise')" />
 
     <p class="text-xl font-bold mt-4">Select an exercise</p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import EquipmentIcon from './icons/EquipmentIcon.vue'
-import PrimaryIcon from './icons/PrimaryIcon.vue'
-import DumbellPlaceholder from './icons/DumbellPlaceholder.vue'
-
 defineProps<{
   exercise: IExercise
   statistics: IExerciseStatistics

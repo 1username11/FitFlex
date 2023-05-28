@@ -35,7 +35,7 @@
     />
 
     <button v-else @click="$emit('deleteSet')">
-      <DeleteIcon />
+      <IconDelete />
     </button>
   </div>
 </template>

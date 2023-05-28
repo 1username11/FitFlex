@@ -8,23 +8,23 @@
     </router-link>
     <el-dropdown trigger="click">
       <span>
-        <RoutinesItemButtonIcon />
+        <IconRoutinesItemButton />
       </span>
 
       <template #dropdown>
         <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
           <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="navigate()">
-            <EditIcon />
+            <IconEdit />
             Edit Routine
           </el-dropdown-item>
 
           <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('duplicate', workout)">
-            <DuplicateIcon />
+            <IconDuplicate />
             Duplicate Routine
           </el-dropdown-item>
 
           <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('delete', workout)">
-            <DeleteIcon />
+            <IconDelete />
             Delete Routine
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -35,9 +35,6 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import DeleteIcon from './icons/DeleteIcon.vue'
-import DuplicateIcon from './icons/DuplicateIcon.vue'
-import EditIcon from './icons/EditIcon.vue'
 
 const props = defineProps<{
   workout: IRoutine

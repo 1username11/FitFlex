@@ -1,3 +1,0 @@
-<template>
-  <svg width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" tint="#6D727F" type="profile" dark="#6D727F" light="#6D727F"><g transform="translate(9 8)" stroke="#6D727F" stroke-width="1.2" fill="none" fill-rule="evenodd"><path d="M6.24 7.533c1.52 0 2.9.602 3.914 1.58a5.626 5.626 0 011.667 3.243h0l-11.188.206a5.623 5.623 0 011.619-3.377A5.622 5.622 0 016.24 7.533z"></path><circle cx="6.24" cy="2.773" r="2.773"></circle></g></svg>
-</template>

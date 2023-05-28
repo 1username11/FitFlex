@@ -8,7 +8,7 @@
           hover:bg-gray-100 hover:border-gray-200 active:bg-gray-200 active:border-gray-300"
         @click="navigate"
       >
-        <NewRoutineIcon />
+        <IconNewRoutine />
 
         <p>
           New Routine

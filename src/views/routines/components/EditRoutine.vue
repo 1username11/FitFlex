@@ -39,7 +39,7 @@
           v-else
           class="flex flex-col justify-center items-center h-full my-auto"
         >
-          <NoItemsIcon />
+          <IconNoItems />
 
           <p class="text-lg font-bold mt-4">
             Get started

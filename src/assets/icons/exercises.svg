@@ -1,4 +1,3 @@
-<template>
   <svg
     width="30px"
     height="30px"
@@ -21,4 +20,3 @@
       />
     </g>
   </svg>
-</template>

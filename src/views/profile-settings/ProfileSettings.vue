@@ -7,12 +7,12 @@
         @click="onProfilePage()"
       >
         <div class="flex gap-2">
-          <ProfileIcon class="w-[40px] h-[40px] mr-2" />
+          <IconProfile class="w-[40px] h-[40px] mr-2" />
           <span class="hidden lg:flex items-center">Profile</span>
         </div>
 
         <div class="flex items-center">
-          <ArrowIcon />
+          <IconArrow />
         </div>
       </div>
       <div
@@ -20,12 +20,12 @@
         @click="onAccountPage()"
       >
         <div class="flex gap-2">
-          <AccountIcon class="w-[40px] h-[40px] mr-2" />
+          <IconAccount class="w-[40px] h-[40px] mr-2" />
           <span class="hidden lg:flex items-center">Account</span>
         </div>
 
         <div class="flex items-center">
-          <ArrowIcon />
+          <IconArrow />
         </div>
       </div>
     </div>

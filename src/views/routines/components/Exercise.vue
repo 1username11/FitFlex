@@ -9,12 +9,12 @@
 
       <div class="flex space-x-2 mb-2">
         <div class="border border-gray-300 bg-white rounded-lg w-fit pr-2">
-          <SetsIcon />
+          <IconSets />
           {{ exercise.sets.length }} {{ exercise.sets.length > 1 ? 'sets' : 'set' }}
         </div>
 
         <div class="border border-gray-300 bg-white rounded-lg w-fit pr-2">
-          <RepsIcon />
+          <IconReps />
           {{ Math.min(...exercise.sets.map((set) => set.reps)) }} -
           {{ Math.max(...exercise.sets.map((set) => set.reps)) }}
           reps
