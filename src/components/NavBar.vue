@@ -49,10 +49,8 @@
               hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
                 @click="logout()"
               >
-                <LogoutIcon />
-                <p>
-                  Logout
-                </p>
+                <IconLogout />
+                <p>Logout</p>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
