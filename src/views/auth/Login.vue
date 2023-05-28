@@ -11,7 +11,7 @@
         <span class="h-[0.5px] block bg-gray-300 mt-8" />
 
         <p class="-mt-[11px] px-4 text-center z-50 bg-gray-50 text-gray-300 text-sm w-fit mx-auto mb-8">
-          Or with email
+          or with email
         </p>
       </div>
 
@@ -43,7 +43,7 @@
             native-type="submit"
             class="h-12 w-full rounded-lg"
             :type="$elComponentType.primary"
-            :disabled="!isFormValid"
+            :disabled="!(loginModel.email || loginModel.password)"
           >
             Sign Up
           </el-button>
@@ -81,30 +81,19 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
+import { ElNotification } from 'element-plus'
 
 const loginRef = ref()
-
+const router = useRouter()
 const loginModel = reactive({
   email: '',
   password: ''
 })
 
 const loginRules = ref({
-  email: [
-    { required: true, message: 'Please input email', trigger: 'blur' },
-    { type: 'email', message: 'Please input a valid email', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, message: 'Password must be at least 6 characters', trigger: 'blur' }
-  ]
+  email: [useRequiredRule(), useEmailRule()],
+  password: [useRequiredRule(), useMinLenRule(6)]
 })
-
-const isFormValid = computed(() => {
-  return loginRef.value?.validate()
-})
-
-const router = useRouter()
 
 function submit () {
   loginRef.value?.validate(async (isValid: boolean) => {
@@ -121,6 +110,12 @@ function submit () {
       } catch (error) {
         console.log(error)
       }
+    } else {
+      ElNotification({
+        title: 'Error',
+        message: 'Please fill in all fields',
+        type: 'error'
+      })
     }
   })
 }

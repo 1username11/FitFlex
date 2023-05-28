@@ -4,7 +4,7 @@
       <p class="text-lg font-bold mb-4 ">{{ exercise.name }}</p>
       <div class="flex grow">
         <div class="image-wrapper">
-          <el-image />
+          <el-image :src="exercise.img" />
         </div>
 
         <div class="ml-4">
@@ -14,14 +14,14 @@
             <p>
               Equipment:
             </p>
-            <p>{{ exercise.equipment }}</p>
+            <p class="capitalize">&nbsp; {{ exercise.equipment }}</p>
           </div>
           <div class="flex">
             <PrimaryIcon />
             <p>
               Primary:
             </p>
-            <p>{{ exercise.primary }}</p>
+            <p class="capitalize">&nbsp; {{ exercise.primary }}</p>
           </div>
         </div>
       </div>

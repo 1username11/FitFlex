@@ -13,7 +13,7 @@
         <span class="h-[0.5px] block bg-gray-300 mt-8" />
 
         <p class="-mt-[11px] px-4 text-center z-50 bg-gray-50 text-gray-300 text-sm w-fit mx-auto mb-8">
-          Or with email
+          or with email
         </p>
       </div>
 
@@ -54,7 +54,7 @@
             native-type="submit"
             class="h-12 w-full"
             :type="$elComponentType.primary"
-            :disabled="isFormValid"
+            :disabled="!(signUpModel.email.length || signUpModel.password.length || signUpModel.confirmPassword.length)"
           >
             Sign Up
           </el-button>
@@ -84,6 +84,7 @@ import { ElNotification } from 'element-plus'
 import SocialAuth from './components/SocialAuth.vue'
 import { routeNames } from '@/router/route-names'
 
+const router = useRouter()
 const signUpRef = ref()
 const signUpModel = reactive({
   email: '',
@@ -99,25 +100,15 @@ const confirmPasswordValidator = (_, value: string, callback) => {
   }
 }
 
-const signUpRules = ref({
-  email: [
-    { required: true, message: 'Please input email', trigger: 'blur' },
-    { type: 'email', message: 'Please input a valid email', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, message: 'Password must be at least 6 characters', trigger: 'blur' }
-  ],
-  confirmPassword: [
-    { required: true, message: 'Please input confirm password', trigger: 'blur' },
+const signUpRules = reactive({
+  email: [useRequiredRule(), useEmailRule()],
+  password: [useRequiredRule(), useMinLenRule(6)],
+
+  confirmPassword: [useRequiredRule(),
     { validator: confirmPasswordValidator, trigger: 'blur' }
   ]
 })
 
-const isFormValid = computed(() => {
-  return !signUpRef.value?.validate()
-})
-const router = useRouter()
 function submit () {
   signUpRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
@@ -138,6 +129,12 @@ function submit () {
       } catch (error) {
         console.log(error)
       }
+    } else {
+      ElNotification({
+        title: 'Error',
+        message: 'Please fill in all fields',
+        type: 'error'
+      })
     }
   })
 }
