@@ -112,7 +112,6 @@ const signUpRules = reactive({
 function submit () {
   signUpRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
-      console.log('form is valid')
       try {
         const { email, password } = signUpModel
         await authService.signUp({

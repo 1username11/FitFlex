@@ -1,5 +1,4 @@
-<template>
-  <svg
+<svg
     width="30px"
     height="30px"
     viewBox="0 0 30 30"
@@ -27,5 +26,4 @@
   0 10.896.908l3.878-3.827a.64.64 0 000-.909z"
       />
     </g>
-  </svg>
-</template>
+</svg>

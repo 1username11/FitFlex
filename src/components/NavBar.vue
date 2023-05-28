@@ -1,25 +1,20 @@
 <template>
-  <div
-    class="sticky top-0 z-49 w-full bg-white border-b border-gray-300"
-  >
+  <div class="sticky top-0 z-49 w-full bg-white border-b border-gray-300">
     <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
-      <nav class="flex justify-start items-center">
+      <nav class="flex items-center">
         <Logo />
         <ul class="flex px-3 h-full">
           <li
             v-for="route in routes"
             :key="route.name"
+            class="group"
           >
             <RouterLink
               :to="{name: route.name}"
-              class="flex items-center space-x-2 text-[#6D727F] border-b-2 border-b-white hover:text-gray-600
-              hover:border-b-2 hover:border-b-[#c6e0fa] px-5 h-full"
+              class="nav-link flex items-center space-x-2 text-[#6D727F] border-b-2 border-b-white px-5 h-full
+              group-hover:text-gray-600 group-hover:border-b-2 group-hover:border-b-[#c6e0fa]"
             >
-              <!-- TODO change SVG color on active -->
-              <FeedIcon
-                v-if="route.name === routeNames.home"
-                :isHovered="isHovered"
-              />
+              <HomeIcon v-if="route.name === routeNames.home" />
               <RoutinesIcon v-else-if="route.name === routeNames.routinesList" />
               <ExercisesIcon v-else-if="route.name === routeNames.exercises" />
 
@@ -69,6 +64,7 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
+import HomeIcon from '@/components/icons/HomeIcon.vue'
 
 const routes = [
   { name: routeNames.home },
@@ -76,8 +72,6 @@ const routes = [
   { name: routeNames.exercises }
 ]
 const router = useRouter()
-
-const isHovered = ref(false)
 
 function navigateTo (routeName: string) {
   router.push({ name: routeName })
@@ -89,8 +83,8 @@ async function logout () {
 }
 </script>
 
-<style lang="scss">
-.router-link-active.router-link-exact-active {
+<style scoped lang="scss">
+.router-link-active.router-link-exact-active.nav-link {
   border-bottom: 2px solid #1D83EA !important;
   color: black !important;
 }
