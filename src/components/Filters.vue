@@ -63,13 +63,16 @@
           @click="emitExercise(exercise)"
         >
           <IconPlus />
-          <el-image
-            v-if="exercise.img.split('.').pop() === 'jpg'"
-            :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden"
-          />
-          <video v-else class="w-16 h-16 rounded-full overflow-hidden">
+          <video
+            v-if="exercise.img?.split('?').shift()?.split('.').pop() === 'mp4'"
+            class="w-16 h-16 rounded-full overflow-hidden"
+          >
             <source :src="exercise.img" type="video/mp4">
           </video>
+          <el-image
+            v-else
+            :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden"
+          />
 
           <div class="ml-2">
             <div>
@@ -169,6 +172,7 @@
     <CreateExercise
       class="popup-wrapper"
       @close="isCreateExerciseVisible = false"
+      @closePopup="isCreateExerciseVisible = false"
     />
     <div class="overlay" @click="isCreateExerciseVisible = !isCreateExerciseVisible" />
   </div>

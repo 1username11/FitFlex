@@ -7,7 +7,6 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
   const selectedEquipment = ref('')
   const slecetedPrimary = ref('')
   const searchedExercises = ref('')
-
   const compare = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0
 
   async function getExercises() {
