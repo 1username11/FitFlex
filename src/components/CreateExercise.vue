@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-center bg-white max-w-[550px] p-5 rounded-lg">
-    <p class="trext-lg font-bold mb-4 w-full">Create Exercise</p>
+    <p class="text-lg font-bold mb-4 w-full">Create Exercise</p>
 
     <el-image class="w-[80px] h-[80px] rounded-full overflow-hidden border mb-5" />
 

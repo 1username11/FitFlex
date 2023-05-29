@@ -10,7 +10,6 @@
 
 <script lang="ts" setup>
 import ExerciseDetailCard from './components/ExerciseDetailCard.vue'
-import { ref } from 'vue'
 
 function seeDetails (exercise: IExercise) {
   seeDetailExercise.value = exercise

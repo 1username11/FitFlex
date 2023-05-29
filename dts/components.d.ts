@@ -54,6 +54,7 @@ declare module '@vue/runtime-core' {
     IconLogout: typeof import('~icons/icon/logout')['default']
     IconNewRoutine: typeof import('~icons/icon/new-routine')['default']
     IconNoItems: typeof import('~icons/icon/no-items')['default']
+    IconPlus: typeof import('~icons/icon/plus')['default']
     IconPrimary: typeof import('~icons/icon/primary')['default']
     IconPrimaryIcon: typeof import('~icons/icon/primary-icon')['default']
     IconProfile: typeof import('~icons/icon/profile')['default']

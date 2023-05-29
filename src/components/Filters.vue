@@ -1,13 +1,18 @@
 <template>
   <div
     v-if="isLargeScreen"
-    v-loading="isLoading"
-    class="flex flex-col p-4 bg-white rounded-lg border border-gray-200
-    w-[320px] h-[830px] overflow-auto"
+    v-loading="loading"
+    class="flex flex-col p-4 bg-white rounded-lg border border-gray-200 w-80 h-[830px] overflow-auto"
   >
     <p class="mb-5 text-gray-400">Filters</p>
+
     <div class="select-wrapper">
-      <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment" clearable>
+      <el-select
+        v-model="equipmentForFiltering"
+        class="w-full mb-4"
+        placeholder="All Equipment"
+        clearable
+      >
         <el-option
           v-for="equipmentsItem in equipments"
           :key="equipmentsItem"
@@ -17,7 +22,12 @@
     </div>
 
     <div class="select-wrapper">
-      <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary" clearable>
+      <el-select
+        v-model="primaryForFiltering"
+        class="w-full mb-4"
+        placeholder="Primary"
+        clearable
+      >
         <el-option
           v-for="primaryItem in primaries"
           :key="primaryItem"
@@ -45,14 +55,14 @@
       </div>
 
       <div
-        v-for="exercise in filteredExercises"
+        v-for="exercise in exercises"
         :key="exercise.id"
       >
         <div
           class="flex items-center border-b border-b-gray-200 h-[90px]"
           @click="emitExercise(exercise)"
         >
-          <PlusIcon />
+          <IconPlus />
           <el-image :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden" />
 
           <div class="ml-2">
@@ -67,7 +77,7 @@
       </div>
     </div>
   </div>
-  
+
   <div v-if="!isLargeScreen">
     <el-button
       type="primary"
@@ -97,7 +107,7 @@
       </div>
 
       <div class="select-wrapper">
-        <el-select v-model="primaryForFIltering" class="w-full mb-4" placeholder="Primary" clearable>
+        <el-select v-model="primaryForFiltering" class="w-full mb-4" placeholder="Primary" clearable>
           <el-option
             v-for="primaryItem in primaries"
             :key="primaryItem"
@@ -125,14 +135,14 @@
         </div>
 
         <div
-          v-for="exercise in filteredExercises"
+          v-for="exercise in exercises"
           :key="exercise.id"
         >
           <div
             class="flex items-center border-b border-b-gray-200 h-[90px]"
             @click="emitExercise(exercise)"
           >
-            <PlusIcon />
+            <IconPlus />
             <el-image :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden" />
 
             <div class="ml-2">
@@ -148,9 +158,8 @@
       </div>
     </el-drawer>
   </div>
-  <div
-    v-if="isCreateExerciseVisible "
-  >
+
+  <div v-if="isCreateExerciseVisible">
     <CreateExercise
       class="popup-wrapper"
       @close="isCreateExerciseVisible = false"
@@ -163,107 +172,42 @@
 import { useMediaQuery } from '@vueuse/core'
 
 const emits = defineEmits(['addExercise', 'seeDetails'])
+
+const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+const isMediumScreen = useMediaQuery('(min-width: 768px)')
+
+const drawer = ref(false)
+const loading = ref(false)
 const isCreateExerciseVisible = ref(false)
-const isLoading = ref(false)
+const currentRoute = useRouter().currentRoute.value.path
 
 const exerciseStore = useExercisesStore()
 const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
 const {
   exercises,
-  exerciseRes,
-  muscleGroupsRes,
-  equipmentRes
+  equipments,
+  primaries,
+  equipmentForFiltering,
+  primaryForFiltering,
+  inputFilteringValue
 } = storeToRefs(exerciseStore)
-
-const equipments = computed(() => {
-  return exerciseRes.value.map((exercise) => {
-    return equipmentRes.value.find((item) => item.id === exercise.equipment_category)?.title
-  }).sort((a, b) => {
-    if (a < b) {
-      return -1
-    }
-    if (a > b) {
-      return 1
-    }
-    return 0
-  })
-})
-console.log('equipments', equipments.value)
-
-const primaries = computed(() => {
-  return exerciseRes.value.map((exercise) => {
-    return muscleGroupsRes.value.find((item) => item.id === exercise.muscle_group)?.title
-  }).sort((a, b) => {
-    if (a < b) {
-      return -1
-    }
-    if (a > b) {
-      return 1
-    }
-    return 0
-  })
-})
-
-const equipmentForFiltering = ref<string>('')
-const primaryForFIltering = ref<string>('')
-const inputFilteringValue = ref<string>('')
-
-const filteredExercises = computed(() => {
-  const filteringValue = inputFilteringValue.value.toLowerCase().trim()
-
-  return exercises.value.filter((exercise) => {
-    const meetsEquipmentFilter =
-      !equipmentForFiltering.value || exercise.equipment === equipmentForFiltering.value
-    const meetsPrimaryFilter =
-      !primaryForFIltering.value || exercise.primary === primaryForFIltering.value
-    const meetsSearchFilter =
-      !filteringValue ||
-      exercise.name.toLowerCase().includes(filteringValue) ||
-      exercise.primary.toLowerCase().includes(filteringValue)
-
-    return meetsEquipmentFilter && meetsPrimaryFilter && meetsSearchFilter
-  })
-})
 
 function emitExercise (exercise: IExercise) {
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }
 
-const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-const isMediumScreen = useMediaQuery('(min-width: 768px)')
-const drawer = ref(false)
-
-const currentRoute = useRouter().currentRoute.value.path
-console.log(currentRoute)
-
 onMounted(async () => {
-  isLoading.value = true
+  loading.value = true
   Promise.allSettled([
-    getExercises(),
     getMuscleGroups(),
     getExerciseTypes(),
     getEquipment()
-  ]).then(() => {
-    exercises.value = exerciseRes.value.map((exercise: IExerciseRes) => {
-      const muscleGroup = muscleGroupsRes.value.find((item) => item.id === exercise.muscle_group)?.title
-      const equipment = equipmentRes.value.find((item) => item.id === exercise.equipment_category)?.title
-
-      return {
-        id: exercise.id,
-        name: exercise.title,
-        primary: muscleGroup,
-        equipment,
-        img: exercise.exercise_media_url
-      }
-    })
+  ]).then(() =>{
+    getExercises()
   }).finally(() => {
-    isLoading.value = false
+    loading.value = false
   })
-  // console.log(exerciseRes.value)
-  // console.log(muscleGroupsRes.value)
-  // console.log(exerciseTypesRes.value)
-  // console.log(equipmentRes.value)
 })
 </script>
 

@@ -1,67 +1,84 @@
-// the first argument is a unique id of the store across your application
 export const useExercisesStore = defineStore('exercisesStore', () => {
-  const exercises = ref<IExercise[]>([])
   const exerciseRes = ref<IExerciseRes[]>([])
-  const muscleGroupsRes = ref<IMuscleGroupRes[]>([])
-  const exerciseTypesRes = ref<IExerciseTypeRes[]>([])
-  const equipmentRes = ref<IEquipmentRes[]>([])
+  const muscleGroupsRes = ref<any>()
+  const exerciseTypesRes = ref<any>()
+  const equipmentRes = ref<any>()
+
+  const equipmentForFiltering = ref('')
+  const primaryForFiltering = ref('')
+  const inputFilteringValue = ref('')
+
+  const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0
 
   async function getExercises() {
-    const res = await exercisesService.getExercises()
-    if (res.data && res.data.length > 0 && res.status === 200) {
-      res.data.forEach((exercise) => {
-        exerciseRes.value.push({
-          id: exercise.id,
-          title: exercise.title,
-          equipment_category: exercise.equipment_category,
-          muscle_group: exercise.muscle_group,
-          secondary_muscles: exercise.secondary_muscles,
-          exercise_media_url: exercise.exercise_media_url,
-          exercise_type: exercise.exercise_type,
-          created_at: exercise.created_at
-        })
-      })
-    }
+    exerciseRes.value = (await exercisesService.getExercises()).data as IExerciseRes[]
   }
 
   async function getMuscleGroups() {
-    const res = await exercisesService.getMuscleGroups()
-    if (res.data && res.data.length > 0 && res.status === 200) {
-      res.data.forEach((muscleGroup) => {
-        muscleGroupsRes.value.push({
-          id: muscleGroup.id,
-          title: muscleGroup.title,
-          created_at: muscleGroup.created_at
-        })
-      })
-    }
+    muscleGroupsRes.value = (await exercisesService.getMuscleGroups()).data?.reduce((acc, curr) => {
+      acc[curr.id] = curr.title
+      return acc
+    }, {})
+    console.log(muscleGroupsRes.value)
   }
 
   async function getExerciseTypes() {
-    const res = await exercisesService.getExerciseTypes()
-    if (res.data && res.data.length > 0 && res.status === 200) {
-      res.data.forEach((exerciseType) => {
-        exerciseTypesRes.value.push({
-          id: exerciseType.id,
-          title: exerciseType.title,
-          created_at: exerciseType.created_at
-        })
-      })
-    }
+    exerciseTypesRes.value = (await exercisesService.getExerciseTypes()).data
+      ?.reduce((acc, curr) => {
+        acc[curr.id] = curr.title
+        return acc
+      }, {})
   }
 
   async function getEquipment() {
-    const res = await exercisesService.getEquipment()
-    if (res.data && res.data.length && res.status === 200) {
-      res.data.forEach((equipment) => {
-        equipmentRes.value.push({
-          id: equipment.id,
-          title: equipment.title,
-          created_at: equipment.created_at
-        })
-      })
-    }
+    equipmentRes.value = (await exercisesService.getEquipment()).data
+      ?.reduce((acc, curr) => {
+        acc[curr.id] = curr.title
+        return acc
+      }, {})
   }
+
+  const exercises = computed(() => {
+    const filteringValue = inputFilteringValue.value.toLowerCase().trim()
+    return exerciseRes.value.map((exercise: IExerciseRes) => {
+      return {
+        id: exercise.id,
+        name: exercise.title,
+        primary: muscleGroupsRes.value[exercise.muscle_group],
+        equipment: equipmentRes.value[exercise.equipment_category],
+        img: exercise.exercise_media_url
+      }
+    }).filter((exercise) => {
+      const meetsEquipmentFilter =
+        !equipmentForFiltering.value || exercise.equipment === equipmentForFiltering.value
+      const meetsPrimaryFilter =
+        !primaryForFiltering.value || exercise.primary === primaryForFiltering.value
+      const meetsSearchFilter =
+        !filteringValue ||
+        exercise.name.toLowerCase().includes(filteringValue) ||
+        exercise.primary.toLowerCase().includes(filteringValue)
+
+      return meetsEquipmentFilter && meetsPrimaryFilter && meetsSearchFilter
+    })
+  })
+
+  const equipments = computed(() => {
+    return exerciseRes.value.map((exercise) => {
+      const equipmentIds = Object.keys(equipmentRes.value)
+      if (equipmentIds.includes(exercise.equipment_category)) {
+        return equipmentRes.value[exercise.equipment_category]
+      }
+    }).sort(compare)
+  })
+
+  const primaries = computed(() => {
+    return exerciseRes.value.map((exercise) => {
+      const muscleGroupsIds = Object.keys(muscleGroupsRes.value)
+      if (muscleGroupsIds.includes(exercise.muscle_group)) {
+        return muscleGroupsRes.value[exercise.muscle_group]
+      }
+    }).sort(compare)
+  })
 
   return {
     getExercises,
@@ -69,10 +86,12 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     getExerciseTypes,
     getEquipment,
     exercises,
-    exerciseRes,
-    muscleGroupsRes,
-    exerciseTypesRes,
-    equipmentRes
+    equipments,
+    primaries,
+    equipmentForFiltering,
+    primaryForFiltering,
+    inputFilteringValue
+
   }
 })
 
