@@ -203,8 +203,10 @@ onMounted(async () => {
     getMuscleGroups(),
     getExerciseTypes(),
     getEquipment()
-  ]).then(() =>{
+  ]).then(() => {
     getExercises()
+  }).catch((e) => {
+    console.log(e)
   }).finally(() => {
     loading.value = false
   })
