@@ -8,7 +8,7 @@
 
     <div class="select-wrapper">
       <el-select
-        v-model="equipmentForFiltering"
+        v-model="selectedEquipment"
         class="w-full mb-4"
         placeholder="All Equipment"
         clearable
@@ -23,7 +23,7 @@
 
     <div class="select-wrapper">
       <el-select
-        v-model="primaryForFiltering"
+        v-model="slecetedPrimary"
         class="w-full mb-4"
         placeholder="Primary"
         clearable
@@ -51,7 +51,7 @@
       </div>
 
       <div class="mb-4">
-        <el-input v-model="inputFilteringValue" placeholder="Search" />
+        <el-input v-model="searchedExercises" placeholder="Search" />
       </div>
 
       <div
@@ -63,7 +63,13 @@
           @click="emitExercise(exercise)"
         >
           <IconPlus />
-          <el-image :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden" />
+          <el-image
+            v-if="exercise.img.split('.').pop() === 'jpg'"
+            :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden"
+          />
+          <video v-else class="w-16 h-16 rounded-full overflow-hidden">
+            <source :src="exercise.img" type="video/mp4">
+          </video>
 
           <div class="ml-2">
             <div>
@@ -97,7 +103,7 @@
       <p class="mb-5 text-gray-400">Filters</p>
 
       <div class="select-wrapper">
-        <el-select v-model="equipmentForFiltering" class="w-full mb-4" placeholder="All Equipment" clearable>
+        <el-select v-model="selectedEquipment" class="w-full mb-4" placeholder="All Equipment" clearable>
           <el-option
             v-for="equipmentsItem in equipments"
             :key="equipmentsItem"
@@ -107,7 +113,7 @@
       </div>
 
       <div class="select-wrapper">
-        <el-select v-model="primaryForFiltering" class="w-full mb-4" placeholder="Primary" clearable>
+        <el-select v-model="slecetedPrimary" class="w-full mb-4" placeholder="Primary" clearable>
           <el-option
             v-for="primaryItem in primaries"
             :key="primaryItem"
@@ -131,7 +137,7 @@
         </div>
 
         <div class="mb-4">
-          <el-input v-model="inputFilteringValue" placeholder="Search" />
+          <el-input v-model="searchedExercises" placeholder="Search" />
         </div>
 
         <div
@@ -187,9 +193,9 @@ const {
   exercises,
   equipments,
   primaries,
-  equipmentForFiltering,
-  primaryForFiltering,
-  inputFilteringValue
+  selectedEquipment,
+  slecetedPrimary,
+  searchedExercises
 } = storeToRefs(exerciseStore)
 
 function emitExercise (exercise: IExercise) {
@@ -217,7 +223,7 @@ onMounted(async () => {
 .select-wrapper {
   .el-select {
     .el-input__wrapper {
-      background: #f0f0f0;
+      background: white;
     }
     .el-input.is-focus .el-input__wrapper {
       box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset !important;

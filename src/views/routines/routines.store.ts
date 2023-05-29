@@ -89,24 +89,6 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
     }
   ])
 
-  const comments = ref<IComment[]>([
-    {
-      id: '1',
-      user: users.value[0],
-      content: 'Comment 1'
-    },
-    {
-      id: '2',
-      user: users.value[1],
-      content: 'Comment 2'
-    },
-    {
-      id: '3',
-      user: users.value[2],
-      content: 'Comment 3'
-    }
-  ])
-
   const logs = ref<ILog[]>([
     {
       id: '1',
@@ -118,7 +100,6 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
       reps: 10,
       workout: routines.value[0],
       likes: 5,
-      comments: [comments.value[0], comments.value[1]]
     },
     {
       id: '2',
@@ -130,7 +111,6 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
       reps: 8,
       workout: routines.value[1],
       likes: 3,
-      comments: [comments.value[1], comments.value[2]]
     },
     {
       id: '3',
@@ -142,7 +122,6 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
       reps: 12,
       workout: routines.value[2],
       likes: 7,
-      comments: [comments.value[0], comments.value[2]]
     }
   ])
 

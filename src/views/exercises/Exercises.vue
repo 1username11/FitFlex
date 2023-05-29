@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-4">
     <Filters
-      @seeDetails="seeDetails($event)"
+      @seeDetails="seeDetails"
     />
 
     <ExerciseDetailCard :exercise="seeDetailExercise" :statistics="{} as IExerciseStatistics" />
@@ -10,10 +10,9 @@
 
 <script lang="ts" setup>
 import ExerciseDetailCard from './components/ExerciseDetailCard.vue'
+const seeDetailExercise = ref({} as IExercise)
 
 function seeDetails (exercise: IExercise) {
   seeDetailExercise.value = exercise
 }
-
-const seeDetailExercise = ref({} as IExercise)
 </script>

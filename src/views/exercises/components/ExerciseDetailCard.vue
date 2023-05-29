@@ -1,10 +1,16 @@
 <template>
-  <div v-if="exercise.id" class="flex flex-col grow h-full">
+  <div v-if="exercise.id" :key="exercise.id" class="flex flex-col grow h-full">
     <div class="flex flex-col">
-      <p class="text-lg font-bold mb-4 ">{{ exercise.name }}</p>
-      <div class="flex grow">
+      <p class="text-lg font-bold mb-4">{{ exercise.name }}</p>
+      <div class="md:flex">
         <div class="image-wrapper">
-          <el-image :src="exercise.img" />
+          <video v-if="exercise.img.split('?').shift()?.split('.').pop() === 'mp4'" autoplay loop>
+            <source :src="exercise.img" type="video/mp4">
+          </video>
+          <el-image
+            v-else
+            :src="exercise.img"
+          />
         </div>
 
         <div class="ml-4">
@@ -113,27 +119,21 @@ const timeOptions = ref(['last 12 week', 'Year', 'All time'])
 
 <style lang="scss">
 .image-wrapper{
+  display: flex;
+  justify-content: center;
   background-color: white;
-    display: flex;
-    width: 50%;
-    aspect-ratio: 1.6 / 1;
-    -webkit-box-pack: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: white;
-    border-radius: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(224, 224, 224);
+  width: 320px;
+  aspect-ratio: 1.6 / 1;
+  overflow: hidden;
+  border-radius: 8px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(224, 224, 224);
 }
 
 .statistic-placeholder{
   display: flex;
-    flex: 1 1 0%;
-    -webkit-box-align: center;
     align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
     background-color: white;
     border-radius: 8px;
     border-style: solid;

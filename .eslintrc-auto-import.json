@@ -95,6 +95,7 @@
     "resolveComponent": true,
     "resolveRef": true,
     "resolveUnref": true,
+    "routinesService": true,
     "setActivePinia": true,
     "setMapStoreSuffix": true,
     "shallowReactive": true,
