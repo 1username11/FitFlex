@@ -85,17 +85,25 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     }, [] as string[]).sort(compare)
   })
 
+  async function insertExercise(exercise) {
+    return await exercisesService.insertExercise(exercise)
+  }
+
   return {
     getExercises,
     getMuscleGroups,
     getExerciseTypes,
     getEquipment,
+    insertExercise,
     exercises,
     equipments,
     primaries,
     selectedEquipment,
     slecetedPrimary,
-    searchedExercises
+    searchedExercises,
+    hashedMuscleGroups,
+    hashedExerciseTypes,
+    hashedEquipment
   }
 })
 

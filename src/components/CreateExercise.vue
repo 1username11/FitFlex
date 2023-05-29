@@ -21,13 +21,7 @@
         Exercise type
       </p>
 
-      <el-select v-model="type" class="w-5/12">
-        <el-option
-          v-for="exerciseType in exerciseTypes"
-          :key="exerciseType"
-          :value="exerciseType"
-        />
-      </el-select>
+      <el-select-v2 v-model="type" :options="exerciseTypes" class="ml-2" />
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
@@ -35,13 +29,7 @@
         Equipment
       </p>
 
-      <el-select v-model="equipment" class="w-5/12">
-        <el-option
-          v-for="equipmentItem in equipments"
-          :key="equipmentItem"
-          :value="equipmentItem"
-        />
-      </el-select>
+      <el-select-v2 v-model="equipment" :options="equipments" class="ml-2" />
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
@@ -49,13 +37,7 @@
         Primary Muscle Group
       </p>
 
-      <el-select v-model="primary" class="w-5/12">
-        <el-option
-          v-for="primaryMuscleGroup in muscleGroups"
-          :key="primaryMuscleGroup"
-          :value="primaryMuscleGroup"
-        />
-      </el-select>
+      <el-select-v2 v-model="primary" :options="muscleGroups" class="ml-2" />
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
@@ -63,17 +45,11 @@
         Secondary Muscle Group
       </p>
 
-      <el-select v-model="secondary" class="w-5/12">
-        <el-option
-          v-for="secondaryMuscleGroup in muscleGroups"
-          :key="secondaryMuscleGroup"
-          :value="secondaryMuscleGroup"
-        />
-      </el-select>
+      <el-select-v2 v-model="secondary" :options="muscleGroups" class="ml-2" />
     </div>
 
     <div class="flex justify-end items-end w-full">
-      <el-button type="primary" class="mt-28 w-[200px]">
+      <el-button type="primary" class="mt-28 w-[200px]" @click="insertExercise(exersiceForm)">
         Create Exercise
       </el-button>
     </div>
@@ -87,44 +63,32 @@ const equipment = ref('')
 const primary = ref('')
 const secondary = ref('')
 
-const exerciseTypes = [
-  'Weight Reps',
-  'Reps Only',
-  'Weighted Bodyweight',
-  'Assisted Bodyweight',
-  'Bodyweight',
-  'Duration',
-  'Distance Duration',
-  'Weght and Distance'
-]
+const exercisesStore = useExercisesStore()
+const { insertExercise } = exercisesStore
+const {
+  hashedMuscleGroups,
+  hashedExerciseTypes,
+  hashedEquipment
+} = storeToRefs(exercisesStore)
+console.log(hashedMuscleGroups.value, hashedExerciseTypes.value, hashedEquipment.value)
 
-const equipments = [
-  'Barbell',
-  'Dumbbell',
-  'Kettlebell',
-  'Machine',
-  'Cable',
-  'Bodyweight',
-  'Bands',
-  'Other',
-  'None'
-]
+const exerciseTypes = ref(Object.entries(hashedExerciseTypes.value)
+  .map(([key, value]) => ({ label: value, value: key })))
+const equipments = ref(Object.entries(hashedEquipment.value)
+  .map(([key, value]) => ({ label: value, value: key })))
+const muscleGroups = ref(Object.entries(hashedMuscleGroups.value)
+  .map(([key, value]) => ({ label: value, value: key })))
 
-const muscleGroups = [
-  'Chest',
-  'Back',
-  'Shoulders',
-  'Biceps',
-  'Triceps',
-  'Quads',
-  'Hamstrings',
-  'Calves',
-  'Abs',
-  'Glutes',
-  'Cardio',
-  'Full Body',
-  'Other'
-]
+const exersiceForm = computed(() => {
+  return {
+    title,
+    equipment_category: equipment,
+    muscle_group: primary,
+    secondary_muscles: secondary,
+    exercise_type: type
+  }
+})
+
 </script>
 
 <style lang="scss">
@@ -134,5 +98,4 @@ const muscleGroups = [
   padding: 1px 0px 1px 0px !important;
 }
 }
-
 </style>

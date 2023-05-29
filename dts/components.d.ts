@@ -33,6 +33,7 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSelectV2: typeof import('element-plus/es')['ElSelectV2']
     Exercise: typeof import('./../src/views/routines/components/Exercise.vue')['default']
     ExerciseCard: typeof import('./../src/views/routines/components/ExerciseCard.vue')['default']
     ExerciseCardButtonIcon: typeof import('./../src/views/routines/components/icons/ExerciseCardButtonIcon.vue')['default']
