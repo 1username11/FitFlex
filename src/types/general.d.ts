@@ -18,9 +18,10 @@ interface IExercise {
   restTime?: string
   description?: string
   primary?: string
-  img: string
+  thumbnail: string
   sets?: ISet[]
   equipment?: string
+  media?: string
 }
 
 interface IUser {

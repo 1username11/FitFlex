@@ -1,3 +1,5 @@
+import { th } from "element-plus/es/locale/index.js"
+
 export const useExercisesStore = defineStore('exercisesStore', () => {
   const exerciseRes = ref<IExerciseRes[]>([])
   const hashedMuscleGroups = ref({} as TIndexedObject<string>)
@@ -56,7 +58,8 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
           name: exercise.title,
           primary,
           equipment,
-          img: exercise.exercise_media_url
+          media: exercise.exercise_media_url,
+          thumbnail: exercise.thumbnail_url
         })
       }
 

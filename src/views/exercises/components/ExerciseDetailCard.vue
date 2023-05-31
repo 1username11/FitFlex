@@ -4,12 +4,12 @@
       <p class="text-lg font-bold mb-4">{{ exercise.name }}</p>
       <div class="md:flex">
         <div class="image-wrapper">
-          <video v-if="exercise.img.split('?').shift()?.split('.').pop() === 'mp4'" autoplay loop>
-            <source :src="exercise.img" type="video/mp4">
+          <video v-if="exercise.media?.split('?').shift()?.split('.').pop() === 'mp4'" autoplay loop>
+            <source :src="exercise.thumbnail" type="video/mp4">
           </video>
           <el-image
             v-else
-            :src="exercise.img"
+            :src="exercise.thumbnail"
           />
         </div>
 

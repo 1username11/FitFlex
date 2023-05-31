@@ -64,14 +64,14 @@
         >
           <IconPlus />
           <video
-            v-if="exercise.img?.split('?').shift()?.split('.').pop() === 'mp4'"
+            v-if="exercise.media?.split('?').shift()?.split('.').pop() === 'mp4'"
             class="w-16 h-16 rounded-full overflow-hidden"
           >
-            <source :src="exercise.img" type="video/mp4">
+            <source :src="exercise.media" type="video/mp4">
           </video>
           <el-image
             v-else
-            :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden"
+            :src="exercise.thumbnail" class="w-8 h-8 rounded-full overflow-hidden"
           />
 
           <div class="ml-2">

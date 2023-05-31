@@ -42,7 +42,6 @@ const page = ref('profile')
 
 function onProfilePage () {
   page.value = 'profile'
-  console.log(page.value)
 }
 
 function onAccountPage () {

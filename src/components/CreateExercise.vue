@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center bg-white max-w-[550px] p-5 rounded-lg">
+  <div v-loading="uploading" class="flex flex-col justify-center items-center bg-white max-w-[550px] p-5 rounded-lg">
     <p class="text-lg font-bold mb-4 w-full">Create Exercise</p>
     <div class="cursor-pointer" @click="openFileInput">
       <el-image
@@ -24,7 +24,7 @@
       ref="fileInput"
       type="file"
       style="display: none"
-      accept=".jpg, .jpeg, .png, .gif .mp4"
+      accept=".jpg, .jpeg, .png, .gif, .mp4"
       @change="handleFileUpload"
     >
 
@@ -96,22 +96,36 @@ const handleFileUpload = async (event) => {
 
     const file = files.value[0]
     const fileExt = file.name.split('.').pop()
-    const fileName = `${Math.random()}.${fileExt}`
+    if (fileExt !== 'mp4') {
+      const fileName = `${Math.random()}.${fileExt}`
 
-    const { error: uploadError } = await supabase.storage.from('thumbnails').upload(fileName, file)
+      const { error: uploadError } = await supabase.storage.from('thumbnails').upload(fileName, file)
 
-    const { data, error } = await supabase
-      .storage
-      .from('thumbnails')
-      .createSignedUrl(fileName, 365 * 24 * 3600, {
-        transform: {
-          width: 50,
-          height: 50
-        }
-      })
-    if (!error) fileURL.value = data?.signedUrl as string
+      const { data, error } = await supabase
+        .storage
+        .from('thumbnails')
+        .createSignedUrl(fileName, 365 * 24 * 3600, {
+          transform: {
+            width: 50,
+            height: 50
+          }
+        })
+      if (!error) fileURL.value = data?.signedUrl as string
 
-    if (uploadError) throw uploadError
+      if (uploadError) throw uploadError
+    } else {
+      const fileName = `${Math.random()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage.from('exercises').upload(fileName, file)
+
+      const { data, error } = await supabase
+        .storage
+        .from('exercises')
+        .createSignedUrl(fileName, 365 * 24 * 3600)
+      if (!error) fileURL.value = data?.signedUrl as string
+
+      if (uploadError) throw uploadError
+    }
   } catch (error: any) {
     ElNotification({
       title: 'Error',
@@ -139,9 +153,9 @@ const equipments = ref(Object.entries(hashedEquipment.value)
 const muscleGroups = ref(Object.entries(hashedMuscleGroups.value)
   .map(([key, value]) => ({ label: value, value: key })))
 
-function createHandler (form) {
+async function createHandler (form) {
   try {
-    insertExercise(form)
+    await insertExercise(form)
     emit('closePopup')
     ElNotification(
       {

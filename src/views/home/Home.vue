@@ -2,16 +2,15 @@
   <div class="flex flex-col">
     <div class="flex bg-white border border-gray-300 rounded-xl mb-4 p-5">
       <el-image
-        :src="sampleUser.avatar"
-        :alt="sampleUser.name"
-        class="w-[100px] h-[100px] rounded-full mr-4"
+        :src="currentProfile.avatar_url"
+        class="w-[100px] h-[100px] rounded-full overflow-hidden mr-4"
       />
       <div>
-        <p class="text-xl font-bold mb-2">{{ sampleUser.name }}</p>
+        <p class="text-xl font-bold mb-2">{{ currentProfile.full_name }}</p>
         <div class="text-sm w-fit">
           <p class="flex text-gray-400">Workouts</p>
 
-          <p class="flex justify-center">{{ testData.length }}</p>
+          <!-- <p class="flex justify-center">{{ testData.length }}</p> -->
         </div>
       </div>
     </div>
@@ -19,13 +18,13 @@
       <div class="w-full">
         <p class="text-xl font-bold mb-4">Workouts</p>
 
-        <div class="flex flex-col items-center lg:mr-4">
+        <!-- <div class="flex flex-col items-center lg:mr-4">
           <WorkoutLog
             v-for="testDataItem in testData"
             :key="testDataItem.id"
             :log="testDataItem"
           />
-        </div>
+        </div> -->
       </div>
 
       <div class="hidden lg:block w-full max-w-[377px]">
@@ -42,49 +41,20 @@
 <script lang="ts" setup>
 import WorkoutLog from './components/WorkoutLog.vue'
 
-const sampleSet: ISet = {
-  id: 'set1',
-  reps: 10,
-  description: 'Sample set',
-  weight: 50
-}
+const profileStore = useProfileStore()
+const { profile, currentUserId } = storeToRefs(profileStore)
+const { getProfile, getCurrentUser } = profileStore
 
-const sampleExercise: IExercise = {
-  id: 'exercise1',
-  name: 'Sample Exercise',
-  img: 'exercise.jpg',
-  sets: [sampleSet]
-}
+const currentProfile = ref({
+  avatar_url: '',
+  username: '',
+  full_name: ''
+})
 
-const sampleUser: IUser = {
-  id: 'user1',
-  name: 'John Doe',
-  age: 25,
-  avatar: 'avatar.jpg'
-}
-
-const sampleWorkout: IRoutine = {
-  id: 'workout1',
-  exercises: [sampleExercise]
-}
-
-const sampleComment: IComment = {
-  id: 'comment1',
-  user: sampleUser,
-  content: 'Great job!'
-}
-
-const testData: ILog[] = [{
-  id: 'log1',
-  user: sampleUser,
-  publishTime: new Date(),
-  title: 'Sample Log',
-  description: 'This is a sample log',
-  duration: '1 hour',
-  reps: 10,
-  workout: sampleWorkout,
-  likes: 5,
-  comments: [sampleComment]
-}]
+onBeforeMount(async () => {
+  await getCurrentUser()
+  await getProfile(currentUserId.value)
+  currentProfile.value = profile.value.data
+})
 
 </script>

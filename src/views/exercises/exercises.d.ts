@@ -12,6 +12,7 @@ interface IExerciseRes {
   muscle_group: string
   secondary_muscles: unknown | null
   exercise_media_url: string
+  thumbnail_url: string
   exercise_type: string
 }
 
