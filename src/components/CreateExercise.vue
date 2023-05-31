@@ -8,25 +8,24 @@
       rounded-full overflow-hidden border border-gray-400 mb-5"
       >
         <template #error>
-          <div class="image-slot">
-            <el-icon>
-              <IconCreateExercisePlaceHolder />
-            </el-icon>
-          </div>
+          <el-icon>
+            <IconCreateExercisePlaceHolder />
+          </el-icon>
         </template>
       </el-image>
 
       <button class="text-[#1D83EA] mb-5">
         Add Image
       </button>
+
+      <input
+        ref="fileInput"
+        type="file"
+        class="hidden"
+        accept=".jpg, .jpeg, .png, .gif, .mp4"
+        @change="handleFileUpload"
+      >
     </div>
-    <input
-      ref="fileInput"
-      type="file"
-      style="display: none"
-      accept=".jpg, .jpeg, .png, .gif, .mp4"
-      @change="handleFileUpload"
-    >
 
     <div class="border-b border-b-gray-300 py-6 w-full element-input-wrapper">
       <el-input
@@ -73,6 +72,15 @@ import { supabase } from '@/supabase'
 import { ElNotification } from 'element-plus'
 
 const emit = defineEmits(['closePopup'])
+
+const exercisesStore = useExercisesStore()
+const { insertExercise } = exercisesStore
+const {
+  hashedMuscleGroups,
+  hashedExerciseTypes,
+  hashedEquipment
+} = storeToRefs(exercisesStore)
+
 const title = ref('')
 const type = ref('')
 const equipment = ref('')
@@ -96,7 +104,9 @@ const handleFileUpload = async (event) => {
 
     const file = files.value[0]
     const fileExt = file.name.split('.').pop()
-    if (fileExt !== 'mp4') {
+    console.log(fileExt)
+
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
       const fileName = `${Math.random()}.${fileExt}`
 
       const { error: uploadError } = await supabase.storage.from('thumbnails').upload(fileName, file)
@@ -137,13 +147,6 @@ const handleFileUpload = async (event) => {
   }
 }
 
-const exercisesStore = useExercisesStore()
-const { insertExercise } = exercisesStore
-const {
-  hashedMuscleGroups,
-  hashedExerciseTypes,
-  hashedEquipment
-} = storeToRefs(exercisesStore)
 console.log(hashedMuscleGroups.value, hashedExerciseTypes.value, hashedEquipment.value)
 
 const exerciseTypes = ref(Object.entries(hashedExerciseTypes.value)
@@ -154,24 +157,21 @@ const muscleGroups = ref(Object.entries(hashedMuscleGroups.value)
   .map(([key, value]) => ({ label: value, value: key })))
 
 async function createHandler (form) {
-  try {
-    await insertExercise(form)
+  await insertExercise(form).then(() => {
+    ElNotification({
+      title: 'Success',
+      message: 'Exercise created successfully',
+      type: 'success'
+    })
+  }).catch((error) => {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error'
+    })
+  }).finally(() => {
     emit('closePopup')
-    ElNotification(
-      {
-        title: 'Success',
-        message: 'Exercise created successfully',
-        type: 'success'
-      }
-    )
-  } catch (e) {
-    ElNotification(
-      {
-        title: 'Error',
-        type: 'error'
-      }
-    )
-  }
+  })
 }
 
 const exersiceForm = ref({

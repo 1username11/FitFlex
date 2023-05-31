@@ -51,6 +51,7 @@
         :serial="idx+1"
         class="mb-3"
         @deleteSet="$emit('deleteSet', idx)"
+        @setUpdate="$emit('setUpdate', { idx, set: $event })"
       />
       <button
         class="bg-white border border-gray-300 py-1 rounded-md w-full mb-5
@@ -68,7 +69,7 @@ defineProps<{
   exercise: IExercise
   sets: ISet[]
 }>()
-defineEmits(['addSet', 'deleteSet', 'deleteExercise'])
+defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setUpdate'])
 
 const restTime = ref<number>()
 const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])

@@ -32,6 +32,7 @@
             @addSet="exercise.sets.push({} as ISet)"
             @deleteSet="exercise.sets.splice($event, 1)"
             @deleteExercise="exercises.splice($event, 1)"
+            @setUpdate="exercise.sets[$event.idx] = $event.set"
           />
         </div>
         <div
@@ -64,12 +65,27 @@ defineEmits(['save'])
 const title = ref<string>('')
 const exercises = ref<IExercise[]>([])
 
-function addExercise (exercise: IExercise) {
+function addExercise (event: { id: string; name: string; primary: string; thumbnail: string}) {
+  const exercise: IExercise = {
+    id: event.id,
+    name: event.name,
+    sets: [],
+    primary: event.primary,
+    thumbnail: event.thumbnail
+  }
   exercises.value.push(exercise)
 }
 
-const createdRoutineModel = computed(() => ({
-}))
+const createdRoutineModel = computed(() => {
+  return {
+    title: title.value,
+    exercises: exercises.value
+  }
+})
+
+watch(createdRoutineModel.value.exercises, () => {
+  console.log(createdRoutineModel.value.exercises)
+})
 
 </script>
 

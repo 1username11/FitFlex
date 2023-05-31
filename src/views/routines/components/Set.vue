@@ -45,7 +45,7 @@ const props = defineProps<{
   set: ISet
   serial: number
 }>()
-const emits = defineEmits(['deleteSet', 'setComplete'])
+const emits = defineEmits(['deleteSet', 'setComplete', 'setUpdate'])
 
 const router = useRouter()
 const setModel = ref<ISet>({
@@ -58,6 +58,10 @@ function done () {
   emits('setComplete', setModel.value)
   setDone.value = true
 }
+
+watch(setModel.value, () => {
+    emits('setUpdate', setModel.value)
+  })
 </script>
 
 <style lang="scss">
