@@ -10,9 +10,12 @@
 
 <script lang="ts" setup>
 import ExerciseDetailCard from './components/ExerciseDetailCard.vue'
-const seeDetailExercise = ref({} as IExercise)
+const seeDetailExercise = ref({})
 
 function seeDetails (exercise: IExercise) {
+  console.log(exercise)
   seeDetailExercise.value = exercise
+  console.log(seeDetailExercise.value)
 }
+
 </script>

@@ -80,7 +80,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ElNotification } from 'element-plus'
 import SocialAuth from './components/SocialAuth.vue'
 import { routeNames } from '@/router/route-names'
 

@@ -15,7 +15,7 @@
         <template #dropdown>
           <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
             <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise)">
-              <DeleteIcon />
+              <IconDelete/>
               Delete Exercise
             </el-dropdown-item>
           </el-dropdown-menu>

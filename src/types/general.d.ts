@@ -19,7 +19,7 @@ interface IExercise {
   description?: string
   primary?: string
   thumbnail: string
-  sets: ISet[]
+  sets?: ISet[]
   equipment?: string
   media?: string
 }

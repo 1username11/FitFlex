@@ -51,8 +51,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ElNotification } from 'element-plus'
-
 const forgetPasswordRef = ref()
 const forgetPasswordModel = reactive({
   email: ''

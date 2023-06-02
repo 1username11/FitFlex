@@ -7,8 +7,7 @@
         <el-button
           class="w-[200px]"
           type="primary"
-          :disabled="createdRoutineModel"
-          @click="$emit('save', createdRoutineModel)"
+          @click="saveHandler"
         >
           Save Routine
         </el-button>
@@ -60,20 +59,33 @@
 </template>
 
 <script lang="ts" setup>
-defineEmits(['save'])
+import type { router } from '@/router'
+import { supabase } from '@/supabase'
+
+const emits = defineEmits(['save'])
 
 const title = ref<string>('')
 const exercises = ref<IExercise[]>([])
 
-function addExercise (event: { id: string; name: string; primary: string; thumbnail: string}) {
-  const exercise: IExercise = {
+async function getUserId () {
+  const { data, error } = await supabase.auth.getUser()
+  if (error) return error
+  return data?.user?.id
+}
+
+const exerciseStore = useExercisesStore()
+
+function addExercise (event: IExercise) {
+  const exercise = ref<IExercise>({
     id: event.id,
     name: event.name,
-    sets: [],
+    sets: event.sets,
+    equipment: event.equipment,
     primary: event.primary,
     thumbnail: event.thumbnail
-  }
-  exercises.value.push(exercise)
+  })
+
+  exercises.value.push(exercise.value)
 }
 
 const createdRoutineModel = computed(() => {
@@ -83,8 +95,22 @@ const createdRoutineModel = computed(() => {
   }
 })
 
+function saveHandler () {
+  emits('save', createdRoutineModel.value)
+  const sets = exercises.value?.map((exercise) => {
+    return {
+      exerciseId: exercise.id,
+      sets: exercise.sets
+    }
+  })
+  const routine = {
+    userId: getUserId(),
+    title: title.value
+  }
+}
+
 watch(createdRoutineModel.value.exercises, () => {
-  console.log(createdRoutineModel.value.exercises)
+  console.log(createdRoutineModel.value)
 })
 
 </script>

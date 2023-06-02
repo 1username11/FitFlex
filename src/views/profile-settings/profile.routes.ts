@@ -9,6 +9,9 @@ export const profileRoutes: Array<RouteRecordRaw> = [
   {
     path: 'settings',
     name: profileRouteNames.profileSettings,
-    component: ProfileSettings
+    component: ProfileSettings,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]

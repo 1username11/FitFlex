@@ -68,16 +68,10 @@ const routes = [
   { name: routeNames.routinesList },
   { name: routeNames.exercises }
 ]
-const router = useRouter()
 
-function navigateTo (routeName: string) {
-  router.push({ name: routeName })
-}
+const generalStore = useGeneralStore()
+const { logout, navigateTo } = generalStore
 
-async function logout () {
-  navigateTo(routeNames.auth)
-  return await authService.signOut()
-}
 </script>
 
 <style scoped lang="scss">

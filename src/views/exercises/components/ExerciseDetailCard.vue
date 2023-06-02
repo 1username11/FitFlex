@@ -1,33 +1,61 @@
 <template>
-  <div v-if="exercise.id" :key="exercise.id" class="flex flex-col grow h-full">
+  <div v-if="props.exercise.id" :key="props.exercise.id" v-loading="loading" class="flex flex-col grow h-full">
     <div class="flex flex-col">
-      <p class="text-lg font-bold mb-4">{{ exercise.name }}</p>
+      <div class="flex justify-between">
+        <p class="text-lg font-bold mb-4">{{ props.exercise.name }}</p>
+        <el-select v-model="action" placeholder="Select" class="w-[100px]">
+          <el-option
+            v-for="item in actions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
       <div class="md:flex">
         <div class="image-wrapper">
-          <video v-if="exercise.media?.split('?').shift()?.split('.').pop() === 'mp4'" autoplay loop>
-            <source :src="exercise.thumbnail" type="video/mp4">
-          </video>
+          <div v-if="props.exercise.media?.split('?')[0].split('/').slice(-1)[0].split('.')[1] === 'mp4'">
+            <video
+              v-if="!videoError"
+              autoplay
+              loop
+            >
+              <source
+                :src="props.exercise.media" type="video/mp4"
+                @error="handleError"
+              >
+            </video>
+
+            <ImagePlaseholder v-else />
+          </div>
+
           <el-image
             v-else
-            :src="exercise.thumbnail"
-          />
+            :src="props.exercise.thumbnail"
+          >
+            <template #error>
+              <ImagePlaseholder />
+            </template>
+          </el-image>
         </div>
 
         <div class="ml-4">
           <p class="mb-2 text-gray-400">Info</p>
+
           <div class="flex mb-2">
             <IconEquipment />
-            <p>
-              Equipment:
-            </p>
-            <p class="capitalize">&nbsp; {{ exercise.equipment }}</p>
+
+            <p>Equipment:</p>
+
+            <p class="capitalize">&nbsp; {{ props.exercise.equipment }}</p>
           </div>
+
           <div class="flex">
             <IconPrimary />
-            <p>
-              Primary:
-            </p>
-            <p class="capitalize">&nbsp; {{ exercise.primary }}</p>
+
+            <p>Primary:</p>
+
+            <p class="capitalize">&nbsp; {{ props.exercise.primary }}</p>
           </div>
         </div>
       </div>
@@ -36,6 +64,7 @@
     <div>
       <div class="flex justify-between mt-4">
         <p class="text-lg font-bold mb-4">Statistics</p>
+
         <el-select v-model="duration">
           <el-option
             v-for="timeOption in timeOptions"
@@ -100,21 +129,80 @@
   </div>
 
   <div v-else class="flex flex-col py-[30%] items-center grow h-full">
-    <IconDumbell @click="$emit('createExercise')" />
+    <IconDumbell />
 
     <p class="text-xl font-bold mt-4">Select an exercise</p>
+  </div>
+
+  <div v-if="modalVisible">
+    <CreateExercise
+      :exerciseId="exercise.id"
+      class="popup-wrapper"
+      @close="modalVisible = false"
+    />
+    <div class="overlay" @click="modalVisible = !modalVisible" />
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+const props = defineProps<{
   exercise: IExercise
   statistics: IExerciseStatistics
 }>()
-defineEmits(['createExercise'])
+
+const exerciseStore = useExercisesStore()
+const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
+const loading = ref(false)
+
+const modalVisible = ref(false)
+const action = ref<string>('')
+const actions = ref([
+  {
+    label: 'Edit',
+    value: 'edit'
+  },
+  {
+    label: 'Delete',
+    value: 'delete'
+  }
+])
 
 const duration = ref<string>()
 const timeOptions = ref(['last 12 week', 'Year', 'All time'])
+const videoError = ref(false)
+
+const handleError = () => {
+  videoError.value = true
+  console.log('error', videoError.value)
+}
+
+async function deleteExercise (id: string) {
+  await exercisesService.deleteExercise(id)
+}
+watch(action, async (value) => {
+  if (value === 'edit') {
+    modalVisible.value = true
+    action.value = ''
+  } else if (value === 'delete') {
+    console.log('delete', props.exercise.id)
+    await deleteExercise(props.exercise.id).then(() => {
+      action.value = ''
+    })
+    loading.value = true
+    Promise.allSettled([
+      getMuscleGroups(),
+      getExerciseTypes(),
+      getEquipment()
+    ]).then(() => {
+      getExercises()
+      props.exercise.id = ''
+    }).catch((e) => {
+      console.log(e)
+    }).finally(() => {
+      loading.value = false
+    })
+  }
+})
 </script>
 
 <style lang="scss">

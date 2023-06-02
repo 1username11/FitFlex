@@ -60,19 +60,21 @@
       >
         <div
           class="flex items-center border-b border-b-gray-200 h-[90px]"
-          @click="emitExercise(exercise)"
+          @click="emitExercise({
+            ...exercise,
+            sets:[{} as ISet]
+          })"
         >
           <IconPlus />
-          <video
-            v-if="exercise.media?.split('?').shift()?.split('.').pop() === 'mp4'"
-            class="w-16 h-16 rounded-full overflow-hidden"
-          >
-            <source :src="exercise.media" type="video/mp4">
-          </video>
+
           <el-image
-            v-else
             :src="exercise.thumbnail" class="w-8 h-8 rounded-full overflow-hidden"
-          />
+            lazy
+          >
+            <template #error>
+              <ImagePlaseholder />
+            </template>
+          </el-image>
 
           <div class="ml-2">
             <div>
@@ -152,7 +154,7 @@
             @click="emitExercise(exercise)"
           >
             <IconPlus />
-            <el-image :src="exercise.img" class="w-8 h-8 rounded-full overflow-hidden" />
+            <el-image :src="exercise.thumbnail" class="w-8 h-8 rounded-full overflow-hidden" />
 
             <div class="ml-2">
               <div>
@@ -172,7 +174,6 @@
     <CreateExercise
       class="popup-wrapper"
       @close="isCreateExerciseVisible = false"
-      @closePopup="isCreateExerciseVisible = false"
     />
     <div class="overlay" @click="isCreateExerciseVisible = !isCreateExerciseVisible" />
   </div>
@@ -202,7 +203,7 @@ const {
   searchedExercises
 } = storeToRefs(exerciseStore)
 
-function emitExercise (exercise: IExercise) {
+function emitExercise (exercise) {
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }
@@ -219,6 +220,7 @@ onMounted(async () => {
     console.log(e)
   }).finally(() => {
     loading.value = false
+    console.log(exercises.value)
   })
 })
 </script>

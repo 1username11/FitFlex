@@ -48,7 +48,6 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import { ElNotification } from 'element-plus'
 
 const currentRoute = useRoute()
 

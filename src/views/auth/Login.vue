@@ -81,7 +81,6 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import { ElNotification } from 'element-plus'
 
 const loginRef = ref()
 const router = useRouter()
@@ -89,6 +88,8 @@ const loginModel = reactive({
   email: '',
   password: ''
 })
+
+const generalStore = useGeneralStore()
 
 const loginRules = ref({
   email: [useRequiredRule(), useEmailRule()],

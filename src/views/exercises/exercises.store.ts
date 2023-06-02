@@ -1,7 +1,5 @@
-import { th } from "element-plus/es/locale/index.js"
-
 export const useExercisesStore = defineStore('exercisesStore', () => {
-  const exerciseRes = ref<IExerciseRes[]>([])
+  const exerciseRes = ref<IExerciseExchange[]>([])
   const hashedMuscleGroups = ref({} as TIndexedObject<string>)
   const hashedExerciseTypes = ref({} as TIndexedObject<string>)
   const hashedEquipment = ref({} as TIndexedObject<string>)
@@ -11,11 +9,11 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
   const searchedExercises = ref('')
   const compare = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0
 
-  async function getExercises() {
-    exerciseRes.value = (await exercisesService.getExercises()).data as IExerciseRes[]
+  async function getExercises () {
+    exerciseRes.value = (await exercisesService.getExercises()).data as IExerciseExchange[]
   }
 
-  async function getMuscleGroups() {
+  async function getMuscleGroups () {
     const data = (await exercisesService.getMuscleGroups()).data as IMuscleGroupRes[]
     hashedMuscleGroups.value = data.reduce((acc, curr) => {
       acc[curr.id] = curr.title
@@ -23,7 +21,7 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     }, {} as TIndexedObject<string>)
   }
 
-  async function getExerciseTypes() {
+  async function getExerciseTypes () {
     const data = (await exercisesService.getExerciseTypes()).data as IExerciseTypeRes[]
     hashedExerciseTypes.value = data.reduce((acc, curr) => {
       acc[curr.id] = curr.title
@@ -31,7 +29,7 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     }, {} as TIndexedObject<string>)
   }
 
-  async function getEquipment() {
+  async function getEquipment () {
     const data = (await exercisesService.getEquipment()).data as IEquipmentRes[]
     hashedEquipment.value = data.reduce((acc, curr) => {
       acc[curr.id] = curr.title
@@ -59,7 +57,7 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
           primary,
           equipment,
           media: exercise.exercise_media_url,
-          thumbnail: exercise.thumbnail_url
+          thumbnail: exercise.thumbnails_url
         })
       }
 
@@ -87,16 +85,11 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     }, [] as string[]).sort(compare)
   })
 
-  async function insertExercise(exercise) {
-    return await exercisesService.insertExercise(exercise)
-  }
-
   return {
     getExercises,
     getMuscleGroups,
     getExerciseTypes,
     getEquipment,
-    insertExercise,
     exercises,
     equipments,
     primaries,
