@@ -23,12 +23,7 @@ const defaultLayoutRoutes: RouteRecordRaw = {
     ...homeViewRoutes,
     ...routinesViewRoutes,
     ...exercisesViewRoutes,
-    ...profileRoutes,
-    {
-      path: 'create-exercise',
-      name: routeNames.createExercise,
-      component: CreateExercise
-    }
+    ...profileRoutes
   ]
 }
 

@@ -9,6 +9,9 @@ export const homeViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: homeViewRouteNames.home,
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]

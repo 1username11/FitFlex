@@ -20,32 +20,50 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/routines',
     name: routinesViewRouteNames.routinesList,
-    component: RoutinesList
+    component: RoutinesList,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/routine-deatil/:id',
     name: routinesViewRouteNames.routineDetail,
-    component: RoutineDetail
+    component: RoutineDetail,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/exercise',
     name: routinesViewRouteNames.exercise,
-    component: Exercise
+    component: Exercise,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/createRoutine',
     name: routinesViewRouteNames.createRoutine,
-    component: CreateRoutine
+    component: CreateRoutine,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/edit-routine/:id',
     name: routinesViewRouteNames.editRoutine,
-    component: EditRoutine
+    component: EditRoutine,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/start-workout/:id',
     name: routinesViewRouteNames.startWorkout,
-    component: Workout
+    component: Workout,
+    meta: {
+      requiresAuth: true
+    }
   }
 
 ]

@@ -13,15 +13,25 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const { data, error } = await supabase.auth.getSession()
+
+  const currentUser = await supabase.auth.getUser()
+
+  console.log('currentUser', currentUser)
+
+  await supabase.auth.onAuthStateChange((event, session) => {
+    console.log('event', event)
+    console.log('session', session)
+  })
+
   const currentSession = data
 
-  console.log('currentSession', currentSession.session?.user)
+  console.log('currentSession', currentSession.session?.access_token)
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   console.log('requiresAuth', requiresAuth)
 
   console.log('error', error?.status)
 
-  if (requiresAuth && !currentSession.session?.access_token) {
+  if (requiresAuth && (!currentSession.session?.access_token || currentUser.error?.status === 401)) {
     await authService.signOut()
     next({ name: routeNames.login })
   } else {

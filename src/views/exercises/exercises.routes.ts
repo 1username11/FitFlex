@@ -11,11 +11,18 @@ export const exercisesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/exercises',
     name: exercisesViewRouteNames.exercises,
-    component: Exercises
+    component: Exercises,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/video',
     name: exercisesViewRouteNames.video,
-    component: VideoCapture
+    component: VideoCapture,
+    meta: {
+      requiresAuth: true
+    }
+
   }
 ]
