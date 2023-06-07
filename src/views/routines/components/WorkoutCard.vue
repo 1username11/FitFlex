@@ -1,76 +1,141 @@
 <template>
   <div class="bg-white p-4 rounded-md w-full">
     <div class="flex justify-between mb-6">
-      <div class="flex space-x-2">
-        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" />
+      <div class="flex space-x-2 items-center">
+        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">
+          <template #error>
+            <ImagePlaseholder />
+          </template>
+        </el-image>
 
-        <p class="font-bold text-lg">{{ exercise.name }}</p>
+        <p class="font-bold text-lg">{{ exercise.title }}</p>
       </div>
-
-      <el-dropdown trigger="click">
-        <span>
-          <IconExerciseCardButton />
-        </span>
-
-        <template #dropdown>
-          <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
-            <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise)">
-              <DeleteIcon />
-              Delete Exercise
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
     </div>
-    <div>
-      <div class="flex">
-        <IconTimer />
 
-        <p class="text-[#1d83ea] ml-1 mr-2">
-          Rest timer
-        </p>
+    <div class="flex">
+      <IconTimer />
 
-        <el-select
-          v-model="restTime"
-          class="w-[100px]"
-          placeholder="Off"
-        >
-          <el-option v-for="time in timeOptions" :key="time" :label="time + 's'" :value="time" />
-        </el-select>
-      </div>
-      <div class="flex justify-between">
-        <p>Set</p>
-        <p v-if="exercise.equipment">KG</p>
-        <p>Reps</p>
-        <p />
-      </div>
-      <Set
-        v-for="(set, idx) in sets"
-        :key="set.id"
-        :set="set"
-        :serial="idx+1"
-        class="mb-3"
-        @deleteSet="$emit('deleteSet', idx)"
-        @setComplete="$emit('setComplete', sets[idx])"
-      />
-      <button
-        class="bg-white border border-gray-300 py-1 rounded-md w-full mb-5
-          hover:bg-gray-100 hover:border-gray-200 active:bg-gray-200 active:border-gray-300"
-        @click.stop="$emit('addSet')"
+      <p class="text-[#1d83ea] ml-1 mr-2">
+        Rest timer
+      </p>
+
+      <p>{{ isLastSetDone ? 'Exercise Done': formattedRestTime }}</p>
+    </div>
+    <div class="flex justify-between">
+      <p>Set</p>
+      <p
+        v-if="['weight reps', 'weight distance']
+          .includes(exercise.exercise_type)"
       >
-        + Add set
-      </button>
+        KG
+      </p>
+
+      <p
+        v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only']
+          .includes(exercise.exercise_type)"
+      >
+        Reps
+      </p>
+      <p
+        v-if="['duration', 'distance duration']
+          .includes(exercise.exercise_type)"
+      >
+        Duration
+      </p>
+      <p />
     </div>
+    <WorkoutSet
+      v-for="(set, idx) in sets"
+      :key="set.id"
+      :set="set"
+      :serial="idx+1"
+      :exerciseType="exercise.exercise_type"
+      class="mb-3"
+      :isWorokoutStarted="isWorokoutStarted"
+      @setComplete="idx === sets.length - 1 ? lastSetComplete(idx): startRestCountdown(idx)"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
-  exercise: IExercise
-  sets: ISet[]
-}>()
-defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete'])
+import type { ISetRoutine, IExerciseRoutine } from '../routine'
 
-const restTime = ref<number>()
-const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])
+const props = defineProps<{
+  exercise: IExerciseRoutine
+  sets: ISetRoutine[]
+  isWorokoutStarted: boolean
+}>()
+const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete', 'exerciseCompleted'])
+
+const generalStore = useGeneralStore()
+const { generateGUID } = generalStore
+
+const isLastSetDone = ref(false)
+const restTime = ref(props.sets[0]?.rest_time || 0)
+const formattedRestTime = computed(() => {
+  const minutes = Math.floor(restTime.value / 60)
+  const seconds = restTime.value % 60
+
+  return `${padZero(minutes)}:${padZero(seconds)}`
+})
+
+function padZero (value) {
+  return String(value).padStart(2, '0')
+}
+function startRestCountdown (idx: number) {
+  restTime.value = props.sets[0]?.rest_time || 0
+  const interval = setInterval(() => {
+    restTime.value -= 1
+    if (restTime.value === 0) {
+      clearInterval(interval)
+    }
+  }, 1000)
+  emit('setComplete', props.sets[idx])
+}
+
+function lastSetComplete (idx: number) {
+  emit('setComplete', props.sets[idx])
+  isLastSetDone.value = true
+}
+
+const exerciseStatistic = computed(() => {
+  if (['weight reps', 'weight distance'].includes(props.exercise.exercise_type)) {
+    return {
+      id: generateGUID(),
+      created_at: Date.now(),
+      exercise_id: props.exercise.id,
+      avarage_weight: props.sets.reduce((acc, set) => acc + set.weight, 0) / props.sets.length,
+      max_weight: props.sets.reduce((acc, set) => Math.max(acc, set.weight), 0),
+      one_reps_max:
+      props.sets.reduce((acc, set) => Math.max(acc, set.weight), 0) / 0.0333 +
+      0.0333 * props.sets.reduce((acc, set) => Math.max(acc, set.reps), 0),
+      volume: props.sets.reduce((acc, set) => acc + set.weight * set.reps, 0)
+    }
+  } else if (['weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(props.exercise.exercise_type)) {
+    return {
+      id: generateGUID(),
+      created_at: Date.now(),
+      exercise_id: props.exercise.id,
+      most_reps: props.sets.reduce((acc, set) => Math.max(acc, set.reps), 0),
+      avarage_reps: props.sets.reduce((acc, set) => acc + set.reps, 0) / props.sets.length
+    }
+  } else if (['duration', 'distance duration'].includes(props.exercise.exercise_type)) {
+    return {
+      id: generateGUID(),
+      created_at: Date.now(),
+      exercise_id: props.exercise.id,
+      best_set_duration: props.sets.reduce((acc, set) => Math.max(acc, set.duration), 0),
+      avarage_duration: props.sets.reduce((acc, set) => acc + set.duration, 0) / props.sets.length
+    }
+  }
+})
+
+watch(isLastSetDone, (value) => {
+  if (value) {
+    emit('exerciseCompleted', exerciseStatistic.value)
+  }
+})
+
+console.log('exerciseStatistic', exerciseStatistic.value)
+
 </script>

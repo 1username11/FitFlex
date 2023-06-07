@@ -1,10 +1,10 @@
 <template>
   <div class="flex justify-between bg-white p-4 border border-gray-300 rounded-lg  mt-4">
     <router-link
-      :to="{name: $routeNames.routineDetail, params: {id: workout.id}}"
+      :to="{name: $routeNames.routineDetail, params: {id: routine.id}}"
       class="text-lg font-bold"
     >
-      {{ workout.name }}
+      {{ routine.title }}
     </router-link>
     <el-dropdown trigger="click">
       <span>
@@ -18,12 +18,12 @@
             Edit Routine
           </el-dropdown-item>
 
-          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('duplicate', workout)">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('duplicate', routine)">
             <IconDuplicate />
             Duplicate Routine
           </el-dropdown-item>
 
-          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('delete', workout)">
+          <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('delete', routine)">
             <IconDelete />
             Delete Routine
           </el-dropdown-item>
@@ -37,14 +37,14 @@
 import { routeNames } from '@/router/route-names'
 
 const props = defineProps<{
-  workout: IRoutine
+  routine: IRoutine
 }>()
 defineEmits(['duplicate', 'delete'])
 
 const router = useRouter()
 
 function navigate () {
-  router.push({ name: routeNames.editRoutine, params: { id: props.workout.id } })
+  router.push({ name: routeNames.editRoutine, params: { id: props.routine.id } })
 }
 </script>
 

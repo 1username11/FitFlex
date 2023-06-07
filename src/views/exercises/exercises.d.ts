@@ -10,7 +10,7 @@ interface IExerciseExchange {
   title: string
   equipment_category: string
   muscle_group: string
-  secondary_muscles: unknown | null
+  secondary_muscles?: unknown | null
   exercise_media_url: string
   thumbnails_url: string
   exercise_type: string

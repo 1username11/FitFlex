@@ -62,13 +62,13 @@
           class="flex items-center border-b border-b-gray-200 h-[90px]"
           @click="emitExercise({
             ...exercise,
-            sets:[{} as ISet]
+            sets: [{} as ISetRoutine],
           })"
         >
           <IconPlus />
 
           <el-image
-            :src="exercise.thumbnail" class="w-8 h-8 rounded-full overflow-hidden"
+            :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden"
             lazy
           >
             <template #error>
@@ -78,10 +78,10 @@
 
           <div class="ml-2">
             <div>
-              {{ exercise.name }}
+              {{ exercise.title }}
             </div>
             <div class="text-gray-400">
-              {{ exercise.primary }}
+              {{ exercise.muscle_group }}
             </div>
           </div>
         </div>
@@ -154,14 +154,18 @@
             @click="emitExercise(exercise)"
           >
             <IconPlus />
-            <el-image :src="exercise.thumbnail" class="w-8 h-8 rounded-full overflow-hidden" />
+            <el-image :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden">
+              <template #error>
+                <ImagePlaseholder />
+              </template>
+            </el-image>
 
             <div class="ml-2">
               <div>
-                {{ exercise.name }}
+                {{ exercise.title }}
               </div>
               <div class="text-gray-400">
-                {{ exercise.primary }}
+                {{ exercise.muscle_group }}
               </div>
             </div>
           </div>
@@ -203,7 +207,8 @@ const {
   searchedExercises
 } = storeToRefs(exerciseStore)
 
-function emitExercise (exercise) {
+function emitExercise (exercise: IExerciseRoutine) {
+  console.log('exercise', exercise)
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }

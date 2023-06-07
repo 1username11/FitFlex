@@ -8,8 +8,7 @@
     </div>
 
     <div
-      v-if="['weight reps', 'weight distance']
-        .includes(exerciseType)"
+      v-if="['weight reps', 'weight distance'].includes(exerciseType)"
       class="input-wrapper"
     >
       <el-input
@@ -18,8 +17,7 @@
     </div>
 
     <div
-      v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only']
-        .includes(exerciseType)"
+      v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(exerciseType)"
       class="input-wrapper"
     >
       <el-input
@@ -28,8 +26,7 @@
     </div>
 
     <div
-      v-if="['duration', 'distance duration']
-        .includes(exerciseType)"
+      v-if="['duration', 'distance duration'].includes(exerciseType)"
       class="input-wrapper"
     >
       <el-input
@@ -37,26 +34,39 @@
       />
     </div>
 
-    <button @click="$emit('deleteSet')">
-      <IconDelete />
-    </button>
+    <button
+      class="w-[30px] h-[30px] bg-white border border-gray-200 rounded-md flex justify-center items-center"
+      :class="{'bg-[#1D83EA]': setDone}"
+      :disabled="setDone || !props.isWorokoutStarted"
+      @click="done()"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { ISetRoutine } from '../routine'
+
 const props = defineProps<{
-  exerciseType: string
   set: ISetRoutine
   serial: number
+  isWorokoutStarted: boolean
+  exerciseType: string
 }>()
-
 const emits = defineEmits(['deleteSet', 'setComplete', 'setUpdate'])
 
+const router = useRouter()
 const setModel = ref<ISetRoutine>({
   weight: props.set.weight,
   reps: props.set.reps,
   duration: props.set.duration
+
 } as ISetRoutine)
+const setDone = ref<boolean>(false)
+
+function done () {
+  emits('setComplete', setModel.value)
+  setDone.value = true
+}
 
 watch(setModel.value, () => {
   emits('setUpdate', setModel.value)

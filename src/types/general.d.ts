@@ -8,15 +8,16 @@ interface ISet {
   id: string
   type?: string
   reps: number
-  description: string
+  description?: string
   weight?: number
+  duration?: string
 }
 
 interface IExercise {
   id: string
   name: string
   restTime?: string
-  description?: string
+  exerciseType?: any
   primary?: string
   thumbnail: string
   sets?: ISet[]
@@ -30,13 +31,6 @@ interface IUser {
   age: number
   bio?: string
   avatar: string
-}
-
-interface IRoutine {
-  id: string
-  name: string
-  exercises: IExercise[]
-  user: IUser
 }
 
 interface ILog {

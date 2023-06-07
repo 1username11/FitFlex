@@ -2,9 +2,13 @@
   <div class="bg-white p-4 rounded-md w-full">
     <div class="flex justify-between mb-6">
       <div class="flex space-x-2">
-        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" />
+        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">
+          <template #error>
+            <ImagePlaseholder />
+          </template>
+        </el-image>
 
-        <p class="font-bold text-lg">{{ exercise.name }}</p>
+        <p class="font-bold text-lg">{{ exercise.title }}</p>
       </div>
 
       <el-dropdown trigger="click">
@@ -15,7 +19,7 @@
         <template #dropdown>
           <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
             <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise)">
-              <IconDelete/>
+              <IconDelete />
               Delete Exercise
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -34,14 +38,32 @@
           v-model="restTime"
           class="w-[100px]"
           placeholder="Off"
+          @change="$emit('setRestTime', restTime)"
         >
           <el-option v-for="time in timeOptions" :key="time" :label="time + 's'" :value="time" />
         </el-select>
       </div>
       <div class="flex justify-between">
         <p>Set</p>
-        <p>KG</p>
-        <p>Reps</p>
+        <p
+          v-if="['weight reps', 'weight distance']
+            .includes(exercise.exercise_type)"
+        >
+          KG
+        </p>
+        <p
+          v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only']
+            .includes(exercise.exercise_type)"
+        >
+          Reps
+        </p>
+
+        <p
+          v-if="['duration', 'distance duration']
+            .includes(exercise.exercise_type)"
+        >
+          Duration
+        </p>
         <p />
       </div>
       <Set
@@ -49,6 +71,7 @@
         :key="set.id"
         :set="set"
         :serial="idx+1"
+        :exerciseType="exercise.exercise_type"
         class="mb-3"
         @deleteSet="$emit('deleteSet', idx)"
         @setUpdate="$emit('setUpdate', { idx, set: $event })"
@@ -66,10 +89,10 @@
 
 <script lang="ts" setup>
 defineProps<{
-  exercise: IExercise
-  sets: ISet[]
+  exercise: IExerciseRoutine
+  sets: ISetRoutine[]
 }>()
-defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setUpdate'])
+defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setUpdate', 'setRestTime'])
 
 const restTime = ref<number>()
 const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])

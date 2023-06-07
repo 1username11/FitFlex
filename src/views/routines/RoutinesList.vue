@@ -15,16 +15,21 @@
         </p>
       </button>
     </div>
-    
-    <div class="bg-white rounded-lg p-5 border border-gray-300 w-full">
+
+    <div v-loading="loading" class="bg-white rounded-lg p-5 border border-gray-300 w-full">
       <p class="text-gray-400">
-        {{ routines.length > 1 ? `My Routines(${routines.length})` : 'My Routine' }}
+        {{ routineList.length > 1 ? `My Routines(${routineList.length})` : 'My Routine' }}
       </p>
 
-      <draggable v-model="routines" :animation="300" item-key="id" class="cursor-move">
+      <draggable
+        v-model="routineList"
+        :animation="300"
+        item-key="id"
+        class="cursor-move"
+      >
         <template #item="{ element: workout }">
           <RoutinesItem
-            :workout="workout"
+            :routine="workout"
             @duplicate="duplicateWorkout(workout)"
             @delete="deleteWorkout(workout)"
           />
@@ -36,10 +41,17 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
+import { supabase } from '@/supabase'
 import draggable from 'vuedraggable'
 
+const loading = ref(false)
+
 const routinesStore = useRoutinesStore()
-const { routines } = storeToRefs(routinesStore)
+const { routineList } = storeToRefs(routinesStore)
+const { getRoutines } = routinesStore
+
+const generalStore = useGeneralStore()
+const { generateGUID } = generalStore
 
 const router = useRouter()
 
@@ -47,17 +59,96 @@ function navigate () {
   router.push({ name: routeNames.createRoutine })
 }
 
-function duplicateWorkout (workout: IRoutine) {
-  const duplicatedWorkout = {
-    ...routines.value.find((w) => w.id === workout.id),
-    id: workout.id + 'duplicated'
+async function duplicateWorkout (workout: IRoutine) {
+  try {
+    loading.value = true
+    const fetchedData = await Promise.all([
+      routinesService.getRoutine(workout.id),
+      routinesService.getSetsByRoutineId(workout.id)
+    ])
+
+    if (fetchedData[0].error || fetchedData[1].error) throw new Error('Error fetching data')
+    const duplicatedRoutine = {
+      ...fetchedData[0].data[0] as IRoutine,
+      id: generateGUID(),
+      created_at: new Date().toISOString()
+    }
+
+    const routineSets = fetchedData[1].data.map((set) => {
+      set.id = generateGUID()
+      set.created_at = new Date().toISOString()
+      set.routine_id = duplicatedRoutine.id
+      return set
+    })
+
+    await routinesService.insertRoutine(duplicatedRoutine)
+    await routinesService.insertSets(routineSets)
+    const userId = (await supabase.auth.getUser()).data.user?.id as string
+    await getRoutines(userId).then(() => {
+      console.log('routines', routineList.value)
+    })
+    console.log('duplicatedRoutine', duplicatedRoutine)
+    console.log('routineSets', routineSets)
+  } catch (error) {
+    ElNotification({
+      title: 'Error',
+      message: 'Error duplicating routine',
+      type: 'error'
+    })
+  } finally {
+    loading.value = false
   }
-  routines.value.push(duplicatedWorkout)
 }
 
-function deleteWorkout (workout: IRoutine) {
-  const deletedWorkout = routines.value.find((w) => w.id === workout.id)
-  const index = routines.value.indexOf(deletedWorkout)
-  routines.value.splice(index, 1)
+async function deleteWorkout (workout: IRoutine) {
+  try {
+    loading.value = true
+    const index = routineList.value.findIndex((w) => w.id === workout.id)
+    routineList.value.splice(index, 1)
+    await routinesService.deleteRoutineSets(workout.id)
+    await routinesService.deleteRoutine(workout.id)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
 }
+
+// async function updateRoutineOrder () {
+//   try {
+//     loading.value = true
+//     // Отримайте оновлену послідовність елементів після перетягування
+//     const updatedRoutineList = routineList.value.map((workout, index) => ({
+//       ...workout,
+//       order: index + 1 // Встановіть порядок залежно від індексу (можливо, потрібно врахувати індекс з 0 або 1)
+//     }))
+//     const userId = (await supabase.auth.getUser()).data.user?.id as string
+//     // Оновіть порядок елементів в базі даних
+//     await routinesService.deleteRoutines(userId)
+//   } catch (error) {
+//     console.log(error)
+//   } finally {
+//     loading.value = false
+//   }
+// }
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    const { data, error } = await supabase.auth.getUser()
+    if (error) throw new Error('Error fetching user')
+    const userId = data.user?.id as string
+    await getRoutines(userId).then(() => {
+      console.log('routines', routineList.value)
+    })
+  } catch (error) {
+    ElNotification({
+      title: 'Error',
+      message: 'Error fetching routines',
+      type: 'error'
+    })
+  } finally {
+    loading.value = false
+  }
+})
 </script>

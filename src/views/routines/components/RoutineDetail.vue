@@ -23,23 +23,25 @@
       </button>
     </div>
 
-    <div class="bg-white px-4 pt-4 border border-gray-300 rounded-lg w-full mr-3">
-      <p class="pb-4 text-3xl font-bold">{{ workout ? workout.name : '' }}</p>
+    <div v-loading="loading" class="bg-white p-4 border border-gray-300 rounded-lg w-full mr-3">
+      <p class="pb-4 text-3xl font-bold">{{ routine?.title }}</p>
 
       <div class="flex space-x-3">
-        <el-image class="w-5 h-5 rounded-full overflow-hidden" :src=" workout ? workout.user.avatar : ''" />
+        <el-image class="w-10 h-10 rounded-full overflow-hidden" :src="avatar">
+          <template #error>
+            <ImagePlaseholder />
+          </template>
+        </el-image>
 
-        <p>Created by {{ workout ? workout.user.name: '' }}</p>
+        <p>Created by {{ username }}</p>
       </div>
 
       <div>
         <Exercise
-          v-for="(exerciseItem, idx) in workout ? workout.exercises: []"
+          v-for="(exerciseItem, idx) in routineDetailsWithExercises"
           :key="exerciseItem.id"
           :exercise="exerciseItem"
-          :class="{
-            'border-none': workout ? idx === workout.exercises.length - 1: false
-          }"
+          :class="{ 'border-t border-gray-300': idx !== 0 }"
         />
       </div>
     </div>
@@ -48,18 +50,17 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
+import { supabase } from '@/supabase'
 
-const currentRoute = useRoute()
+const loading = ref(false)
+const currentUser = ref()
+const avatar = ref()
+const username = ref()
+const routineDetailsWithExercises = ref()
 
 const routinesStore = useRoutinesStore()
-const { routines } = storeToRefs(routinesStore)
-
-const workout = computed(() => {
-  const result = routines.value.find((workout) => workout.id === currentRoute.params.id)
-  if (result) {
-    return result
-  }
-})
+const { routine, routineDetails } = storeToRefs(routinesStore)
+const { getRoutineDetails } = routinesStore
 
 const router = useRouter()
 function navigate (name: string) {
@@ -76,4 +77,71 @@ const copyLink = () => {
     duration: 2000
   })
 }
+console.log(router.currentRoute.value.params.id.toString())
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    const { data, error } = await routinesService.getRoutine(router.currentRoute.value.params.id.toString())
+    if (error) throw new Error(error.message)
+    routine.value = data[0] as IRoutine
+    currentUser.value = (await supabase.auth.getUser()).data.user
+    avatar.value = currentUser.value.user_metadata.avatar_url
+    username.value = currentUser.value.user_metadata.full_name
+
+    await getRoutineDetails(router.currentRoute.value.params.id.toString())
+    const exerciseIds = routineDetails.value.data.map((item: ISetRoutine) => item.exercise_id)
+    const exercises = (await Promise.all(exerciseIds.map((exerciseId: string) =>
+      routinesService.getExerciseById(exerciseId)
+    ))).map((item) => item.data)
+
+    routineDetailsWithExercises.value = routineDetails.value.data.map((item: ISetRoutine, index: number) => ({
+      exercise_id: exercises[index][0].id,
+      exercise_title: exercises[index][0].title,
+      exercise_thumbnail: exercises[index][0].thumbnails_url,
+      reps: item.reps,
+      weight: item.weight,
+      duration: item.duration
+    })).reduce((result: IExerciseDetails[], item: IRoutineDetails) => {
+      const existingExercise = result.find((exercise: IExerciseDetails) => exercise.id === item.exercise_id)
+
+      if (existingExercise) {
+        existingExercise.sets.push({
+          reps: item.reps || null,
+          weight: item.weight || null,
+          duration: item.duration || null
+        })
+      } else {
+        result.push({
+          id: item.exercise_id,
+          title: item.exercise_title,
+          thumbnails_url: item.exercise_thumbnail,
+          sets: [
+            {
+              reps: item.reps || null,
+              weight: item.weight || null,
+              duration: item.duration || null
+            }
+          ]
+        })
+      }
+
+      return result
+    }, [] as IExerciseDetails[])
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
+
+  console.log('routineDetailsWithExercises', routineDetailsWithExercises.value)
+
+  console.log('routineDetails', routineDetails.value)
+
+  console.log(avatar.value)
+  console.log(username.value)
+
+  console.log(currentUser.value)
+  console.log('routine', routine.value)
+})
 </script>

@@ -37,13 +37,13 @@ declare module '@vue/runtime-core' {
     FacebookIcon: typeof import('./../src/views/auth/components/FacebookIcon.vue')['default']
     Filters: typeof import('./../src/components/Filters.vue')['default']
     GoogleIcon: typeof import('./../src/views/auth/components/GoogleIcon.vue')['default']
-    Ico: typeof import('~icons/ic/o')['default']
     IconAccount: typeof import('~icons/icon/account')['default']
     IconArrow: typeof import('~icons/icon/arrow')['default']
     IconCreateExercisePlaceHolder: typeof import('~icons/icon/create-exercise-place-holder')['default']
     IconDelete: typeof import('~icons/icon/delete')['default']
     IconDumbell: typeof import('~icons/icon/dumbell')['default']
     IconDuplicate: typeof import('~icons/icon/duplicate')['default']
+    IconDuration: typeof import('~icons/icon/duration')['default']
     IconEdit: typeof import('~icons/icon/edit')['default']
     IconEquipment: typeof import('~icons/icon/equipment')['default']
     IconExerciseCardButton: typeof import('~icons/icon/exercise-card-button')['default']
@@ -75,6 +75,7 @@ declare module '@vue/runtime-core' {
     SocialAuth: typeof import('./../src/views/auth/components/SocialAuth.vue')['default']
     WorkoutCard: typeof import('./../src/views/routines/components/WorkoutCard.vue')['default']
     WorkoutLog: typeof import('./../src/views/home/components/WorkoutLog.vue')['default']
+    WorkoutSet: typeof import('./../src/views/routines/components/WorkoutSet.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

@@ -1,40 +1,40 @@
 <template>
-  <div class="flex gap-4 justify-between">
+  <div v-loading="loading" class="flex gap-4 justify-between">
     <div class="grow">
       <div class="flex justify-between mb-4">
-        <p class="font-bold text-xl">Edit routine</p>
+        <p class="font-bold text-xl">Create routine</p>
 
-        <el-button
+        <ElButton
           class="w-[200px]"
           type="primary"
-          :disabled="editedRoutineModel"
-          @click="$emit('save', editedRoutineModel)"
+          @click="saveHandler"
         >
           Edit Routine
-        </el-button>
+        </ElButton>
       </div>
 
       <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
-          <el-input
+          <ElInput
             v-model="title"
             class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
             placeholder="Routine Title"
           />
         </div>
 
-        <div v-if="routine?.exercises.length">
+        <div v-if="exercises.length">
           <ExerciseCard
-            v-for="exercise in routine?.exercises"
+            v-for="exercise in exercises"
             :key="exercise.id"
             :exercise="exercise"
             :sets="exercise.sets"
-            @addSet="exercise.sets.push({} as ISet)"
-            @deleteSet="exercise.sets.splice($event, 1)"
-            @deleteExercise="routine?.exercises.splice($event, 1)"
+            @addSet="exercise.sets.push({} as ISetRoutine)"
+            @deleteSet="exercise.sets?.splice($event, 1)"
+            @deleteExercise="exercises.splice($event, 1)"
+            @setUpdate="exercise.sets[$event.idx] = $event.set"
+            @setRestTime="setRestTime($event)"
           />
         </div>
-
         <div
           v-else
           class="flex flex-col justify-center items-center h-full my-auto"
@@ -60,23 +60,132 @@
 </template>
 
 <script lang="ts" setup>
-defineEmits(['save'])
+import { supabase } from '@/supabase'
 
-const routinesStore = useRoutinesStore()
-const { routines } = storeToRefs(routinesStore)
+const emits = defineEmits(['save'])
 
-const params = useRouter().currentRoute.value.params.id
-const routine = ref(routines.value.find((workout) => workout.id === params))
+const exercisesStore = useExercisesStore()
+const { hashedExerciseTypes } = storeToRefs(exercisesStore)
 
-const title = ref<string>(routine.value?.name || '')
+const routineStore = useRoutinesStore()
+const { restTime } = storeToRefs(routineStore)
+const { setRestTime } = routineStore
 
-function addExercise (exercise: IExercise) {
-  routine.value?.exercises.push(exercise)
+const title = ref<string>('')
+const exercises = ref<IExerciseRoutine[]>([])
+const loading = ref(false)
+
+const router = useRouter()
+const currentRoute = router.currentRoute.value.params.id
+
+async function getUserId () {
+  const { data, error } = await supabase.auth.getUser()
+  if (error) return error
+  return data?.user?.id
 }
 
-const editedRoutineModel = computed(() => ({
+const generalStore = useGeneralStore()
+const { generateGUID } = generalStore
 
-}))
+function addExercise (event: IExerciseRoutine) {
+  const exercise = ref<IExerciseRoutine>({
+    id: event.id,
+    title: event.title,
+    sets: event.sets,
+    exercise_type: hashedExerciseTypes.value[event.exercise_type as string],
+    equipment_category: event.equipment_category,
+    muscle_group: event.muscle_group,
+    thumbnails_url: event.thumbnails_url
+  })
+
+  exercises.value.push(exercise.value)
+}
+
+const createdRoutineModel = computed(() => {
+  return {
+    title: title.value,
+    exercises: exercises.value
+  }
+})
+
+async function saveHandler () {
+  emits('save')
+  const routine = ref({
+    id: generateGUID(),
+    created_at: new Date(),
+    user: await getUserId(),
+    title: title.value
+  })
+
+  const exerciseSets = computed(() => {
+    return createdRoutineModel.value.exercises.map((exercise) => {
+      const sets = exercise.sets?.map((set) => ({
+        id: generateGUID(),
+        reps: set.reps || null,
+        rest_time: restTime || null,
+        duration: set.duration || null,
+        weight: Number(set.weight) || null,
+        exercise_id: exercise.id,
+        routine_id: routine.value.id
+      }))
+
+      return sets
+    })
+  })
+  await routinesService.insertRoutine(routine.value)
+  await routinesService.insertSets(exerciseSets.value.flat())
+  await routinesService.deleteRoutineSets(currentRoute as string)
+  await routinesService.deleteRoutine(currentRoute as string)
+
+  console.log(exerciseSets.value.flat())
+}
+
+watch(createdRoutineModel.value.exercises, () => {
+  console.log(createdRoutineModel.value)
+})
+
+onMounted(async () => {
+  try {
+    loading.value = true
+
+    const [routine, routineSets] = await Promise.all([
+      routinesService.getRoutine(currentRoute as string),
+      routinesService.getSetsByRoutineId(currentRoute as string)
+    ])
+
+    if (routine.error || routineSets.error) throw new Error('Error fetching routine')
+
+    const exercisePromises = [...new Set(routineSets.data.map((set) => set.exercise_id))]
+      .map((id: string) => routinesService.getExerciseById(id))
+
+    const exercisesFetched = (await Promise.all(exercisePromises)).map((item) => {
+      if (item.error) throw new Error('Error fetching exercises')
+      return item.data[0] as IExerciseExchange
+    })
+
+    exercises.value = exercisesFetched.map((item: IExerciseExchange) => {
+      return {
+        id: item.id,
+        title: item.title,
+        exercise_type: hashedExerciseTypes.value[item.exercise_type as string],
+        equipment_category: item.equipment_category,
+        muscle_group: item.muscle_group,
+        thumbnails_url: item.thumbnails_url,
+        sets: routineSets.data.filter((set) => set.exercise_id === item.id)
+      } as IExerciseRoutine
+    })
+    title.value = routine.data[0].title
+    console.log('routine', routine)
+    console.log('routineSets', routineSets)
+    console.log('exercises', exercises)
+    console.log('exercisesFetched', exercisesFetched)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
+})
+
 </script>
 
 <style lang="scss">

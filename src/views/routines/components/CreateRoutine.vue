@@ -4,18 +4,18 @@
       <div class="flex justify-between mb-4">
         <p class="font-bold text-xl">Create routine</p>
 
-        <el-button
+        <ElButton
           class="w-[200px]"
           type="primary"
           @click="saveHandler"
         >
           Save Routine
-        </el-button>
+        </ElButton>
       </div>
 
       <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
-          <el-input
+          <ElInput
             v-model="title"
             class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
             placeholder="Routine Title"
@@ -28,10 +28,11 @@
             :key="exercise.id"
             :exercise="exercise"
             :sets="exercise.sets"
-            @addSet="exercise.sets.push({} as ISet)"
-            @deleteSet="exercise.sets.splice($event, 1)"
+            @addSet="exercise.sets.push({} as ISetRoutine)"
+            @deleteSet="exercise.sets?.splice($event, 1)"
             @deleteExercise="exercises.splice($event, 1)"
             @setUpdate="exercise.sets[$event.idx] = $event.set"
+            @setRestTime="setRestTime($event)"
           />
         </div>
         <div
@@ -59,35 +60,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { router } from '@/router'
 import { supabase } from '@/supabase'
 
 const emits = defineEmits(['save'])
 
 const title = ref<string>('')
-const exercises = ref<IExercise[]>([])
-
-async function getUserId () {
-  const { data, error } = await supabase.auth.getUser()
-  if (error) return error
-  return data?.user?.id
-}
-
-const exerciseStore = useExercisesStore()
-
-function addExercise (event: IExercise) {
-  const exercise = ref<IExercise>({
-    id: event.id,
-    name: event.name,
-    sets: event.sets,
-    equipment: event.equipment,
-    primary: event.primary,
-    thumbnail: event.thumbnail
-  })
-
-  exercises.value.push(exercise.value)
-}
-
+const exercises = ref<IExerciseRoutine[]>([])
 const createdRoutineModel = computed(() => {
   return {
     title: title.value,
@@ -95,24 +73,55 @@ const createdRoutineModel = computed(() => {
   }
 })
 
-function saveHandler () {
-  emits('save', createdRoutineModel.value)
-  const sets = exercises.value?.map((exercise) => {
-    return {
-      exerciseId: exercise.id,
-      sets: exercise.sets
-    }
-  })
-  const routine = {
-    userId: getUserId(),
+const routineStore = useRoutinesStore()
+const { restTime } = storeToRefs(routineStore)
+const { setRestTime } = routineStore
+
+const generalStore = useGeneralStore()
+const { generateGUID } = generalStore
+
+async function getUserId () {
+  const { data, error } = await supabase.auth.getUser()
+  if (error) return error
+  return data.user.id
+}
+
+function addExercise (event: IExerciseRoutine) {
+  exercises.value.push(event)
+}
+
+async function saveHandler () {
+  emits('save')
+  const routine = ref({
+    id: generateGUID(),
+    created_at: new Date(),
+    user: await getUserId(),
     title: title.value
-  }
+  })
+
+  const exerciseSets = computed(() => {
+    return createdRoutineModel.value.exercises.map((exercise: IExerciseRoutine) => {
+      const sets = exercise.sets.map((set: ISetRoutine) => ({
+        id: generateGUID(),
+        reps: set.reps || null,
+        rest_time: restTime.value || null,
+        duration: set.duration || null,
+        weight: Number(set.weight) || null,
+        exercise_id: exercise.id,
+        routine_id: routine.value.id
+      }))
+
+      return sets
+    })
+  })
+  await routinesService.insertRoutine(routine.value)
+  await routinesService.insertSets(exerciseSets.value.flat())
+  console.log(exerciseSets.value.flat())
 }
 
 watch(createdRoutineModel.value.exercises, () => {
   console.log(createdRoutineModel.value)
 })
-
 </script>
 
 <style lang="scss">
