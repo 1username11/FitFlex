@@ -48,7 +48,7 @@ interface IRoutineDetails {
   exercise_id: string
   exercise_title: string
   exercise_thumbnail: string
-  reps: number
+  reps?: number
   weight?: number
-  duration: any
+  duration?: any
 }
