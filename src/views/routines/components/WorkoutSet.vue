@@ -44,8 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { ISetRoutine } from '../routine'
-
 const props = defineProps<{
   set: ISetRoutine
   serial: number
@@ -53,19 +51,17 @@ const props = defineProps<{
   exerciseType: string
 }>()
 const emits = defineEmits(['deleteSet', 'setComplete', 'setUpdate'])
+const setDone = ref<boolean>(false)
 
-const router = useRouter()
 const setModel = ref<ISetRoutine>({
   weight: props.set.weight,
   reps: props.set.reps,
   duration: props.set.duration
-
 } as ISetRoutine)
-const setDone = ref<boolean>(false)
 
 function done () {
-  emits('setComplete', setModel.value)
   setDone.value = true
+  emits('setComplete', setModel.value)
 }
 
 watch(setModel.value, () => {

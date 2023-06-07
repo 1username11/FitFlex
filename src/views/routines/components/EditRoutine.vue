@@ -24,15 +24,18 @@
 
         <div v-if="exercises.length">
           <ExerciseCard
-            v-for="exercise in exercises"
+            v-for="(exercise, index) in exercises"
             :key="exercise.id"
             :exercise="exercise"
             :sets="exercise.sets"
+            :class="{ 'border-b border-gray-300'
+              : index !== exercises.length - 1, 'border-none'
+              : index === exercises.length - 1 }"
             @addSet="exercise.sets.push({} as ISetRoutine)"
             @deleteSet="exercise.sets?.splice($event, 1)"
             @deleteExercise="exercises.splice($event, 1)"
             @setUpdate="exercise.sets[$event.idx] = $event.set"
-            @setRestTime="setRestTime($event)"
+            @setRestTime="exercise.rest_time = $event"
           />
         </div>
         <div
@@ -66,10 +69,6 @@ const emits = defineEmits(['save'])
 
 const exercisesStore = useExercisesStore()
 const { hashedExerciseTypes } = storeToRefs(exercisesStore)
-
-const routineStore = useRoutinesStore()
-const { restTime } = storeToRefs(routineStore)
-const { setRestTime } = routineStore
 
 const title = ref<string>('')
 const exercises = ref<IExerciseRoutine[]>([])
@@ -122,7 +121,7 @@ async function saveHandler () {
       const sets = exercise.sets?.map((set) => ({
         id: generateGUID(),
         reps: set.reps || null,
-        rest_time: restTime || null,
+        rest_time: exercise.rest_time || null,
         duration: set.duration || null,
         weight: Number(set.weight) || null,
         exercise_id: exercise.id,
@@ -167,7 +166,7 @@ onMounted(async () => {
       return {
         id: item.id,
         title: item.title,
-        exercise_type: hashedExerciseTypes.value[item.exercise_type as string],
+        exercise_type: hashedExerciseTypes.value[item.exercise_type],
         equipment_category: item.equipment_category,
         muscle_group: item.muscle_group,
         thumbnails_url: item.thumbnails_url,

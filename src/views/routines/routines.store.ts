@@ -7,11 +7,6 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
   const exercises = ref<IExercise[]>([])
   const routines = ref<IRoutine[]>([])
   const routineDetails = ref()
-  const restTime = ref<number>(0)
-
-  function setRestTime (time: number) {
-    restTime.value = time
-  }
 
   async function getRoutines (userId: string) {
     try {
@@ -51,10 +46,8 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
     routines,
     routineList,
     routineDetails,
-    restTime,
     getRoutines,
-    getRoutineDetails,
-    setRestTime
+    getRoutineDetails
   }
 })
 

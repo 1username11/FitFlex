@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-4 rounded-md w-full">
+  <div class="bg-white p-4 w-full">
     <div class="flex justify-between mb-6">
       <div class="flex space-x-2">
         <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">

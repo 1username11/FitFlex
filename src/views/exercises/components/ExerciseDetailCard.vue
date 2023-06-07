@@ -2,7 +2,7 @@
   <div v-if="props.exercise.id" :key="props.exercise.id" v-loading="loading" class="flex flex-col grow h-full">
     <div class="flex flex-col">
       <div class="flex justify-between">
-        <p class="text-lg font-bold mb-4">{{ props.exercise.name }}</p>
+        <p class="text-lg font-bold mb-4">{{ props.exercise.title }}</p>
         <el-select v-model="action" placeholder="Select" class="w-[100px]">
           <el-option
             v-for="item in actions"
@@ -14,14 +14,14 @@
       </div>
       <div class="md:flex">
         <div class="image-wrapper">
-          <div v-if="props.exercise.media?.split('?')[0].split('/').slice(-1)[0].split('.')[1] === 'mp4'">
+          <div v-if="props.exercise.exercise_media_url?.split('?')[0].split('/').slice(-1)[0].split('.')[1] === 'mp4'">
             <video
               v-if="!videoError"
               autoplay
               loop
             >
               <source
-                :src="props.exercise.media" type="video/mp4"
+                :src="props.exercise.exercise_media_url" type="video/mp4"
                 @error="handleError"
               >
             </video>
@@ -31,10 +31,10 @@
 
           <el-image
             v-else
-            :src="props.exercise.thumbnail"
+            :src="props.exercise.thumbnails_url"
           >
             <template #error>
-              <ImagePlaseholder />
+              <ImagePlaseholder class="w-[100px] h-[100px]" />
             </template>
           </el-image>
         </div>
@@ -47,7 +47,7 @@
 
             <p>Equipment:</p>
 
-            <p class="capitalize">&nbsp; {{ props.exercise.equipment }}</p>
+            <p class="capitalize">&nbsp; {{ props.exercise.equipment_category }}</p>
           </div>
 
           <div class="flex">
@@ -55,7 +55,7 @@
 
             <p>Primary:</p>
 
-            <p class="capitalize">&nbsp; {{ props.exercise.primary }}</p>
+            <p class="capitalize">&nbsp; {{ props.exercise.muscle_group }}</p>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  exercise: IExercise
+  exercise: IExerciseRoutine
   statistics: IExerciseStatistics
 }>()
 
@@ -195,7 +195,6 @@ watch(action, async (value) => {
       getEquipment()
     ]).then(() => {
       getExercises()
-      props.exercise.id = ''
     }).catch((e) => {
       console.log(e)
     }).finally(() => {
@@ -209,6 +208,7 @@ watch(action, async (value) => {
 .image-wrapper{
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: white;
   width: 320px;
   aspect-ratio: 1.6 / 1;

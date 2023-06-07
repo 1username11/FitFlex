@@ -92,7 +92,7 @@
   <div v-if="!isLargeScreen">
     <el-button
       type="primary"
-      class="absolute"
+      class="absolute bottom-10 -right-11 h-6"
       :class="currentRoute === '/exercise' ? 'left-0 routate-90' : 'right-0 -rotate-90'"
       @click="drawer = true"
     >
@@ -151,7 +151,10 @@
         >
           <div
             class="flex items-center border-b border-b-gray-200 h-[90px]"
-            @click="emitExercise(exercise)"
+            @click="emitExercise({
+              ...exercise,
+              sets: [{} as ISetRoutine],
+            })"
           >
             <IconPlus />
             <el-image :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden">

@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading">
-    <div class="flex justify-between bg-white p-4 rounded-lg mb-4">
+    <div class="flex justify-between bg-white p-4 rounded-lg mb-4 border border-gray-300">
       <div>
         <p>Duration</p>
         <p>{{ formatTime }}</p>
@@ -27,6 +27,7 @@
         <button
           v-else
           class="w-full lg:w-[300px] h-9 rounded-md bg-[#1D83EA] text-white cursor-pointer hover:bg-[#056DD7]"
+          @click="finishRoutine"
         >
           Finish
         </button>
@@ -47,16 +48,18 @@
           Discard
         </button>
       </div>
-      <div class="w-full">
+      <div class="w-full border border-gray-300 rounded-md overflow-hidden">
         <WorkoutCard
-          v-for="exercise in exercises"
+          v-for="(exercise, index) in exercises"
           :key="exercise.id"
           :exercise="exercise"
           :sets="exercise.sets"
           :isWorokoutStarted="isRunning"
-          @addSet="exercise.sets.push({} as ISet)"
+          :class="{'border-b border-gray-300'
+            : index !== exercises.length - 1, 'border-none'
+            : index === exercises.length - 1}"
+          @addSet="exercise.sets.push({} as ISetRoutine)"
           @deleteSet="exercise.sets.splice($event, 1)"
-          @deleteExercise="routine?.exercises.splice($event, 1)"
           @setComplete="setComplete($event)"
           @exerciseCompleted="exerciseCompleted($event)"
         />
@@ -66,13 +69,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ElMessageBox } from 'element-plus'
-
-import type { IExerciseRoutine, ISetRoutine } from './routine'
-
-const routinesStore = useRoutinesStore()
-const { routines } = storeToRefs(routinesStore)
-
 const exerciseStore = useExercisesStore()
 const { getExerciseTypes } = exerciseStore
 const { hashedExerciseTypes } = storeToRefs(exerciseStore)
@@ -85,7 +81,6 @@ const initialTime = 0
 const time = ref(initialTime)
 const intervalRef = ref()
 const isRunning = ref(false)
-const isOverlayVisible = ref(false)
 
 const formatTime = computed(() => {
   const hours = Math.floor(time.value / 3600)
@@ -125,11 +120,63 @@ const volume = computed(() => {
 
 const currentVolume = ref(0)
 function setComplete (set: ISetRoutine) {
+  console.log('set complete', set)
+  exercises.value.forEach((item) => {
+    item.sets.forEach((setItem) => {
+      if (setItem.id === set.id) {
+        setItem.set_done = true
+      }
+    })
+  })
+
+  console.log('completedSet', exercises.value)
+
   currentVolume.value += (set.reps || 0) * (set.weight || 0)
 }
 
+function checkAllSetDone () {
+  return exercises.value.every((item) => {
+    return item.sets.every((setItem) => {
+      return setItem.set_done === true
+    })
+  })
+}
+
+function finishRoutine () {
+  if (checkAllSetDone()) {
+    ElMessageBox.confirm(
+      'Congratulations! You have completed this workout.',
+      'Success!',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'success'
+      }
+    ).then(() => {
+      router.push({ name: 'routines' })
+    })
+      .catch((e: any) => {
+        console.log(e)
+      })
+  } else {
+    ElMessageBox.confirm(
+      'Are you sure you want to discard this workout?',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }
+    ).then(() => {
+      router.push({ name: 'routines' })
+    })
+      .catch((e: any) => {
+        console.log(e)
+      })
+  }
+}
+
 const confirmDiscard = () => {
-  isOverlayVisible.value = true
   ElMessageBox.confirm(
     'Are you sure you want to discard this workout?',
     'Warning',
@@ -141,9 +188,8 @@ const confirmDiscard = () => {
   ).then(() => {
     router.push({ name: 'routines' })
   })
-    .catch((e) => {
+    .catch((e: any) => {
       console.log(e)
-      isOverlayVisible.value = false
     })
 }
 
@@ -156,28 +202,31 @@ onMounted(async () => {
   try {
     loading.value = true
     getExerciseTypes()
-    const routine = (await routinesService.getRoutine(currentRoute)).data
-    const routineSets = (await routinesService.getSetsByRoutineId(currentRoute)).data
-    const exercisePromises = routineSets.map((item) =>
-      routinesService.getExerciseById(item.exercise_id)
-    )
-    const exercisesFetched = (await Promise.all(exercisePromises)).map((item) => item.data[0]).reduce((acc, curr) => {
-      if (acc.find((item) => item.id === curr.id)) return acc
-      return [...acc, curr]
-    }, [])
-    exercises.value = exercisesFetched.map((item) => ({
-      created_at: item.created_at,
-      title: item.title,
-      equipment_category: item.equipment_category,
-      muscle_group: item.muscle_group,
-      secondary_muscle: item.secondary_muscle,
-      exercise_media_url: item.exercise_media_url,
-      exercise_type: hashedExerciseTypes.value[item.exercise_type],
-      id: item.id,
-      thumbnails_url: item.thumbnails_url,
-      sets: routineSets?.filter((set) => set.exercise_id === item.id) as ISet[]
-    }))
+    const { data, error } = await routinesService.getSetsByRoutineId(currentRoute as string)
+    if (error) throw new Error(error.message)
 
+    const routineSets = data
+
+    const exercisePromises = [...new Set(routineSets.map((set) => set.exercise_id))]
+      .map((id: string) => routinesService.getExerciseById(id))
+
+    console.log('exercisePromises', exercisePromises)
+    const exercisesFetched = (await Promise.all(exercisePromises)).map((item) => {
+      if (item.error) throw new Error('Error fetching exercises')
+      return item.data[0] as IExerciseExchange
+    })
+
+    exercises.value = exercisesFetched.map((item: IExerciseExchange) => {
+      return {
+        id: item.id,
+        title: item.title,
+        exercise_type: hashedExerciseTypes.value[item.exercise_type],
+        equipment_category: item.equipment_category,
+        muscle_group: item.muscle_group,
+        thumbnails_url: item.thumbnails_url,
+        sets: routineSets.filter((set) => set.exercise_id === item.id)
+      } as IExerciseRoutine
+    })
     console.log('hashedExerciseTypes', hashedExerciseTypes.value)
     console.log('routineSets', routineSets)
 

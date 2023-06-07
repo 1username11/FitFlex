@@ -7,7 +7,7 @@ interface ISetRoutine {
   duration?: number
   exercise_id?: string
   routine_id?: string
-  setDone?: boolean
+  set_done?: boolean
 }
 
 interface IExerciseRoutine {
@@ -16,6 +16,7 @@ interface IExerciseRoutine {
   title: string
   equipment_category: string
   muscle_group: string
+  rest_time?: number
   secondary_muscles?: any
   exercise_media_url?: string
   thumbnails_url?: string
