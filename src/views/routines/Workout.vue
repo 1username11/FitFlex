@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-if="!isWorkoutFinished" v-loading="loading">
     <div class="flex justify-between bg-white p-4 rounded-lg mb-4 border border-gray-300">
       <div>
         <p>Duration</p>
@@ -66,9 +66,15 @@
       </div>
     </div>
   </div>
+
+  <div v-else>
+    <FinishWorkout :completedWorkout="exercises" :duration="formatTime" />
+  </div>
 </template>
 
 <script lang="ts" setup>
+import FinishWorkout from '@/views/routines/components/FinishWorkout.vue'
+
 const exerciseStore = useExercisesStore()
 const { getExerciseTypes } = exerciseStore
 const { hashedExerciseTypes } = storeToRefs(exerciseStore)
@@ -81,6 +87,7 @@ const initialTime = 0
 const time = ref(initialTime)
 const intervalRef = ref()
 const isRunning = ref(false)
+const isWorkoutFinished = ref(false)
 
 const formatTime = computed(() => {
   const hours = Math.floor(time.value / 3600)
@@ -153,7 +160,7 @@ function finishRoutine () {
         type: 'success'
       }
     ).then(() => {
-      router.push({ name: 'routines' })
+      isWorkoutFinished.value = true
     })
       .catch((e: any) => {
         console.log(e)

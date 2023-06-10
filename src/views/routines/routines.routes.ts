@@ -5,6 +5,7 @@ import Exercise from './components/Exercise.vue'
 import CreateRoutine from './components/CreateRoutine.vue'
 import EditRoutine from './components/EditRoutine.vue'
 import Workout from './Workout.vue'
+import FinishWorkout from './components/FinishWorkout.vue'
 
 export const routinesViewRouteNames = {
   routinesList: 'routines',
@@ -13,7 +14,8 @@ export const routinesViewRouteNames = {
   createRoutine: 'createRoutine',
   filters: 'filters',
   editRoutine: 'editRoutine',
-  startWorkout: 'startWorkout'
+  startWorkout: 'startWorkout',
+  finishWorkout: 'finishWorkout'
 }
 
 export const routinesViewRoutes: Array<RouteRecordRaw> = [
@@ -61,6 +63,14 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
     path: '/start-workout/:id',
     name: routinesViewRouteNames.startWorkout,
     component: Workout,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/finish-workout/:id',
+    name: routinesViewRouteNames.finishWorkout,
+    component: FinishWorkout,
     meta: {
       requiresAuth: true
     }

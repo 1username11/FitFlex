@@ -67,6 +67,12 @@ class ExercisesService {
       .update(exercise)
       .eq('id', `${id}`)
   }
+
+  getExerciseStatistics(id: string) {
+    return supabase.from('statistics')
+      .select('*')
+      .eq('exercise_id', id)
+  }
 }
 
 export const exercisesService = new ExercisesService()

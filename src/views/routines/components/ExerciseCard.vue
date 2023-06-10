@@ -8,7 +8,7 @@
           </template>
         </el-image>
 
-        <p class="font-bold text-lg">{{ exercise.title }}</p>
+        <p class="font-bold text-lg truncate">{{ exercise.title }}</p>
       </div>
 
       <el-dropdown trigger="click">

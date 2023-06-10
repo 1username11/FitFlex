@@ -58,7 +58,15 @@ class RoutinesService {
       .from('statistics')
       .insert([
         statistics
-   ])
+      ])
+  }
+
+  saveWorkout(workout) {
+    return supabase
+      .from('feed')
+      .insert([
+        workout
+      ])
   }
 }
 

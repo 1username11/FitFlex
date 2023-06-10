@@ -4,7 +4,7 @@
       @seeDetails="seeDetails"
     />
 
-    <ExerciseDetailCard :exercise="seeDetailExercise" :statistics="{} as IExerciseStatistics" />
+    <ExerciseDetailCard :exercise="seeDetailExercise" />
   </div>
 </template>
 
@@ -12,10 +12,8 @@
 import ExerciseDetailCard from './components/ExerciseDetailCard.vue'
 const seeDetailExercise = ref({} as IExerciseRoutine)
 
-function seeDetails (exercise: IExerciseRoutine) {
-  console.log(exercise)
+async function seeDetails (exercise: IExerciseRoutine) {
   seeDetailExercise.value = exercise
-  console.log(seeDetailExercise.value)
 }
 
 </script>

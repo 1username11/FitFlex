@@ -75,55 +75,106 @@
       </div>
 
       <div>
-        <div class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">Hawiest Weight</p>
+        <div
+          class="flex flex-col mt-4"
+        >
+          <p class="text-gray-400 mb-4">most reps</p>
 
-          <div v-if="statistics.heaviestWeight">{{ statistics.heaviestWeight }}</div>
+          <div>
+            <Chart :exerciseId="props.exercise.id" />
+          </div>
+
+          <div class="statistic-placeholder">
+            No data in selected time frame
+          </div>
+        </div>
+        <!--
+        <div
+          v-if="(['reps only', 'weighted bodyweight', 'assisted bodyweight'].includes(exercise.exercise_type))"
+          class="flex flex-col mt-4"
+        >
+          <p class="text-gray-400 mb-4">avarage reps</p>
+
+          <div v-if="props.statistics.avarage_reps">
+            <Chart :data="props.statistics.avarage_reps" />
+          </div>
 
           <div v-else class="statistic-placeholder">
             No data in selected time frame
           </div>
         </div>
 
-        <div class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">Best Set Volume</p>
+        <div v-if="(['duration', 'distance duration'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">avarage duration</p>
 
-          <div v-if="statistics.bestSetVolume">{{ statistics.bestSetVolume }}</div>
+          <div v-if="props.statistics.avarage_duration">
+            <Chart :data="props.statistics.avarage_duration" />
+          </div>
 
           <div v-else class="statistic-placeholder">
             No data in selected time frame
           </div>
         </div>
 
-        <div class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">One Reps Max</p>
+        <div v-if="(['duration', 'distance duration'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">best set duration</p>
 
-          <div v-if="statistics.oneRepMax">{{ statistics.oneRepMax }}</div>
+          <div v-if="props.statistics.best_set_duration">
+            <Chart :data="props.statistics.best_set_duration" />
+          </div>
 
           <div v-else class="statistic-placeholder">
             No data in selected time frame
           </div>
         </div>
 
-        <div class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">Best Time</p>
+        <div v-if="(['weight reps', 'weight distance'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">avarage weight</p>
 
-          <div v-if="statistics.bestTime">{{ statistics.bestTime }}</div>
+          <div v-if="props.statistics.avarage_weight">
+            <Chart :data="props.statistics.avarage_weight" />
+          </div>
 
           <div v-else class="statistic-placeholder">
             No data in selected time frame
           </div>
         </div>
 
-        <div class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">Best Time</p>
+        <div v-if="(['weight reps', 'weight distance'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">max weight</p>
 
-          <div v-if="statistics.mostReps">{{ statistics.mostReps }}</div>
+          <div v-if="props.statistics.max_weight">
+            <Chart :data="props.statistics.max_weight" />
+          </div>
 
           <div v-else class="statistic-placeholder">
             No data in selected time frame
           </div>
         </div>
+
+        <div v-if="(['weight reps'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">one reps max</p>
+
+          <div v-if="props.statistics.one_reps_max">
+            <Chart :data="props.statistics.one_reps_max" />
+          </div>
+
+          <div v-else class="statistic-placeholder">
+            No data in selected time frame
+          </div>
+        </div>
+
+        <div v-if="(['weight reps'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
+          <p class="text-gray-400 mb-4">volume</p>
+
+          <div v-if="props.statistics.volume">
+            <Chart :data="props.statistics.volume" />
+          </div>
+
+          <div v-else class="statistic-placeholder">
+            No data in selected time frame
+          </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -145,15 +196,15 @@
 </template>
 
 <script lang="ts" setup>
+
 const props = defineProps<{
   exercise: IExerciseRoutine
-  statistics: IExerciseStatistics
+  statistics?: any
 }>()
 
 const exerciseStore = useExercisesStore()
 const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
 const loading = ref(false)
-
 const modalVisible = ref(false)
 const action = ref<string>('')
 const actions = ref([
@@ -179,6 +230,7 @@ const handleError = () => {
 async function deleteExercise (id: string) {
   await exercisesService.deleteExercise(id)
 }
+
 watch(action, async (value) => {
   if (value === 'edit') {
     modalVisible.value = true

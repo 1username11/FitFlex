@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AuthFooter: typeof import('./../src/views/auth/components/AuthFooter.vue')['default']
     AuthHeader: typeof import('./../src/views/auth/components/AuthHeader.vue')['default']
+    Chart: typeof import('./../src/views/exercises/components/Chart.vue')['default']
     Compute: typeof import('./../src/components/Compute.vue')['default']
     CreateExercise: typeof import('./../src/components/CreateExercise.vue')['default']
     CreateRoutine: typeof import('./../src/views/routines/components/CreateRoutine.vue')['default']
@@ -37,6 +38,7 @@ declare module '@vue/runtime-core' {
     ExerciseDetailCard: typeof import('./../src/views/exercises/components/ExerciseDetailCard.vue')['default']
     FacebookIcon: typeof import('./../src/views/auth/components/FacebookIcon.vue')['default']
     Filters: typeof import('./../src/components/Filters.vue')['default']
+    FinishWorkout: typeof import('./../src/views/routines/components/FinishWorkout.vue')['default']
     GoogleIcon: typeof import('./../src/views/auth/components/GoogleIcon.vue')['default']
     IconAccount: typeof import('~icons/icon/account')['default']
     IconArrow: typeof import('~icons/icon/arrow')['default']

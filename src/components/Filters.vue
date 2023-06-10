@@ -217,19 +217,24 @@ function emitExercise (exercise: IExerciseRoutine) {
 }
 
 onMounted(async () => {
-  loading.value = true
-  Promise.allSettled([
-    getMuscleGroups(),
-    getExerciseTypes(),
-    getEquipment()
-  ]).then(() => {
-    getExercises()
-  }).catch((e) => {
-    console.log(e)
-  }).finally(() => {
+  try {
+    loading.value = true
+    await Promise.all([
+      getMuscleGroups(),
+      getExerciseTypes(),
+      getEquipment()
+    ])
+    await getExercises()
+  } catch (error: any) {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error'
+    })
+  } finally {
     loading.value = false
     console.log(exercises.value)
-  })
+  }
 })
 </script>
 
