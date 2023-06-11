@@ -69,8 +69,6 @@ async function duplicateWorkout (routine: IRoutine) {
     ])
     const createdAt = new Date().toISOString()
 
-    console.log(fetchedRoutine, fetchedRoutineSets)
-
     if (fetchedRoutine.error || fetchedRoutineSets.error) {
       throw new Error('Error fetching data')
     }
@@ -82,19 +80,28 @@ async function duplicateWorkout (routine: IRoutine) {
     }
 
     const routineSets = fetchedRoutineSets.data.map((set) => ({
+      ...set,
       id: generateGUID(),
       created_at: createdAt,
-      routine_id: duplicatedRoutine.id,
-      ...set
+      routine_id: duplicatedRoutine.id
     }))
 
-    await Promise.all([
-      routinesService.insertRoutine(duplicatedRoutine),
-      routinesService.insertSets(routineSets)
-    ])
-    await getRoutines(userId.value).then(() => {
-      // console.log('routines', routineList.value)
+    const { error: insertRoutineError } =
+    await routinesService.insertRoutine(duplicatedRoutine)
+
+    const { error: insertSetsError } =
+    await routinesService.insertSets(routineSets)
+
+    if (insertRoutineError || insertSetsError) {
+      throw new Error('Error duplicating routine')
+    }
+    ElNotification({
+      title: 'Success',
+      message: 'Routine duplicated',
+      type: 'success'
     })
+    await getRoutines(userId.value)
+
     console.log('duplicatedRoutine', duplicatedRoutine)
     console.log('routineSets', routineSets)
   } catch (error) {
@@ -111,10 +118,19 @@ async function duplicateWorkout (routine: IRoutine) {
 async function deleteWorkout (routine: IRoutine) {
   try {
     loading.value = true
+
+    const { error: deleteSetsError } = await routinesService.deleteRoutineSets(routine.id)
+    const { error: deleteRoutineError } = await routinesService.deleteRoutine(routine.id)
+    if (deleteSetsError || deleteRoutineError) {
+      throw new Error('Error deleting routine')
+    }
     const index = routineList.value.findIndex((r) => r.id === routine.id)
     routineList.value.splice(index, 1)
-    await routinesService.deleteRoutineSets(routine.id)
-    await routinesService.deleteRoutine(routine.id)
+    ElNotification({
+      title: 'Success',
+      message: 'Routine deleted',
+      type: 'success'
+    })
   } catch (error) {
     console.log(error)
   } finally {

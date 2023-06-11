@@ -9,8 +9,6 @@ export const router = createRouter({
   routes
 })
 
-// router.beforeEach(routeGuard)
-
 router.beforeEach(async (to, from, next) => {
   const { data, error } = await supabase.auth.getSession()
 

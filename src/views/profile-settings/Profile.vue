@@ -139,10 +139,10 @@ async function updateHandler () {
 
 onBeforeMount(async () => {
   await getProfile(userId.value)
-  profileModel.value.avatar_url = profile.value.data.avatar_url
-  profileModel.value.username = profile.value.data.username
-  profileModel.value.full_name = profile.value.data.full_name
-  profileModel.value.bio = profile.value.data.bio
+  profileModel.value.avatar_url = profile.value?.data.avatar_url as string
+  profileModel.value.username = profile.value?.data.username as string
+  profileModel.value.full_name = profile.value?.data.full_name as string
+  profileModel.value.bio = profile.value?.data.bio as string
 })
 </script>
 

@@ -2,7 +2,7 @@
   <div v-loading="loading" class="flex gap-4 justify-between">
     <div class="grow">
       <div class="flex justify-between mb-4">
-        <p class="font-bold text-xl">Create routine</p>
+        <p class="font-bold text-xl">Edit routine</p>
 
         <ElButton
           class="w-[200px]"
@@ -63,8 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { supabase } from '@/supabase'
-
 const emits = defineEmits(['save'])
 
 const exercisesStore = useExercisesStore()
@@ -77,14 +75,9 @@ const loading = ref(false)
 const router = useRouter()
 const currentRoute = router.currentRoute.value.params.id
 
-async function getUserId () {
-  const { data, error } = await supabase.auth.getUser()
-  if (error) return error
-  return data?.user?.id
-}
-
 const generalStore = useGeneralStore()
 const { generateGUID } = generalStore
+const { userId } = storeToRefs(generalStore)
 
 function addExercise (event: IExerciseRoutine) {
   const exercise = ref<IExerciseRoutine>({
@@ -112,7 +105,7 @@ async function saveHandler () {
   const routine = ref({
     id: generateGUID(),
     created_at: new Date(),
-    user: await getUserId(),
+    user: userId.value,
     title: title.value
   })
 

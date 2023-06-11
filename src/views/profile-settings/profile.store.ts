@@ -1,5 +1,5 @@
 export const useProfileStore = defineStore('profileStore', () => {
-  const profile = ref<any>()
+  const profile = ref<IProfileResponse>()
   const currentUserId = ref<any>()
   async function getProfile(id) {
     profile.value = await profileService.getProfile(id)

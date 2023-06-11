@@ -30,7 +30,7 @@
         <el-dropdown trigger="click" class="relative">
           <el-image
             class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
-            :src="profileUrl"
+            :src=" profile?.data.avatar_url"
           >
             <template #error>
               <div class="image-slot">
@@ -84,16 +84,12 @@ const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 const { getProfile } = profileStore
 
-const profileUrl = ref('')
-
 onMounted(async () => {
   try {
     await getProfile(userId.value)
-    console.log(profile.value.data.avatar_url)
-    if (profile.value.error) {
+    if (profile.value?.error) {
       throw new Error(profile.value.error)
     }
-    profileUrl.value = profile.value.data.avatar_url
   } catch (error: any) {
     ElNotification({
       title: 'Error',
@@ -102,7 +98,6 @@ onMounted(async () => {
     })
   }
 })
-
 </script>
 
 <style scoped lang="scss">
