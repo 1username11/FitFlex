@@ -80,7 +80,7 @@ onMounted(async () => {
     console.log('rotinesIds', routinesIds.value)
     console.log('routinesWithDetails', routinesSets.value)
     console.log('exercisePromises', exercisePromises)
-    // console.log('exercisesFetched', exercisesFetched)
+
   } catch (err) {
     console.log(err)
   }

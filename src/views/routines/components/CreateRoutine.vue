@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { supabase } from '@/supabase'
 
 const emits = defineEmits(['save'])
 
@@ -78,12 +77,7 @@ const createdRoutineModel = computed(() => {
 
 const generalStore = useGeneralStore()
 const { generateGUID } = generalStore
-
-async function getUserId () {
-  const { data, error } = await supabase.auth.getUser()
-  if (error) return error
-  return data.user.id
-}
+const { userId } = storeToRefs(generalStore)
 
 function addExercise (event: IExerciseRoutine) {
   exercises.value.push(event)
@@ -94,7 +88,7 @@ async function saveHandler () {
   const routine = ref({
     id: generateGUID(),
     created_at: new Date(),
-    user: await getUserId(),
+    user: userId.value,
     title: title.value
   })
 

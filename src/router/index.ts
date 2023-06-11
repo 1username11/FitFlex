@@ -21,6 +21,7 @@ router.beforeEach(async (to, from, next) => {
   await supabase.auth.onAuthStateChange((event, session) => {
     console.log('event', event)
     console.log('session', session)
+    localStorage.setItem('userId', session?.user?.id || '')
   })
 
   const currentSession = data

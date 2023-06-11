@@ -30,8 +30,15 @@
         <el-dropdown trigger="click" class="relative">
           <el-image
             class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
-            src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-          />
+            :src="profileUrl"
+          >
+            <template #error>
+              <div class="image-slot">
+                <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
+              </div>
+            </template>
+          </el-image>
+
           <template #dropdown>
             <el-dropdown-menu class="flex flex-col justify-between w-fit py-3">
               <el-dropdown-item
@@ -71,6 +78,30 @@ const routes = [
 
 const generalStore = useGeneralStore()
 const { logout, navigateTo } = generalStore
+const { userId } = storeToRefs(generalStore)
+
+const profileStore = useProfileStore()
+const { profile } = storeToRefs(profileStore)
+const { getProfile } = profileStore
+
+const profileUrl = ref('')
+
+onMounted(async () => {
+  try {
+    await getProfile(userId.value)
+    console.log(profile.value.data.avatar_url)
+    if (profile.value.error) {
+      throw new Error(profile.value.error)
+    }
+    profileUrl.value = profile.value.data.avatar_url
+  } catch (error: any) {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error'
+    })
+  }
+})
 
 </script>
 

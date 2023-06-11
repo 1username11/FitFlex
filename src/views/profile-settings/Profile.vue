@@ -1,11 +1,12 @@
 <template>
   <div
+    v-loading="uploading"
     class="flex flex-col items-center py-6 px-2.5
   bg-white border-t border-t-gray-200 border-r border-r-gray-200
   border-b border-b-gray-200 rounded-r-lg w-full h-screen"
   >
-    <div @click="openFileInput">
-      <el-image class="w-[100px] h-[100px] rounded-full overflow-hidden" :src="profileModel.avatar_url">
+    <div class="image-wrpapper" @click="openFileInput">
+      <el-image class="w-[100px] h-[100px] rounded-full overflow-hidden" :src="profileModel.avatar_url" fit="contatin">
         <template #error>
           <div class="image-slot">
             <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
@@ -21,7 +22,7 @@
         @change="handleFileUpload"
       >
     </div>
-    
+
     <div class="flex py-4 border-b border-b-gray-200 w-full gap-8">
       <div class="w-12">
         <p class="flex items-center font-light">Username:</p>
@@ -64,8 +65,11 @@
 import { supabase } from '@/supabase'
 
 const profileStore = useProfileStore()
-const { profile, currentUserId } = storeToRefs(profileStore)
-const { getProfile, getCurrentUser, updateProfile } = profileStore
+const { profile } = storeToRefs(profileStore)
+const { getProfile, updateProfile } = profileStore
+
+const generalStore = useGeneralStore()
+const { userId } = storeToRefs(generalStore)
 
 const fileURL = ref()
 const files = ref<File[]>()
@@ -97,13 +101,18 @@ const handleFileUpload = async (event) => {
 
     const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file)
 
-    const { data, error } = await supabase
+    const { data, error: signedUrlError } = await supabase
       .storage
       .from('avatars')
       .createSignedUrl(fileName, 365 * 24 * 3600)
 
-    if (!error) fileURL.value = data?.signedUrl as string
     if (uploadError) throw uploadError
+    if (!signedUrlError) {
+      fileURL.value = data?.signedUrl as string
+      profileModel.value.avatar_url = fileURL.value
+    } else {
+      throw signedUrlError
+    }
   } catch (error: any) {
     ElNotification({
       title: 'Error',
@@ -114,9 +123,10 @@ const handleFileUpload = async (event) => {
     uploading.value = false
   }
 }
+
 async function updateHandler () {
   uploading.value = true
-  await updateProfile(currentUserId.value, profileModel.value).catch((e) => {
+  await updateProfile(userId.value, profileModel.value).catch((e) => {
     ElNotification({
       title: 'Error',
       message: e.message || 'Something went wrong',
@@ -128,8 +138,7 @@ async function updateHandler () {
 }
 
 onBeforeMount(async () => {
-  await getCurrentUser()
-  await getProfile(currentUserId.value)
+  await getProfile(userId.value)
   profileModel.value.avatar_url = profile.value.data.avatar_url
   profileModel.value.username = profile.value.data.username
   profileModel.value.full_name = profile.value.data.full_name
@@ -144,4 +153,5 @@ onBeforeMount(async () => {
     box-shadow: none !important;
   }
 }
+
 </style>

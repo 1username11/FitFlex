@@ -52,6 +52,7 @@ const { getRoutines } = routinesStore
 
 const generalStore = useGeneralStore()
 const { generateGUID } = generalStore
+const { userId } = storeToRefs(generalStore)
 
 const router = useRouter()
 
@@ -59,33 +60,40 @@ function navigate () {
   router.push({ name: routeNames.createRoutine })
 }
 
-async function duplicateWorkout (workout: IRoutine) {
+async function duplicateWorkout (routine: IRoutine) {
   try {
     loading.value = true
-    const fetchedData = await Promise.all([
-      routinesService.getRoutine(workout.id),
-      routinesService.getSetsByRoutineId(workout.id)
+    const [fetchedRoutine, fetchedRoutineSets] = await Promise.all([
+      routinesService.getRoutine(routine.id),
+      routinesService.getSetsByRoutineId(routine.id)
     ])
+    const createdAt = new Date().toISOString()
 
-    if (fetchedData[0].error || fetchedData[1].error) throw new Error('Error fetching data')
-    const duplicatedRoutine = {
-      ...fetchedData[0].data[0] as IRoutine,
-      id: generateGUID(),
-      created_at: new Date().toISOString()
+    console.log(fetchedRoutine, fetchedRoutineSets)
+
+    if (fetchedRoutine.error || fetchedRoutineSets.error) {
+      throw new Error('Error fetching data')
     }
 
-    const routineSets = fetchedData[1].data.map((set) => {
-      set.id = generateGUID()
-      set.created_at = new Date().toISOString()
-      set.routine_id = duplicatedRoutine.id
-      return set
-    })
+    const duplicatedRoutine = {
+      ...fetchedRoutine.data[0],
+      id: generateGUID(),
+      created_at: createdAt
+    }
 
-    await routinesService.insertRoutine(duplicatedRoutine)
-    await routinesService.insertSets(routineSets)
-    const userId = (await supabase.auth.getUser()).data.user?.id as string
-    await getRoutines(userId).then(() => {
-      console.log('routines', routineList.value)
+    const routineSets = fetchedRoutineSets.data.map((set) => ({
+      id: generateGUID(),
+      created_at: createdAt,
+      routine_id: duplicatedRoutine.id,
+      ...set
+    }))
+
+    await Promise.all([
+      routinesService.insertRoutine(duplicatedRoutine),
+      routinesService.insertSets(routineSets)
+    ])
+    await getRoutines(userId.value).then(() => {
+      // console.log('routines', routineList.value)
     })
     console.log('duplicatedRoutine', duplicatedRoutine)
     console.log('routineSets', routineSets)
@@ -100,13 +108,13 @@ async function duplicateWorkout (workout: IRoutine) {
   }
 }
 
-async function deleteWorkout (workout: IRoutine) {
+async function deleteWorkout (routine: IRoutine) {
   try {
     loading.value = true
-    const index = routineList.value.findIndex((w) => w.id === workout.id)
+    const index = routineList.value.findIndex((r) => r.id === routine.id)
     routineList.value.splice(index, 1)
-    await routinesService.deleteRoutineSets(workout.id)
-    await routinesService.deleteRoutine(workout.id)
+    await routinesService.deleteRoutineSets(routine.id)
+    await routinesService.deleteRoutine(routine.id)
   } catch (error) {
     console.log(error)
   } finally {
@@ -131,7 +139,6 @@ async function deleteWorkout (workout: IRoutine) {
 //     loading.value = false
 //   }
 // }
-
 onMounted(async () => {
   try {
     loading.value = true
@@ -139,7 +146,7 @@ onMounted(async () => {
     if (error) throw new Error('Error fetching user')
     const userId = data.user?.id as string
     await getRoutines(userId).then(() => {
-      console.log('routines', routineList.value)
+      // console.log('routines', routineList.value)
     })
   } catch (error) {
     ElNotification({
@@ -151,4 +158,5 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
 </script>

@@ -1,6 +1,10 @@
+import { routeNames } from '@/router/route-names'
+
 export const useGeneralStore = defineStore('generalStore', () => {
   const exampleGeneralVar = ref<IExampleInterface>()
   const generalLoading = ref(false)
+  const userId = ref(localStorage.getItem('userId') || '')
+
   const accessToken = computed(() => {
     const authMeta = localStorage.getItem('sb-qmkeigkuramlfzjmpxug-auth-token')
     if (authMeta) {
@@ -26,9 +30,7 @@ export const useGeneralStore = defineStore('generalStore', () => {
   }
 
   async function logout() {
-    // navigateTo(routeNames.login)
-    // localStorage.removeItem('sb-qmkeigkuramlfzjmpxug-auth-token')
-    // localStorage.removeItem('ref-token')
+    navigateTo(routeNames.login)
     await authService.signOut()
   }
 
@@ -44,6 +46,7 @@ export const useGeneralStore = defineStore('generalStore', () => {
     exampleGeneralVar,
     generalLoading,
     accessToken,
+    userId,
     generateGUID,
     getGeneralStoreVar,
     logout,
