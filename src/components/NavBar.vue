@@ -17,6 +17,7 @@
               <IconHome v-if="route.name === routeNames.home" />
               <IconRoutines v-else-if="route.name === routeNames.routinesList" />
               <IconExercises v-else-if="route.name === routeNames.exercises" />
+              <IconGymFriends v-else-if="route.name === routeNames.gymFriends" class="w-5 h-5"/>
 
               <span class="hidden capitalize lg:flex lg:items-center h-full">
                 {{ route.name }}
@@ -59,6 +60,15 @@
                 <IconLogout />
                 <p>Logout</p>
               </el-dropdown-item>
+              <el-dropdown-item
+                v-if="userRole === 'admin'"
+                class="flex items-center py-1.5 px-[19px]
+              hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
+                @click="navigateTo(routeNames.adminPanel)"
+              >
+                <IconAdmin />
+                <p>Adimn Panel</p>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -73,7 +83,8 @@ import { routeNames } from '@/router/route-names'
 const routes = [
   { name: routeNames.home },
   { name: routeNames.routinesList },
-  { name: routeNames.exercises }
+  { name: routeNames.exercises },
+  { name: routeNames.gymFriends }
 ]
 
 const generalStore = useGeneralStore()
@@ -83,9 +94,15 @@ const { userId } = storeToRefs(generalStore)
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 const { getProfile } = profileStore
+const userRole = ref('')
+const router = useRouter()
+function navigate (routeName: string) {
+  router.push({ name: routeName })
+}
 
 onMounted(async () => {
   try {
+    userRole.value = localStorage.getItem('role') || ''
     await getProfile(userId.value)
     if (profile.value?.error) {
       throw new Error(profile.value.error)

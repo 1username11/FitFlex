@@ -1,3 +1,5 @@
+import { supabase } from '@/supabase'
+
 export const useHomeStore = defineStore('homeStore', () => {
   const feeds = ref<any[]>([])
   const routines = ref<any[]>([])
@@ -6,6 +8,15 @@ export const useHomeStore = defineStore('homeStore', () => {
 
   async function getFeeds(userId: string) {
     const { data, error } = await homeService.getFeeds(userId)
+    if (error) throw Error(error.message)
+    feeds.value = data
+  }
+  async function getInitialFeeds(userId: string) {
+    const { data, error } = await supabase
+      .from('feed')
+      .select('*')
+      .eq('user_id', userId)
+      .range(0, 1)
     if (error) throw Error(error.message)
     feeds.value = data
   }
@@ -34,6 +45,7 @@ export const useHomeStore = defineStore('homeStore', () => {
     getUniqueRoutineIds,
     getRoutines,
     getRoutinesWithDetails,
+    getInitialFeeds,
     feeds,
     routines,
     routinesIds,

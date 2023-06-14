@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading" class="flex flex-col justify-center items-center bg-white max-w-[550px] p-5 rounded-lg">
     <p class="text-lg font-bold mb-4 w-full">{{ props.exerciseId ? 'Update Exercise': 'Create Exercise' }}</p>
-    {{ router.currentRoute.value.path === '/exercises' }}
+
     <div class="cursor-pointer" @click="fileInputRef.click()">
       <el-image
         :src="fileURL"
@@ -73,6 +73,9 @@ const props = defineProps<{
 const exercisesStore = useExercisesStore()
 const { hashedMuscleGroups, hashedExerciseTypes, hashedEquipment } = storeToRefs(exercisesStore)
 
+const generalStore = useGeneralStore()
+const { userId } = storeToRefs(generalStore)
+
 const title = ref('')
 const type = ref('')
 const equipment = ref('')
@@ -82,6 +85,7 @@ const files = ref<FileList | null>()
 const loading = ref(false)
 const fileURL = ref('')
 const exerciseMediaURL = ref('')
+const userRole = ref('')
 
 const exerciseStore = useExercisesStore()
 const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
@@ -195,7 +199,9 @@ async function upsertHandler () {
     muscle_group: primary.value,
     exercise_type: type.value,
     thumbnails_url: fileURL.value,
-    exercise_media_url: exerciseMediaURL.value || fileURL.value
+    exercise_media_url: exerciseMediaURL.value || fileURL.value,
+    user_id: userId.value,
+    is_public: router.currentRoute.value.fullPath === '/admin-panel'
   }
   try {
     if (props.exerciseId) {
@@ -231,6 +237,9 @@ async function upsertHandler () {
     emit('close')
   }
 }
+onMounted(() => {
+  userRole.value = localStorage.getItem('role') as string
+})
 </script>
 
 <style lang="scss">

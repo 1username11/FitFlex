@@ -3,7 +3,7 @@
     <div class="flex flex-col">
       <div class="flex justify-between">
         <p class="text-lg font-bold mb-4">{{ props.exercise.title }}</p>
-        <el-select v-model="action" placeholder="Select" class="w-[100px]">
+        <el-select v-if="!exercise.is_public" v-model="action" placeholder="Select" class="w-[100px]">
           <el-option
             v-for="item in actions"
             :key="item.value"

@@ -22,6 +22,7 @@ interface IExerciseRoutine {
   thumbnails_url?: string
   exercise_type: string
   sets: ISetRoutine[]
+  is_public: boolean
 }
 
 interface IRoutine {

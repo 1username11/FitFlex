@@ -3,6 +3,9 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
   const hashedMuscleGroups = ref({} as TIndexedObject<string>)
   const hashedExerciseTypes = ref({} as TIndexedObject<string>)
   const hashedEquipment = ref({} as TIndexedObject<string>)
+  
+  const generalStore = useGeneralStore()
+  const { userId } = storeToRefs(generalStore)
 
   const selectedEquipment = ref('')
   const slecetedPrimary = ref('')
@@ -10,7 +13,7 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
   const compare = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0
 
   async function getExercises() {
-    exerciseRes.value = (await exercisesService.getExercises()).data as IExerciseExchange[]
+    exerciseRes.value = (await exercisesService.getExercises(userId.value)).data as IExerciseExchange[]
   }
 
   async function getMuscleGroups() {
@@ -61,7 +64,8 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
           exercise_type: exerciseType,
           exercise_media_url: exercise.exercise_media_url,
           thumbnails_url: exercise.thumbnails_url,
-          sets: [] as ISetRoutine[]
+          sets: [] as ISetRoutine[],
+          is_public: exercise.is_public
         })
       }
 

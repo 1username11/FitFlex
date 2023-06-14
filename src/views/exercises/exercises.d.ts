@@ -14,6 +14,7 @@ interface IExerciseExchange {
   exercise_media_url: string
   thumbnails_url: string
   exercise_type: string
+  is_public: boolean
 }
 
 interface IExerciseTypeRes {

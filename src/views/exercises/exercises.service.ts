@@ -1,10 +1,11 @@
 import { supabase } from '@/supabase'
 
 class ExercisesService {
-  getExercises() {
+  getExercises(userId: string) {
     return supabase
       .from('exercises')
       .select('*')
+      .or(`user_id.eq.${userId},is_public.eq.true`)
   }
 
   getMuscleGroups() {

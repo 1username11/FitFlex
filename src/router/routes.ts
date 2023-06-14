@@ -10,7 +10,8 @@ import { homeViewRoutes } from '@/views/home/home.routes'
 import { routinesViewRoutes } from '@/views/routines/routines.routes'
 import { exercisesViewRoutes } from '@/views/exercises/exercises.routes'
 import { profileRoutes } from '@/views/profile-settings/profile.routes'
-import CreateExercise from '@/components/CreateExercise.vue'
+import { adminRoutes } from '@/views/admin/admin.routes'
+import { gymFriendsRoutes } from '@/views/gym-friends/gym-friends.routes'
 
 const defaultLayoutRoutes: RouteRecordRaw = {
   path: '/',
@@ -23,7 +24,9 @@ const defaultLayoutRoutes: RouteRecordRaw = {
     ...homeViewRoutes,
     ...routinesViewRoutes,
     ...exercisesViewRoutes,
-    ...profileRoutes
+    ...profileRoutes,
+    ...adminRoutes,
+    ...gymFriendsRoutes
   ]
 }
 

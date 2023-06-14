@@ -166,9 +166,11 @@
             <div class="ml-2">
               <div>
                 {{ exercise.title }}
+                {{ exercise.is_public }}
+                <div v-if="!exercise.is_public">Custom</div>
               </div>
               <div class="text-gray-400">
-                {{ exercise.muscle_group }}
+                <p>{{ exercise.muscle_group }}</p>
               </div>
             </div>
           </div>
@@ -216,7 +218,7 @@ function emitExercise (exercise: IExerciseRoutine) {
   emits('addExercise', exercise)
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   try {
     loading.value = true
     await Promise.all([

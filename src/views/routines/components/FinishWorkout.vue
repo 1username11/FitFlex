@@ -128,7 +128,8 @@ const finishWorkoutModel = computed(() => {
     description: description.value,
     media_url: exerciseMediaURL.value,
     created_at: date.value,
-    duration: props.duration
+    duration: props.duration,
+    json_data: JSON.stringify(props.completedWorkout)
   }
 })
 

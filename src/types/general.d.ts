@@ -27,10 +27,12 @@ interface IExercise {
 
 interface IUser {
   id: string
-  name: string
-  age: number
-  bio?: string
-  avatar: string
+  updated_at: string
+  username: string
+  full_name: string
+  avatar_url: string
+  role: any
+  bio: string
 }
 
 interface ILog {

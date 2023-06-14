@@ -31,6 +31,7 @@ export const useGeneralStore = defineStore('generalStore', () => {
 
   async function logout() {
     navigateTo(routeNames.login)
+    localStorage.clear()
     await authService.signOut()
   }
 

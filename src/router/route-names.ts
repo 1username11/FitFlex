@@ -4,6 +4,8 @@ import { routinesViewRouteNames } from '@/views/routines/routines.routes'
 import { homeViewRouteNames } from '@/views/home/home.routes'
 import { exercisesViewRouteNames } from '@/views/exercises/exercises.routes'
 import { profileRouteNames } from '@/views/profile-settings/profile.routes'
+import { adminRouteNames } from '@/views/admin/admin.routes'
+import { gymFriendsRouteNames } from '@/views/gym-friends/gym-friends.routes'
 
 export const routeNames = {
   rootPage: 'rootPage',
@@ -14,6 +16,8 @@ export const routeNames = {
   ...exercisesViewRouteNames,
   ...routinesViewRouteNames,
   ...profileRouteNames,
+  ...adminRouteNames,
+  ...gymFriendsRouteNames,
 
   additionalDefaultLayoutRoute: 'additionalDefaultLayoutRoute',
   additionalNoLayoutRoute: 'additionalNoLayoutRoute'
