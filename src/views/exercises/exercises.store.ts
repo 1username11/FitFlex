@@ -3,7 +3,31 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
   const hashedMuscleGroups = ref({} as TIndexedObject<string>)
   const hashedExerciseTypes = ref({} as TIndexedObject<string>)
   const hashedEquipment = ref({} as TIndexedObject<string>)
-  
+  const mostReps = ref([
+    ['x', 'y']
+  ])
+  const avarageReps = ref([
+    ['x', 'y']
+  ])
+  const bestSetDuration = ref([
+    ['x', 'y']
+  ])
+  const avarageDuration = ref([
+    ['x', 'y']
+  ])
+  const avarageWeight = ref([
+    ['x', 'y']
+  ])
+  const maxWeight = ref([
+    ['x', 'y']
+  ])
+  const oneRepsMax = ref([
+    ['x', 'y']
+  ])
+  const volume = ref([
+    ['x', 'y']
+  ])
+
   const generalStore = useGeneralStore()
   const { userId } = storeToRefs(generalStore)
 
@@ -108,8 +132,16 @@ export const useExercisesStore = defineStore('exercisesStore', () => {
     searchedExercises,
     hashedMuscleGroups,
     hashedExerciseTypes,
-    hashedEquipment
-  }
+    hashedEquipment,
+    mostReps,
+    avarageReps,
+    bestSetDuration,
+    avarageDuration,
+    avarageWeight,
+    maxWeight,
+    oneRepsMax,
+    volume
+    }
 })
 
 if (import.meta.hot) {

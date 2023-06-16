@@ -54,3 +54,19 @@ interface IRoutineDetails {
   weight?: number
   duration?: any
 }
+
+interface IExerciseStatistics {
+  id: string
+  user_id: string
+  created_at: number
+  exercise_id: string
+  avarage_weight?: number
+  max_weight?: number
+  one_reps_max?: number
+  most_reps?: number
+  avarage_reps?: number
+  best_set_duration?: number
+  avarage_duration?: number
+  volume: number
+}
+

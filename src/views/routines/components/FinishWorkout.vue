@@ -26,7 +26,7 @@
         </el-image>
         <div>
           <p>Created by {{ username }}</p>
-          <p class="text-gray-400">{{ date }}</p>
+          <p class="text-gray-400">{{ getCurrentDate() }}</p>
         </div>
       </div>
       <div class="border-b border-b-gray-300 py-6 w-full element-input-wrapper mb-4">
@@ -66,7 +66,7 @@
       <div class="mb-6 flex space-x-10">
         <div>
           <p class="text-gray-400">Duration</p>
-          <p>{{ props.duration }}</p>
+          <p>{{ formatTime(duration) }}</p>
         </div>
         <div>
           <p class="text-gray-400">Sets</p>
@@ -105,7 +105,20 @@ const description = ref('')
 const fileURL = ref('')
 const exerciseMediaURL = ref('')
 const files = ref<FileList | null>()
-const date = ref(getCurrentDate())
+const date = ref(Date.now())
+
+function formatTime (timestamp: number) {
+  const hours = Math.floor(timestamp / 3600)
+    .toString()
+    .padStart(2, '0')
+  const minutes = Math.floor((timestamp % 3600) / 60)
+    .toString()
+    .padStart(2, '0')
+  const seconds = (timestamp % 60).toString().padStart(2, '0')
+  return `${hours}:${minutes}:${seconds}`
+}
+
+
 
 const numberOfSets = computed(() => {
   let totalSets = 0
@@ -124,7 +137,7 @@ const finishWorkoutModel = computed(() => {
   return {
     feed_id: generateGUID(),
     user_id: currentUser.value?.id,
-    routine_id: currentRouteParam,
+    // routine_id: currentRouteParam,
     description: description.value,
     media_url: exerciseMediaURL.value,
     created_at: date.value,

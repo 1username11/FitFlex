@@ -7,6 +7,7 @@
         <ElButton
           class="w-[200px]"
           type="primary"
+          :disabled="!isValid"
           @click="saveHandler"
         >
           Save Routine
@@ -66,6 +67,7 @@
 
 const emits = defineEmits(['save'])
 
+const router = useRouter()
 const title = ref<string>('')
 const exercises = ref<IExerciseRoutine[]>([])
 const createdRoutineModel = computed(() => {
@@ -84,36 +86,86 @@ function addExercise (event: IExerciseRoutine) {
 }
 
 async function saveHandler () {
-  emits('save')
-  const routine = ref({
-    id: generateGUID(),
-    created_at: new Date(),
-    user: userId.value,
-    title: title.value
-  })
-
-  const exerciseSets = computed(() => {
-    return createdRoutineModel.value.exercises.map((exercise: IExerciseRoutine) => {
-      const sets = exercise.sets.map((set: ISetRoutine) => ({
-        id: generateGUID(),
-        reps: set.reps || null,
-        rest_time: exercise.rest_time || null,
-        duration: set.duration || null,
-        weight: Number(set.weight) || null,
-        exercise_id: exercise.id,
-        routine_id: routine.value.id
-      }))
-
-      return sets
+  try {
+    emits('save')
+    const routine = ref({
+      id: generateGUID(),
+      created_at: new Date(),
+      user: userId.value,
+      title: title.value
     })
-  })
-  await routinesService.insertRoutine(routine.value)
-  await routinesService.insertSets(exerciseSets.value.flat())
-  console.log(exerciseSets.value.flat())
+
+    const exerciseSets = computed(() => {
+      return createdRoutineModel.value.exercises.map((exercise: IExerciseRoutine) => {
+        const sets = exercise.sets.map((set: ISetRoutine) => ({
+          id: generateGUID(),
+          reps: set.reps || null,
+          rest_time: exercise.rest_time || null,
+          duration: set.duration || null,
+          weight: Number(set.weight) || null,
+          exercise_id: exercise.id,
+          routine_id: routine.value.id
+        }))
+
+        return sets
+      })
+    })
+    const { error: insertRoutineErr } = await routinesService.insertRoutine(routine.value)
+    const { error: insertSetsErr } = await routinesService.insertSets(exerciseSets.value.flat())
+    if (insertRoutineErr || insertSetsErr) throw new Error('Error while inserting routine')
+    ElNotification({
+      title: 'Success',
+      message: 'Routine created successfully',
+      type: 'success'
+    })
+    router.push({ name: 'routines' })
+  } catch (error: any) {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error'
+    })
+  }
 }
 
-watch(createdRoutineModel.value.exercises, () => {
-  console.log(createdRoutineModel.value)
+
+function validateExerciseObject (obj) {
+  // Перевірка наявності заголовка
+  if (!obj.title || obj.title.trim() === '') {
+    return false
+  }
+
+  // Перевірка наявності принаймні однієї вправи
+  if (!obj.exercises || obj.exercises.length === 0) {
+    return false
+  }
+
+  // Перевірка наявності принаймні одного непорожнього поля в sets кожної вправи
+  for (const exercise of obj.exercises) {
+    if (!exercise.sets || exercise.sets.length === 0) {
+      return false
+    }
+
+    let hasNonEmptyField = false
+    for (const set of exercise.sets) {
+      // Перевірка наявності принаймні одного непорожнього поля в кожному set
+      if (Object.values(set).some((value) => value && value.trim() !== '')) {
+        hasNonEmptyField = true
+        break
+      }
+    }
+
+    if (!hasNonEmptyField) {
+      return false
+    }
+  }
+
+  // Пройдено всі перевірки
+  return true
+}
+
+const isValid = computed(() => {
+  return validateExerciseObject(createdRoutineModel.value)
 })
 </script>
 

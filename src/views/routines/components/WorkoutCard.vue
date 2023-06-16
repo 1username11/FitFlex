@@ -24,7 +24,7 @@
     <div class="flex justify-between">
       <p>Set</p>
       <p
-        v-if="['weight reps', 'weight distance']
+        v-if="['weighted bodyweight', 'weight reps', 'weight distance']
           .includes(exercise.exercise_type)"
       >
         KG
@@ -62,6 +62,7 @@ const props = defineProps<{
   exercise: IExerciseRoutine
   sets: ISetRoutine[]
   isWorokoutStarted: boolean
+  bodyweight?: number
 }>()
 const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete', 'exerciseCompleted'])
 
@@ -89,6 +90,7 @@ function startRestCountdown (idx: number) {
       clearInterval(interval)
     }
   }, 1000)
+
   emit('setComplete', props.sets[idx])
 }
 
@@ -107,33 +109,35 @@ function setComplete (idx: number, set: ISetRoutine) {
 }
 
 const exerciseStatistic = computed(() => {
-  if (['weight reps', 'weight distance'].includes(props.exercise.exercise_type)) {
+  if (['weight reps', 'weight distance', 'weighted bodyweight'].includes(props.exercise.exercise_type)) {
     return {
       id: generateGUID(),
+      user_id: localStorage.getItem('userId'),
       created_at: Date.now(),
       exercise_id: props.exercise.id,
       avarage_weight: props.sets.reduce((acc, set) => acc + (set.weight as number), 0) / props.sets.length,
       max_weight: props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0),
-      one_reps_max:
-      props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0) / 0.0333 +
-      0.0333 * props.sets.reduce((acc, set) => Math.max(acc, set.reps as number), 0),
-      volume: props.sets.reduce((acc, set) => acc + (set.weight as number) * (set.reps as number), 0)
+      one_reps_max: props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0) / 0.033
     }
-  } else if (['weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(props.exercise.exercise_type)) {
+  } else if (['assisted bodyweight', 'reps only'].includes(props.exercise.exercise_type)) {
     return {
       id: generateGUID(),
+      user_id: localStorage.getItem('userId'),
       created_at: Date.now(),
       exercise_id: props.exercise.id,
       most_reps: props.sets.reduce((acc, set) => Math.max(acc, set.reps as number), 0),
-      avarage_reps: props.sets.reduce((acc, set) => acc + (set.reps as number), 0) / props.sets.length
+      avarage_reps: props.sets.reduce((acc, set) => acc + (set.reps as number), 0) / props.sets.length,
+      volume: props.sets.reduce((acc, set) => acc + (props.bodyweight as number) * (set.reps as number), 0)
     }
   } else if (['duration', 'distance duration'].includes(props.exercise.exercise_type)) {
     return {
       id: generateGUID(),
+      user_id: localStorage.getItem('userId'),
       created_at: Date.now(),
       exercise_id: props.exercise.id,
       best_set_duration: props.sets.reduce((acc, set) => Math.max(acc, set.duration as number), 0),
-      avarage_duration: props.sets.reduce((acc, set) => acc + (set.duration as number), 0) / props.sets.length
+      avarage_duration: props.sets.reduce((acc, set) => acc + (set.duration as number), 0) / props.sets.length,
+      volume: props.sets.reduce((acc, set) => acc + (props.bodyweight as number) * (set.duration as number), 0)
     }
   }
 })

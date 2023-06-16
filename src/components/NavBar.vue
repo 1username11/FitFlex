@@ -17,7 +17,7 @@
               <IconHome v-if="route.name === routeNames.home" />
               <IconRoutines v-else-if="route.name === routeNames.routinesList" />
               <IconExercises v-else-if="route.name === routeNames.exercises" />
-              <IconGymFriends v-else-if="route.name === routeNames.gymFriends" class="w-5 h-5"/>
+              <IconGymFriends v-else-if="route.name === routeNames.gymFriends" />
 
               <span class="hidden capitalize lg:flex lg:items-center h-full">
                 {{ route.name }}
@@ -29,23 +29,25 @@
 
       <div class="flex justify-end items-center">
         <el-dropdown trigger="click" class="relative">
-          <el-image
-            class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
-            :src=" profile?.data.avatar_url"
-          >
-            <template #error>
-              <div class="image-slot">
-                <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-              </div>
-            </template>
-          </el-image>
+          <div class="avatar-wrapper">
+            <el-image
+              class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
+              :src="userAvatar"
+            >
+              <template #error>
+                <div class="image-slot">
+                  <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
+                </div>
+              </template>
+            </el-image>
+          </div>
 
           <template #dropdown>
             <el-dropdown-menu class="flex flex-col justify-between w-fit py-3">
               <el-dropdown-item
                 class="flex items-center py-1.5 px-6
               hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
-                @click="navigateTo(routeNames.profileSettings)"
+                @click="navigateTo(routeNames.profile)"
               >
                 <IconSettings />
                 <p>
@@ -94,11 +96,9 @@ const { userId } = storeToRefs(generalStore)
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 const { getProfile } = profileStore
+
 const userRole = ref('')
-const router = useRouter()
-function navigate (routeName: string) {
-  router.push({ name: routeName })
-}
+const userAvatar = ref('')
 
 onMounted(async () => {
   try {
@@ -107,6 +107,8 @@ onMounted(async () => {
     if (profile.value?.error) {
       throw new Error(profile.value.error)
     }
+    userAvatar.value = profile.value?.data.avatar_url || ''
+    localStorage.setItem('body_weight', profile.value?.data.body_weight?.toString() || '')
   } catch (error: any) {
     ElNotification({
       title: 'Error',
@@ -121,5 +123,14 @@ onMounted(async () => {
 .router-link-active.router-link-exact-active.nav-link {
   border-bottom: 2px solid #1D83EA !important;
   color: black !important;
+}
+
+.avatar-wrapper{
+  .el-image{
+    :first-child{
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 </style>

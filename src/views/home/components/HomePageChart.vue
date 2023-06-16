@@ -1,7 +1,7 @@
 <template>
   <GChart
     class="w-full h-full"
-    type="LineChart"
+    type="ColumnChart"
     :data="chartData"
     :options="chartOptions.chart"
   />
@@ -11,20 +11,15 @@
 import { ref } from 'vue'
 import { GChart } from 'vue-google-charts'
 
-const props = defineProps<{
-  chartData: [string, number | string][]
-  label: string
+defineProps<{
+  chartData: any
 }>()
 
 const chartOptions = ref({
   chart: {
-    title: props.label,
-    curveType: 'function',
+    title: 'Workout duration',
     legend: { position: 'none' },
-    hAxis: {
-      title: 'Date',
-      
-    }
+    chartArea: { width: '90%' }
   }
 })
 </script>

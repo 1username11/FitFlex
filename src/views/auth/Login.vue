@@ -89,8 +89,6 @@ const loginModel = reactive({
   password: ''
 })
 
-const generalStore = useGeneralStore()
-
 const loginRules = ref({
   email: [useRequiredRule(), useEmailRule()],
   password: [useRequiredRule(), useMinLenRule(6)]

@@ -14,6 +14,10 @@ class ProfileService {
       ...updates
     }).eq('id', id)
   }
+
+  getPublicProfiles() {
+    return supabase.from('profiles').select('*').eq('is_public', true)
+  }
 }
 
 export const profileService = new ProfileService()

@@ -74,6 +74,13 @@ class ExercisesService {
       .select('*')
       .eq('exercise_id', id)
   }
+
+  getExerciseById(id: string) {
+    return supabase.from('exercises')
+      .select('*')
+      .eq('id', id)
+      .single()
+  }
 }
 
 export const exercisesService = new ExercisesService()

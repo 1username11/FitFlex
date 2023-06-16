@@ -46,7 +46,7 @@
       <div class="flex justify-between">
         <p>Set</p>
         <p
-          v-if="['weight reps', 'weight distance']
+          v-if="['weight reps', 'weight distance', 'weighted bodyweight']
             .includes(exercise.exercise_type)"
         >
           KG

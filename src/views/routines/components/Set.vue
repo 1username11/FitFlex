@@ -8,12 +8,12 @@
     </div>
 
     <div
-      v-if="['weight reps', 'weight distance']
+      v-if="['weight reps', 'weight distance', 'weighted bodyweight']
         .includes(exerciseType)"
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-"
+        v-model="setModel.weight" class="w-fit ml-16" type="number" placeholder="-"
       />
     </div>
 
@@ -23,7 +23,7 @@
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-"
+        v-model="setModel.reps" class="w-fit mr-11" type="number" placeholder="-"
       />
     </div>
 
@@ -33,7 +33,7 @@
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.duration" class="w-fit mr-11" type="text" placeholder="-"
+        v-model="setModel.duration" class="w-fit mr-11" type="number" placeholder="-"
       />
     </div>
 

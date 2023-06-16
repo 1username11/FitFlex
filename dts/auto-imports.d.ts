@@ -5,6 +5,7 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const ElMessage: typeof import('element-plus/es')['ElMessage']
   const ElMessageBox: typeof import('element-plus/es')['ElMessageBox']
   const ElNotification: typeof import('element-plus/es')['ElNotification']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
@@ -191,6 +192,7 @@ declare global {
   const useGeneralStore: typeof import('../src/store/modules/general.store')['useGeneralStore']
   const useGeolocation: typeof import('@vueuse/core')['useGeolocation']
   const useGlobalProperties: typeof import('../src/composables/global-properties')['useGlobalProperties']
+  const useGymFriendsStore: typeof import('../src/views/gym-friends/gym-friends.store')['useGymFriendsStore']
   const useHead: typeof import('@vueuse/head')['useHead']
   const useHomeStore: typeof import('../src/views/home/home.store')['useHomeStore']
   const useHttp: typeof import('../src/composables/http/index')['useHttp']

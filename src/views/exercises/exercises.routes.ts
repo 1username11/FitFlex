@@ -1,10 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
 import Exercises from './Exercises.vue'
-import VideoCapture from './VideoCapture.vue'
+import Chart from './components/Chart.vue'
 
 export const exercisesViewRouteNames = {
   exercises: 'exercises',
-  video: 'video'
+  chart: 'chart'
 }
 
 export const exercisesViewRoutes: Array<RouteRecordRaw> = [
@@ -17,12 +17,12 @@ export const exercisesViewRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/video',
-    name: exercisesViewRouteNames.video,
-    component: VideoCapture,
+    path: '/chart',
+    name: exercisesViewRouteNames.chart,
+    component: Chart,
     meta: {
       requiresAuth: true
     }
-
   }
+
 ]

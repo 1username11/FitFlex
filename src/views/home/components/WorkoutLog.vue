@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col p-4 w-full bg-white rounded-xl border border-gray-300 mb-4">
     <div>
-      <div class="flex mb-4">
+      <div class="flex mb-4 home-avatar-wrapper">
         <el-image :src="user.avatar_url" class="w-12 h-12 rounded-full overflow-hidden mr-4">
           <template #error>
             <div class="image-slot">
@@ -11,9 +11,9 @@
         </el-image>
 
         <div>
-          <p>{{ user.username }}</p>
+          <p>{{ user.full_name }}</p>
 
-          <p class="text-gray-400 text-sm">{{ parsedFeed.created_at }}</p>
+          <p class="text-gray-400 text-sm">{{ formatTimestamp(parsedFeed.created_at) }}</p>
         </div>
       </div>
       <!-- <div class="text-xl font-bold mb-4">{{ feed.title }}</div> -->
@@ -165,11 +165,11 @@
 
       <div class="flex justify-center">
         <button
-          v-if="parsedFeed.json_data.length > 3 && !showMore"
+          v-if="!showMore"
           class="text-gray-400"
           @click="showMore=!showMore"
         >
-          See more exercise
+          See workout details
         </button>
 
         <button
@@ -177,7 +177,7 @@
           class="text-gray-400"
           @click="showMore=!showMore"
         >
-          See less exercise
+          Hide workout details
         </button>
       </div>
     </div>
@@ -200,19 +200,26 @@ const parsedFeed = ref({
 } as IFeed)
 console.log('parsedFeed', parsedFeed.value)
 
-// function getFormattedDate (date: Date) {
-//   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+function formatTimestamp (timestamp) {
+  const date = new Date(timestamp)
 
-//   const day = date.getDate()
-//   const monthIndex = date.getMonth()
-//   const year = date.getFullYear()
-//   const hours = String(date.getHours()).padStart(2, '0')
-//   const minutes = String(date.getMinutes()).padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = getMonthName(date.getMonth())
+  const year = date.getFullYear().toString().slice(-2)
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
 
-//   const formattedDate = `${day} ${months[monthIndex]} ${year}, ${hours}:${minutes}`
+  return `${day} ${month} ${year} ${hours}:${minutes}`
+}
 
-//   return formattedDate
-// }
+function getMonthName (monthIndex) {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ]
+
+  return months[monthIndex]
+}
 
 function getTotalReps (data: IFeed) {
   let totalReps = 0
@@ -228,3 +235,14 @@ function getTotalReps (data: IFeed) {
   return totalReps
 }
 </script>
+
+<style lang="scss">
+.home-avatar-wrapper{
+  .el-image{
+    :first-child{
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+</style>

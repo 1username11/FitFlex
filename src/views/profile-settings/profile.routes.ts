@@ -1,15 +1,15 @@
 import type { RouteRecordRaw } from 'vue-router'
-import ProfileSettings from './ProfileSettings.vue'
+import Profile from './Profile.vue'
 
 export const profileRouteNames = {
-  profileSettings: 'profileSettings'
+  profile: 'profile'
 }
 
 export const profileRoutes: Array<RouteRecordRaw> = [
   {
     path: 'settings',
-    name: profileRouteNames.profileSettings,
-    component: ProfileSettings,
+    name: profileRouteNames.profile,
+    component: Profile,
     meta: {
       requiresAuth: true
     }

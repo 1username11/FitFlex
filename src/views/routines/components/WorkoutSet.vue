@@ -8,30 +8,33 @@
     </div>
 
     <div
-      v-if="['weight reps', 'weight distance'].includes(exerciseType)"
+      v-if="['weight reps', 'weight distance', 'weighted bodyweight'].includes(exerciseType)"
       class="input-wrapper"
     >
-      <el-input
+      <!-- <el-input
         v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-"
-      />
+      /> -->
+      {{ setModel.weight }}
     </div>
 
     <div
       v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(exerciseType)"
       class="input-wrapper"
     >
-      <el-input
+      <!-- <el-input
         v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-"
-      />
+      /> -->
+      {{ setModel.reps }}
     </div>
 
     <div
       v-if="['duration', 'distance duration'].includes(exerciseType)"
       class="input-wrapper"
     >
-      <el-input
+      <!-- <el-input
         v-model="setModel.duration" class="w-fit mr-11" type="text" placeholder="-"
-      />
+      /> -->
+      {{ setModel.duration }}
     </div>
 
     <button

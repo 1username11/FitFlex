@@ -27,12 +27,22 @@ interface IExercise {
 
 interface IUser {
   id: string
-  updated_at: string
+  updated_at?: string
   username: string
   full_name: string
   avatar_url: string
-  role: any
-  bio: string
+  role: string
+  bio?: string
+  is_banned: boolean
+  created_at: ?any
+  is_public: boolean
+  lat?: number
+  lng?: number
+  phone_number?: string
+  telegram_link?: string
+  e_mail?: string
+  other_contact_info?: string
+  additional_info?: string
 }
 
 interface ILog {

@@ -8,9 +8,20 @@ export const useProfileStore = defineStore('profileStore', () => {
     profile.value = await profileService.updateProfile(id, updates)
   }
 
+  function getCurrentPosition() {
+    return new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      })
+    })
+  }
+
   return {
     getProfile,
     updateProfile,
+    getCurrentPosition,
     profile
   }
 })

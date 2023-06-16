@@ -6,7 +6,7 @@
     >
       {{ routine.title }}
     </router-link>
-    <el-dropdown trigger="click">
+    <el-dropdown v-if="router.currentRoute.value.path !=='/'" trigger="click">
       <span>
         <IconRoutinesItemButton />
       </span>

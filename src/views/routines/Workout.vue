@@ -54,6 +54,7 @@
           :key="exercise.id"
           :exercise="exercise"
           :sets="exercise.sets"
+          :bodyweight="bodyweight"
           :isWorokoutStarted="isRunning"
           :class="{'border-b border-gray-300'
             : index !== exercises.length - 1, 'border-none'
@@ -68,7 +69,7 @@
   </div>
 
   <div v-else>
-    <FinishWorkout :completedWorkout="exercises" :duration="formatTime" />
+    <FinishWorkout :completedWorkout="exercises" :duration="time" />
   </div>
 </template>
 
@@ -88,6 +89,8 @@ const time = ref(initialTime)
 const intervalRef = ref()
 const isRunning = ref(false)
 const isWorkoutFinished = ref(false)
+const totalVolume = ref(0)
+const bodyweight = ref(0)
 
 const formatTime = computed(() => {
   const hours = Math.floor(time.value / 3600)
@@ -160,6 +163,7 @@ function finishRoutine () {
         type: 'success'
       }
     ).then(() => {
+      pauseTimer()
       isWorkoutFinished.value = true
     })
       .catch((e: any) => {
@@ -200,8 +204,9 @@ const confirmDiscard = () => {
     })
 }
 
-async function exerciseCompleted (exercise: IExerciseRoutine) {
+async function exerciseCompleted (exercise: IExerciseStatistics) {
   console.log('exercise completed', exercise)
+  totalVolume.value += exercise.volume
   return await routinesService.insertExerciseStatistcs(exercise)
 }
 
@@ -234,6 +239,7 @@ onMounted(async () => {
         sets: routineSets.filter((set) => set.exercise_id === item.id)
       } as IExerciseRoutine
     })
+    bodyweight.value = localStorage.getItem('bodyweight') ? Number(localStorage.getItem('bodyweight')) : 1
     console.log('hashedExerciseTypes', hashedExerciseTypes.value)
     console.log('routineSets', routineSets)
 

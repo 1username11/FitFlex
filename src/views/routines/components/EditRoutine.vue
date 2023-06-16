@@ -7,6 +7,7 @@
         <ElButton
           class="w-[200px]"
           type="primary"
+          :disabled="!isValid"
           @click="saveHandler"
         >
           Edit Routine
@@ -80,20 +81,23 @@ const { generateGUID } = generalStore
 const { userId } = storeToRefs(generalStore)
 
 function addExercise (event: IExerciseRoutine) {
+  console.log(event)
+
   const exercise = ref<IExerciseRoutine>({
     id: event.id,
     title: event.title,
     sets: event.sets,
-    exercise_type: hashedExerciseTypes.value[event.exercise_type as string],
+    exercise_type: event.exercise_type as string,
     equipment_category: event.equipment_category,
     muscle_group: event.muscle_group,
-    thumbnails_url: event.thumbnails_url
+    thumbnails_url: event.thumbnails_url,
+    is_public: event.is_public
   })
 
   exercises.value.push(exercise.value)
 }
 
-const createdRoutineModel = computed(() => {
+const editRoutineModel = computed(() => {
   return {
     title: title.value,
     exercises: exercises.value
@@ -110,7 +114,7 @@ async function saveHandler () {
   })
 
   const exerciseSets = computed(() => {
-    return createdRoutineModel.value.exercises.map((exercise) => {
+    return editRoutineModel.value.exercises.map((exercise) => {
       const sets = exercise.sets?.map((set) => ({
         id: generateGUID(),
         reps: set.reps || null,
@@ -132,9 +136,9 @@ async function saveHandler () {
   console.log(exerciseSets.value.flat())
 }
 
-watch(createdRoutineModel.value.exercises, () => {
-  console.log(createdRoutineModel.value)
-})
+watch(editRoutineModel.value, () => {
+  console.log(editRoutineModel.value)
+}, { deep: true })
 
 onMounted(async () => {
   try {
@@ -171,13 +175,36 @@ onMounted(async () => {
     console.log('routineSets', routineSets)
     console.log('exercises', exercises)
     console.log('exercisesFetched', exercisesFetched)
+    console.log('editRoutineModel', editRoutineModel.value)
   } catch (error) {
     console.log(error)
   } finally {
     loading.value = false
   }
 })
+function validateExerciseObject (obj) {
+  // Перевірка наявності title
+  if (!obj.title || obj.title.trim() === '') {
+    return false
+  }
 
+  // Перевірка наявності хоча б однієї вправи
+  if (!obj.exercises || obj.exercises.length === 0) {
+    return false
+  }
+
+  // Перевірка наявності заповнених наборів даних у всіх вправах
+  for (const exercise of obj.exercises) {
+    if (!exercise.sets || exercise.sets.length === 0) {
+      return false
+    }
+  }
+
+  return true
+}
+const isValid = computed(() => {
+  return validateExerciseObject(editRoutineModel.value)
+})
 </script>
 
 <style lang="scss">

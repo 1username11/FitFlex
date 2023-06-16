@@ -61,120 +61,26 @@
       </div>
     </div>
 
-    <div>
-      <div class="flex justify-between mt-4">
-        <p class="text-lg font-bold mb-4">Statistics</p>
+    <div class="flex justify-between mt-4">
+      <p class="text-lg font-bold mb-4">Statistics</p>
 
-        <el-select v-model="duration">
-          <el-option
-            v-for="timeOption in timeOptions"
-            :key="timeOption"
-            :value="timeOption"
-          />
-        </el-select>
-      </div>
+      <!-- <el-select v-model="duration">
+        <el-option
+          v-for="timeOption in timeOptions"
+          :key="timeOption"
+          :value="timeOption.value"
+        />
+      </el-select> -->
+    </div>
 
-      <div>
-        <div
-          class="flex flex-col mt-4"
-        >
-          <p class="text-gray-400 mb-4">most reps</p>
-
-          <div>
-            <Chart :exerciseId="props.exercise.id" />
-          </div>
-
-          <div class="statistic-placeholder">
-            No data in selected time frame
-          </div>
+    <div
+      v-for="statisticsItem in formatedStatistics"
+      :key="statisticsItem.label"
+    >
+      <div v-if="statisticsItem.data.length > 1" class="flex flex-col mt-4">
+        <div class="border border-gray-300 rounded-lg overflow-hidden">
+          <Chart :chartData="statisticsItem.data" :label="statisticsItem.label" />
         </div>
-        <!--
-        <div
-          v-if="(['reps only', 'weighted bodyweight', 'assisted bodyweight'].includes(exercise.exercise_type))"
-          class="flex flex-col mt-4"
-        >
-          <p class="text-gray-400 mb-4">avarage reps</p>
-
-          <div v-if="props.statistics.avarage_reps">
-            <Chart :data="props.statistics.avarage_reps" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['duration', 'distance duration'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">avarage duration</p>
-
-          <div v-if="props.statistics.avarage_duration">
-            <Chart :data="props.statistics.avarage_duration" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['duration', 'distance duration'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">best set duration</p>
-
-          <div v-if="props.statistics.best_set_duration">
-            <Chart :data="props.statistics.best_set_duration" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['weight reps', 'weight distance'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">avarage weight</p>
-
-          <div v-if="props.statistics.avarage_weight">
-            <Chart :data="props.statistics.avarage_weight" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['weight reps', 'weight distance'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">max weight</p>
-
-          <div v-if="props.statistics.max_weight">
-            <Chart :data="props.statistics.max_weight" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['weight reps'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">one reps max</p>
-
-          <div v-if="props.statistics.one_reps_max">
-            <Chart :data="props.statistics.one_reps_max" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div>
-
-        <div v-if="(['weight reps'].includes(exercise.exercise_type))" class="flex flex-col mt-4">
-          <p class="text-gray-400 mb-4">volume</p>
-
-          <div v-if="props.statistics.volume">
-            <Chart :data="props.statistics.volume" />
-          </div>
-
-          <div v-else class="statistic-placeholder">
-            No data in selected time frame
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -199,11 +105,22 @@
 
 const props = defineProps<{
   exercise: IExerciseRoutine
-  statistics?: any
 }>()
 
 const exerciseStore = useExercisesStore()
+const {
+  mostReps,
+  avarageReps,
+  bestSetDuration,
+  avarageDuration,
+  avarageWeight,
+  maxWeight,
+  oneRepsMax,
+  volume,
+  duration
+} = storeToRefs(exerciseStore)
 const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
+
 const loading = ref(false)
 const modalVisible = ref(false)
 const action = ref<string>('')
@@ -218,13 +135,66 @@ const actions = ref([
   }
 ])
 
-const duration = ref<string>()
-const timeOptions = ref(['last 12 week', 'Year', 'All time'])
+const formatedStatistics = computed(() => {
+  return [
+    {
+      label: 'Most reps',
+      data: mostReps.value as [string, number | string][]
+    },
+    {
+      label: 'Avarage reps',
+      data: avarageReps.value as [string, number | string][]
+    },
+    {
+      label: 'Avarage duration',
+      data: avarageDuration.value as [string, number | string][]
+    },
+    {
+      label: 'Best set duration',
+      data: bestSetDuration.value as [string, number | string][]
+    },
+    {
+      label: 'Avarage weight',
+      data: avarageWeight.value as [string, number | string][]
+    },
+    {
+      label: 'Max weight',
+      data: maxWeight.value as [string, number | string][]
+    },
+    {
+      label: 'One reps max',
+      data: oneRepsMax.value as [string, number | string][]
+    },
+    {
+      label: 'Volume',
+      data: volume.value as [string, number | string][]
+    }
+  ]
+})
+
+const timeOptions = ref([
+  {
+    label: 'Last week',
+    value: 'week'
+  },
+  {
+    label: 'Last month',
+    value: 'month'
+  },
+  {
+    label: 'Last year',
+    value: 'year'
+  },
+  {
+    label: 'All time',
+    value: 'all'
+  }
+])
 const videoError = ref(false)
+
 
 const handleError = () => {
   videoError.value = true
-  console.log('error', videoError.value)
 }
 
 async function deleteExercise (id: string) {
