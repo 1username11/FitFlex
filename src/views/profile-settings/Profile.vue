@@ -237,37 +237,17 @@ onBeforeRouteLeave(async (to, from, next) => {
   }
 })
 
-// onBeforeRouteUpdate(async (to, from, next) => {
-//   const isModified = JSON.stringify(profileModel) !== JSON.stringify(profile.value?.data)
-//   if (isModified) {
-//     await ElMessageBox.confirm(
-//       'You have unsaved changes, save and proceed?',
-//       'Confirm',
-//       {
-//         distinguishCancelAndClose: true,
-//         confirmButtonText: 'Save',
-//         cancelButtonText: 'Discard Changes'
-//       }
-//     )
-//       .then(() => {
-//         submit()
-//         next()
-//       })
-//       .catch((action: string) => {
-//         ElMessage({
-//           type: 'info',
-//           message:
-//           action === 'cancel'
-//             ? 'Changes discarded. Proceeding to a new route.'
-//             : 'Stay in the current route'
-//         })
-//         action === 'cancel' ? next() : next(false)
-//       })
-//   } else {
-//     next()
-//   }
-// })
+window.addEventListener('beforeunload', (e) => {
+  const isModified = JSON.stringify(profileModel) !== JSON.stringify(profile.value?.data)
+  if (isModified) {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+})
 
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', () => {})
+})
 </script>
 
 <style lang="scss">

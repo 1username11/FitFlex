@@ -147,6 +147,19 @@ onBeforeRouteLeave(async (to, from, next) => {
     next()
   }
 })
+
+window.addEventListener('beforeunload', (e) => {
+  const isModified = JSON.stringify(exercises.value) !== '[]'
+  if (isModified) {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', () => {})
+})
+
 </script>
 
 <style lang="scss">
