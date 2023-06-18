@@ -5,7 +5,7 @@ interface IProfile {
   username: string
   full_name: string
   avatar_url?: string
-  role: any
+  role: string
   bio: string
   is_banned: boolean
   lat?: number
@@ -16,7 +16,7 @@ interface IProfile {
   other_contact_info?: string
   additional_info?: string
   is_public: boolean
-  body_weight?: number
+  body_weight?: number | null
 }
 
 interface IProfileResponse {

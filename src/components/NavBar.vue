@@ -1,6 +1,6 @@
 <template>
   <div class="sticky top-0 z-10 w-full bg-white border-b border-gray-300">
-    <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-5">
+    <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-2">
       <nav class="flex items-center">
         <Logo />
         <ul class="flex px-3 h-full">
@@ -29,15 +29,13 @@
 
       <div class="flex justify-end items-center">
         <el-dropdown trigger="click" class="relative">
-          <div class="avatar-wrapper">
+          <div class="avatar-wrapper pr-1">
             <el-image
               class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
               :src="userAvatar"
             >
               <template #error>
-                <div class="image-slot">
-                  <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-                </div>
+                <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
               </template>
             </el-image>
           </div>

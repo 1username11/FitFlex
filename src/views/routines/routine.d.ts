@@ -29,7 +29,7 @@ interface IRoutine {
   id: string
   title: string
   exercises?: IExerciseRoutine[]
-  user: IUser
+  user: IProfile
   created_at: string
 }
 

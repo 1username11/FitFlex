@@ -1,14 +1,12 @@
 export const useProfileStore = defineStore('profileStore', () => {
-  const profile = ref<IProfileResponse>()
-  async function getProfile(id) {
-    profile.value = await profileService.getProfile(id)
+  const profile = ref<IProfileResponse | null>(null)
+
+  async function getProfile (id: string) {
+    const res = await profileService.getProfile(id)
+    profile.value = res as IProfileResponse
   }
 
-  async function updateProfile(id, updates) {
-    profile.value = await profileService.updateProfile(id, updates)
-  }
-
-  function getCurrentPosition() {
+  function getCurrentPosition () {
     return new Promise<GeolocationPosition>((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject, {
         enableHighAccuracy: true,
@@ -20,7 +18,6 @@ export const useProfileStore = defineStore('profileStore', () => {
 
   return {
     getProfile,
-    updateProfile,
     getCurrentPosition,
     profile
   }

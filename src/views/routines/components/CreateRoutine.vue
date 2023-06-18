@@ -77,8 +77,9 @@ const createdRoutineModel = computed(() => {
   }
 })
 
+const { generateGUID } = useHelpers()
+
 const generalStore = useGeneralStore()
-const { generateGUID } = generalStore
 const { userId } = storeToRefs(generalStore)
 
 function addExercise (event: IExerciseRoutine) {
@@ -127,7 +128,6 @@ async function saveHandler () {
     })
   }
 }
-
 
 function validateExerciseObject (obj) {
   // Перевірка наявності заголовка

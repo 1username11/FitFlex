@@ -8,11 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { GChart } from 'vue-google-charts'
 
 defineProps<{
-  chartData: any
+  chartData: [string, number | string][]
 }>()
 
 const chartOptions = ref({

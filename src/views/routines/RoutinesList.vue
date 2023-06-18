@@ -42,6 +42,7 @@
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
 import { supabase } from '@/supabase'
+import { useHelpers } from '@/composables'
 import draggable from 'vuedraggable'
 
 const loading = ref(false)
@@ -50,8 +51,9 @@ const routinesStore = useRoutinesStore()
 const { routineList } = storeToRefs(routinesStore)
 const { getRoutines } = routinesStore
 
+const { generateGUID } = useHelpers()
+
 const generalStore = useGeneralStore()
-const { generateGUID } = generalStore
 const { userId } = storeToRefs(generalStore)
 
 const router = useRouter()

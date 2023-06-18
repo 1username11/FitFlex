@@ -36,13 +36,10 @@
       >
         Reps
       </p>
-      <p
-        v-if="['duration', 'distance duration']
-          .includes(exercise.exercise_type)"
-      >
+
+      <p v-if="['duration', 'distance duration'].includes(exercise.exercise_type)">
         Duration
       </p>
-      <p />
     </div>
     <WorkoutSet
       v-for="(set, idx) in sets"
@@ -64,10 +61,10 @@ const props = defineProps<{
   isWorokoutStarted: boolean
   bodyweight?: number
 }>()
+
 const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete', 'exerciseCompleted'])
 
-const generalStore = useGeneralStore()
-const { generateGUID } = generalStore
+const { generateGUID } = useHelpers()
 
 const isLastSetDone = ref(false)
 const restTime = ref(props.sets[0]?.rest_time || 0)
@@ -147,8 +144,4 @@ watch(isLastSetDone, (value) => {
     emit('exerciseCompleted', exerciseStatistic.value)
   }
 })
-
-console.log('exerciseStatistic', exerciseStatistic.value)
-console.log('sets', props.sets)
-
 </script>

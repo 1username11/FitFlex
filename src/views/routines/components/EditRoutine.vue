@@ -75,9 +75,9 @@ const loading = ref(false)
 
 const router = useRouter()
 const currentRoute = router.currentRoute.value.params.id
+const { generateGUID } = useHelpers()
 
 const generalStore = useGeneralStore()
-const { generateGUID } = generalStore
 const { userId } = storeToRefs(generalStore)
 
 function addExercise (event: IExerciseRoutine) {

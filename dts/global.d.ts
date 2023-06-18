@@ -5,7 +5,6 @@ import { EElComponentSize, EElComponentType } from '@/types/enums'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    // todo: this is just an example. Please setup your own route meta params.
     label?: string
     parentName?: string
     requireAuth?: boolean
@@ -14,7 +13,6 @@ declare module 'vue-router' {
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    // todo: Here you define you global vue definitions.
     $portalNames: typeof portalNames
     $routeNames: typeof routeNames
 

@@ -1,21 +1,21 @@
 import { supabase } from '@/supabase'
 
 class ProfileService {
-  getProfile(id: string) {
-    return supabase.from('profiles').select('*').eq('id', id).single()
+  getProfile (id: string) {
+    return supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .single()
   }
 
-  getCurrentUser() {
-    return supabase.auth.getUser()
-  }
-
-  updateProfile(id: string, updates: any) {
+  updateProfile (id: string, updates: any) {
     return supabase.from('profiles').update({
       ...updates
     }).eq('id', id)
   }
 
-  getPublicProfiles() {
+  getPublicProfiles () {
     return supabase.from('profiles').select('*').eq('is_public', true)
   }
 }

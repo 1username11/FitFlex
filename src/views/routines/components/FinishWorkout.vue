@@ -118,8 +118,6 @@ function formatTime (timestamp: number) {
   return `${hours}:${minutes}:${seconds}`
 }
 
-
-
 const numberOfSets = computed(() => {
   let totalSets = 0
 
@@ -130,8 +128,7 @@ const numberOfSets = computed(() => {
   return totalSets
 })
 
-const generalStore = useGeneralStore()
-const { generateGUID } = generalStore
+const { generateGUID } = useHelpers()
 
 const finishWorkoutModel = computed(() => {
   return {

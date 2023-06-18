@@ -4,9 +4,7 @@
       <div class="flex mb-4 home-avatar-wrapper">
         <el-image :src="user.avatar_url" class="w-12 h-12 rounded-full overflow-hidden mr-4">
           <template #error>
-            <div class="image-slot">
-              <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-            </div>
+            <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
           </template>
         </el-image>
 
@@ -186,8 +184,8 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  feed: IFeedJson
-  user: IUser
+  feed: IFeed
+  user: IProfile
   hashedEquipment: TIndexedObject<string>
   hashedExerciseTypes: TIndexedObject<string>
 }>()

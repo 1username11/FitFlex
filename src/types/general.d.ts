@@ -2,8 +2,6 @@ type TIndexedObject<T = any> = {
   [key: string]: T
 }
 
-type TCallbackFn<T extends unknown[] = [], R = void> = (...args: T) => R
-
 interface ISet {
   id: string
   type?: string
@@ -23,38 +21,6 @@ interface IExercise {
   sets?: ISet[]
   equipment?: string
   media?: string
-}
-
-interface IUser {
-  id: string
-  updated_at?: string
-  username: string
-  full_name: string
-  avatar_url: string
-  role: string
-  bio?: string
-  is_banned: boolean
-  created_at: ?any
-  is_public: boolean
-  lat?: number
-  lng?: number
-  phone_number?: string
-  telegram_link?: string
-  e_mail?: string
-  other_contact_info?: string
-  additional_info?: string
-}
-
-interface ILog {
-  id: string
-  user: IUser
-  publishTime: Date
-  title: string
-  description: string
-  duration: string
-  reps: number
-  workout: IRoutine
-  likes: number
 }
 
 interface IExerciseStatistics {

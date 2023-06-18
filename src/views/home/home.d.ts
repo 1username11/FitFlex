@@ -11,22 +11,9 @@ interface IJsonData {
 interface IFeed {
   created_at: string
   user_id: string
-  routine_id: string
   description: string
   media_url: string
   duration: string
   feed_id: string
-  json_data: IJsonData[]
+  json_data: string | IJsonData[]
 }
-
-interface IFeedJson {
-  created_at: string
-  user_id: string
-  routine_id: string
-  description: string
-  media_url: string
-  duration: string
-  feed_id: string
-  json_data: string
-}
-

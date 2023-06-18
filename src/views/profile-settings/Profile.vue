@@ -1,6 +1,6 @@
 <template>
   <div
-    v-loading="uploading"
+    v-loading="loading"
     class="w-fit h-fit flex flex-col border border-gray-300 rounded-lg bg-white p-10 form-wrapper mx-auto"
   >
     <el-form
@@ -14,11 +14,10 @@
         <div class="avatar-wrapper" @click="openFileInput">
           <el-image class="w-[150px] h-[150px] rounded-full overflow-hidden" :src="profileModel.avatar_url" fit="cover">
             <template #error>
-              <div class="image-slot">
-                <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-              </div>
+              <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
             </template>
           </el-image>
+
           <button class="text-sm text-[#1d83ea] mt-4">Change Picture</button>
           <input
             ref="fileInput"
@@ -75,18 +74,14 @@ import { ElNotification } from 'element-plus'
 
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
-const { getProfile, updateProfile, getCurrentPosition } = profileStore
+const { getCurrentPosition } = profileStore
 
 const generalStore = useGeneralStore()
 const { userId } = storeToRefs(generalStore)
 
-const fileURL = ref<string>()
-const files = ref<File[]>()
-const uploading = ref<boolean>(false)
+const loading = ref(false)
 const fileInput = ref<HTMLInputElement>()
-const isPublic = ref<boolean>(false)
 const profileRef = ref()
-const isModified = ref(false)
 
 const profileRules = reactive({
   avatar_url: [{ required: true, message: 'Please select an image', trigger: 'blur' }],
@@ -122,38 +117,23 @@ const profileRules = reactive({
   is_public: [{ required: true, message: 'Please specify if the profile is public', trigger: 'blur' }]
 })
 
-const profileModel = reactive({
-  avatar_url: '',
-  username: '',
-  full_name: '',
-  bio: '',
-  lat: undefined as number | undefined,
-  lng: undefined as number | undefined,
-  phone_number: '',
-  telegram_link: '',
-  e_mail: '',
-  other_contact_info: '',
-  additional_info: '',
-  body_weight: undefined as number | undefined,
-  is_public: isPublic.value
-})
+const profileModel = reactive(Object.assign({}, profile.value?.data))
 
 const openFileInput = () => {
   fileInput.value?.click()
 }
 
 const handleFileUpload = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  files.value = target.files
+  const files = (event.target as HTMLInputElement).files
   try {
-    uploading.value = true
-    if (!files.value || files.value.length === 0) {
+    loading.value = true
+    if (!files.length) {
       throw new Error('You must select an image to upload.')
     }
 
-    const file = files.value[0]
+    const file = files[0]
     const fileExt = file.name.split('.').pop()
-    const fileName = `${Math.random()}.${fileExt}`
+    const fileName = `profile_${Date.now()}.${fileExt}`
 
     const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file)
 
@@ -164,8 +144,7 @@ const handleFileUpload = async (event: Event) => {
 
     if (uploadError) throw uploadError
     if (!signedUrlError) {
-      fileURL.value = data?.signedUrl as string
-      profileModel.avatar_url = fileURL.value
+      profileModel.avatar_url = data?.signedUrl
     } else {
       throw signedUrlError
     }
@@ -176,33 +155,36 @@ const handleFileUpload = async (event: Event) => {
       type: 'error'
     })
   } finally {
-    uploading.value = false
+    loading.value = false
   }
 }
 
 async function updateHandler () {
-  uploading.value = true
-  await updateProfile(userId.value, profileModel).catch((e) => {
-    ElNotification({
-      title: 'Error',
-      message: e.message || 'Something went wrong',
-      type: 'error'
-    })
-  }).then(() => {
+  loading.value = true
+  try {
+    const { error } = await profileService.updateProfile(userId.value, profileModel)
+    if (error) throw Error(error.message)
+
     ElNotification({
       title: 'Success',
       message: 'Profile updated successfully',
       type: 'success'
     })
-  }).finally(() => {
-    uploading.value = false
-  })
+  } catch (error: any) {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error'
+    })
+  } finally {
+    loading.value = false
+  }
 }
 
 function submit () {
   profileRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
-      updateHandler()
+      await updateHandler()
     } else {
       ElNotification({
         title: 'Error',
@@ -211,48 +193,22 @@ function submit () {
       })
     }
   })
-  isModified.value = false
 }
 
-setTimeout(() => {
-  watch(profileModel, () => {
-    isModified.value = true
-    console.log('isModified', isModified.value)
-  }, { deep: true })
-}, 1000)
-
-onMounted(async () => {
-  await getProfile(userId.value)
-  profileModel.avatar_url = profile.value?.data.avatar_url as string
-  profileModel.username = profile.value?.data.username as string
-  profileModel.full_name = profile.value?.data.full_name as string
-  profileModel.bio = profile.value?.data.bio as string
-  profileModel.lat = profile.value?.data.lat as number | undefined
-  profileModel.lng = profile.value?.data.lng as number | undefined
-  profileModel.phone_number = profile.value?.data.phone_number as string
-  profileModel.telegram_link = profile.value?.data.telegram_link as string
-  profileModel.e_mail = profile.value?.data.e_mail as string
-  profileModel.other_contact_info = profile.value?.data.other_contact_info as string
-  profileModel.additional_info = profile.value?.data.additional_info as string
-  profileModel.body_weight = profile.value?.data.body_weight as number
-  isPublic.value = profile.value?.data.is_public as boolean
-  isModified.value = false
-})
-
-watch(isPublic, async (value) => {
-  profileModel.is_public = value
+watch(() => profileModel.is_public, async (value) => {
   if (value) {
     const { coords } = await getCurrentPosition()
     profileModel.lat = coords.latitude
     profileModel.lng = coords.longitude
   } else {
-    profileModel.lat = undefined
-    profileModel.lng = undefined
+    profileModel.lat = -1
+    profileModel.lng = -1
   }
 })
 
 onBeforeRouteLeave(async (to, from, next) => {
-  if (isModified.value) {
+  const isModified = JSON.stringify(profileModel) !== JSON.stringify(profile.value?.data)
+  if (isModified) {
     await ElMessageBox.confirm(
       'You have unsaved changes, save and proceed?',
       'Confirm',
@@ -327,6 +283,5 @@ onBeforeRouteLeave(async (to, from, next) => {
 }
 .form-wrapper{
   align-items: center;
-
 }
 </style>
