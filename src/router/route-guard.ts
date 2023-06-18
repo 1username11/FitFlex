@@ -19,18 +19,20 @@ export const routeGuard = async (
     localStorage.setItem('role', profile.value?.data?.role || '')
 
     supabase.auth.onAuthStateChange((event, session) => {
+      console.log('event', event)
       localStorage.setItem('userId', session?.user?.id || '')
     })
 
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-    if ((requiresAuth && !currentSession?.access_token) || profile.value?.data?.is_banned) {
+    if (requiresAuth && !currentSession?.access_token) {
+      localStorage.clear()
       await authService.signOut()
-      localStorage.removeItem('userId')
-      localStorage.removeItem('role')
-
-      const redirectPath = profile.value?.data.is_banned ? routeNames.bannedUserPage : routeNames.login
-      next({ name: redirectPath })
+      next({ name: routeNames.login })
+    } else if (profile.value?.data?.is_banned) {
+      localStorage.clear()
+      await authService.signOut()
+      next({ name: routeNames.bannedUserPage })
     } else {
       next()
     }

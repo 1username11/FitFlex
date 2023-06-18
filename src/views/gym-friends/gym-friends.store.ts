@@ -1,7 +1,7 @@
 export const useGymFriendsStore = defineStore('gymFriendsStore', () => {
   const profiles = ref<IProfile[]>([])
   const myLocation = ref()
-  const distance = ref<number>( 1000000)
+  const distance = ref(1000000)
 
   async function getPublicProfiles() {
     const { data, error } = await profileService.getPublicProfiles()

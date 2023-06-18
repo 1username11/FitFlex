@@ -6,13 +6,11 @@
       <button
         class="flex justify-center items-center bg-white border border-gray-300 pr-4 rounded-md w-[180px] h-[45px] mb-5
           hover:bg-gray-100 hover:border-gray-200 active:bg-gray-200 active:border-gray-300"
-        @click="navigate"
+        @click="goToCreateRoutine"
       >
         <IconNewRoutine />
 
-        <p>
-          New Routine
-        </p>
+        <p>New Routine</p>
       </button>
     </div>
 
@@ -41,25 +39,19 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import { supabase } from '@/supabase'
-import { useHelpers } from '@/composables'
 import draggable from 'vuedraggable'
 
-const loading = ref(false)
-
+const router = useRouter()
 const routinesStore = useRoutinesStore()
 const { routineList } = storeToRefs(routinesStore)
 const { getRoutines } = routinesStore
-
 const { generateGUID } = useHelpers()
+const { userId } = storeToRefs(useGeneralStore())
 
-const generalStore = useGeneralStore()
-const { userId } = storeToRefs(generalStore)
+const loading = ref(false)
 
-const router = useRouter()
-
-function navigate () {
-  router.push({ name: routeNames.createRoutine })
+async function goToCreateRoutine () {
+  await router.push({ name: routeNames.createRoutine })
 }
 
 async function duplicateWorkout (routine: IRoutine) {
@@ -88,11 +80,8 @@ async function duplicateWorkout (routine: IRoutine) {
       routine_id: duplicatedRoutine.id
     }))
 
-    const { error: insertRoutineError } =
-    await routinesService.insertRoutine(duplicatedRoutine)
-
-    const { error: insertSetsError } =
-    await routinesService.insertSets(routineSets)
+    const { error: insertRoutineError } = await routinesService.insertRoutine(duplicatedRoutine)
+    const { error: insertSetsError } = await routinesService.insertSets(routineSets)
 
     if (insertRoutineError || insertSetsError) {
       throw new Error('Error duplicating routine')
@@ -103,9 +92,6 @@ async function duplicateWorkout (routine: IRoutine) {
       type: 'success'
     })
     await getRoutines(userId.value)
-
-    console.log('duplicatedRoutine', duplicatedRoutine)
-    console.log('routineSets', routineSets)
   } catch (error) {
     ElNotification({
       title: 'Error',
@@ -140,32 +126,10 @@ async function deleteWorkout (routine: IRoutine) {
   }
 }
 
-// async function updateRoutineOrder () {
-//   try {
-//     loading.value = true
-//     // Отримайте оновлену послідовність елементів після перетягування
-//     const updatedRoutineList = routineList.value.map((workout, index) => ({
-//       ...workout,
-//       order: index + 1 // Встановіть порядок залежно від індексу (можливо, потрібно врахувати індекс з 0 або 1)
-//     }))
-//     const userId = (await supabase.auth.getUser()).data.user?.id as string
-//     // Оновіть порядок елементів в базі даних
-//     await routinesService.deleteRoutines(userId)
-//   } catch (error) {
-//     console.log(error)
-//   } finally {
-//     loading.value = false
-//   }
-// }
 onMounted(async () => {
   try {
     loading.value = true
-    const { data, error } = await supabase.auth.getUser()
-    if (error) throw new Error('Error fetching user')
-    const userId = data.user?.id as string
-    await getRoutines(userId).then(() => {
-      // console.log('routines', routineList.value)
-    })
+    await getRoutines(userId.value)
   } catch (error) {
     ElNotification({
       title: 'Error',

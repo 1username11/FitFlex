@@ -13,7 +13,10 @@
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.weight" class="w-fit ml-16" type="number" placeholder="-"
+        v-model="setModel.weight"
+        class="w-fit ml-16"
+        type="number"
+        placeholder="-"
       />
     </div>
 
@@ -23,7 +26,10 @@
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.reps" class="w-fit mr-11" type="number" placeholder="-"
+        v-model="setModel.reps"
+        class="w-fit mr-11"
+        type="number"
+        placeholder="-"
       />
     </div>
 
@@ -33,7 +39,10 @@
       class="input-wrapper"
     >
       <el-input
-        v-model="setModel.duration" class="w-fit mr-11" type="number" placeholder="-"
+        v-model="setModel.duration"
+        class="w-fit mr-11"
+        type="number"
+        placeholder="-"
       />
     </div>
 
@@ -44,6 +53,8 @@
 </template>
 
 <script lang="ts" setup>
+import { watchDebounced } from '@vueuse/core'
+
 const props = defineProps<{
   exerciseType: string
   set: ISetRoutine
@@ -52,15 +63,15 @@ const props = defineProps<{
 
 const emits = defineEmits(['deleteSet', 'setComplete', 'setUpdate'])
 
-const setModel = ref<ISetRoutine>({
+const setModel = reactive({
   weight: props.set.weight,
   reps: props.set.reps,
   duration: props.set.duration
 } as ISetRoutine)
 
-watch(setModel.value, () => {
-  emits('setUpdate', setModel.value)
-})
+watchDebounced(setModel, () => {
+  emits('setUpdate', setModel)
+}, { debounce: 500, maxWait: 1000 })
 </script>
 
 <style lang="scss">

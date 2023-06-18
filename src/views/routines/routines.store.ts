@@ -10,7 +10,7 @@ export const useRoutinesStore = defineStore('routinesStore', () => {
 
   async function getRoutines (userId: string) {
     try {
-      const { data, error } = await routinesService.getRotines(userId)
+      const { data, error } = await routinesService.getRoutines(userId)
       if (error) {
         throw error
       }

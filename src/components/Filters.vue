@@ -213,7 +213,6 @@ const {
 } = storeToRefs(exerciseStore)
 
 function emitExercise (exercise: IExerciseRoutine) {
-  console.log('exercise', exercise)
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }
@@ -235,7 +234,6 @@ onBeforeMount(async () => {
     })
   } finally {
     loading.value = false
-    console.log(exercises.value)
   }
 })
 </script>

@@ -22,17 +22,3 @@ interface IExercise {
   equipment?: string
   media?: string
 }
-
-interface IExerciseStatistics {
-  id: string
-  most_reps: any
-  best_set_duration: any
-  avarage_duration: any
-  avarage_weight: number
-  max_weight: number
-  volume: number
-  exercise_id: string
-  avarage_reps: any
-  one_reps_max: number
-  created_at: number
-}

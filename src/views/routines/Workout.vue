@@ -207,7 +207,7 @@ const confirmDiscard = () => {
 async function exerciseCompleted (exercise: IExerciseStatistics) {
   console.log('exercise completed', exercise)
   totalVolume.value += exercise.volume
-  return await routinesService.insertExerciseStatistcs(exercise)
+  return await routinesService.insertExerciseStatistics(exercise)
 }
 
 onMounted(async () => {

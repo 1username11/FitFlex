@@ -10,6 +10,8 @@ interface ISetRoutine {
   set_done?: boolean
 }
 
+type TExerciseType = 'weight reps' | 'reps only' | 'weighted bodyweight' | 'assisted bodyweight' | 'duration' | 'distance duration' | 'weight distance'
+
 interface IExerciseRoutine {
   id: string
   created_at?: string
@@ -20,7 +22,7 @@ interface IExerciseRoutine {
   secondary_muscles?: any
   exercise_media_url?: string
   thumbnails_url?: string
-  exercise_type: string
+  exercise_type: TExerciseType
   sets: ISetRoutine[]
   is_public: boolean
 }
@@ -37,13 +39,7 @@ interface IExerciseDetails {
   id: string
   title: string
   thumbnails_url: string
-  sets: Set[]
-}
-
-interface ISetDetails {
-  reps: number
-  weight?: number
-  duration: any
+  sets: ISetRoutine[]
 }
 
 interface IRoutineDetails {
@@ -69,4 +65,3 @@ interface IExerciseStatistics {
   avarage_duration?: number
   volume: number
 }
-

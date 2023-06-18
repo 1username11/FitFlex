@@ -18,7 +18,7 @@
 
         <template #dropdown>
           <el-dropdown-menu class="text-base text-gray-400 py-3 space-y-2 cursor-pointer min-w-[210px]">
-            <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise)">
+            <el-dropdown-item class="hover:bg-gray-300 px-6 py-1" @click="$emit('deleteExercise', exercise.id)">
               <IconDelete />
               Delete Exercise
             </el-dropdown-item>
@@ -26,13 +26,12 @@
         </template>
       </el-dropdown>
     </div>
+
     <div>
       <div class="flex">
         <IconTimer />
 
-        <p class="text-[#1d83ea] ml-1 mr-2">
-          Rest timer
-        </p>
+        <p class="text-[#1d83ea] ml-1 mr-2">Rest timer</p>
 
         <el-select
           v-model="restTime"
@@ -40,32 +39,23 @@
           placeholder="Off"
           @change="$emit('setRestTime', restTime)"
         >
-          <el-option v-for="time in timeOptions" :key="time" :label="time + 's'" :value="time" />
+          <el-option
+            v-for="time in timeOptions"
+            :key="time"
+            :label="time + 's'"
+            :value="time"
+          />
         </el-select>
       </div>
+
       <div class="flex justify-between">
         <p>Set</p>
-        <p
-          v-if="['weight reps', 'weight distance', 'weighted bodyweight']
-            .includes(exercise.exercise_type)"
-        >
-          KG
-        </p>
-        <p
-          v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only']
-            .includes(exercise.exercise_type)"
-        >
-          Reps
-        </p>
-
-        <p
-          v-if="['duration', 'distance duration']
-            .includes(exercise.exercise_type)"
-        >
-          Duration
-        </p>
+        <template v-for="(value, key) in setsColumns" :key="key">
+          <p v-if="value" class="capitalize">{{ key }}</p>
+        </template>
         <p />
       </div>
+
       <Set
         v-for="(set, idx) in sets"
         :key="set.id"
@@ -73,9 +63,10 @@
         :serial="idx+1"
         :exerciseType="exercise.exercise_type"
         class="mb-3"
-        @deleteSet="$emit('deleteSet', idx)"
+        @deleteSet="deleteSet(idx)"
         @setUpdate="$emit('setUpdate', { idx, set: $event })"
       />
+
       <button
         class="bg-white border border-gray-300 py-1 rounded-md w-full mb-5
           hover:bg-gray-100 hover:border-gray-200 active:bg-gray-200 active:border-gray-300"
@@ -88,12 +79,24 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+const { setsColumnsConditions } = useHelpers()
+
+const props = defineProps<{
   exercise: IExerciseRoutine
   sets: ISetRoutine[]
 }>()
-defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setUpdate', 'setRestTime'])
+
+const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setUpdate', 'setRestTime'])
 
 const restTime = ref<number>()
-const timeOptions = ref<number[]>([30, 60, 90, 120, 150, 180, 210])
+const timeOptions = ref([30, 60, 90, 120, 150, 180, 210])
+const setsColumns = setsColumnsConditions(props.exercise.exercise_type)
+
+function deleteSet (idx: number) {
+  if (props.sets.length > 1) {
+    emit('deleteSet', idx)
+  } else {
+    emit('deleteExercise', props.exercise.id)
+  }
+}
 </script>

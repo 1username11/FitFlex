@@ -69,7 +69,7 @@ const emits = defineEmits(['save'])
 const exercisesStore = useExercisesStore()
 const { hashedExerciseTypes } = storeToRefs(exercisesStore)
 
-const title = ref<string>('')
+const title = ref('')
 const exercises = ref<IExerciseRoutine[]>([])
 const loading = ref(false)
 
@@ -77,12 +77,9 @@ const router = useRouter()
 const currentRoute = router.currentRoute.value.params.id
 const { generateGUID } = useHelpers()
 
-const generalStore = useGeneralStore()
-const { userId } = storeToRefs(generalStore)
+const { userId } = storeToRefs(useGeneralStore())
 
 function addExercise (event: IExerciseRoutine) {
-  console.log(event)
-
   const exercise = ref<IExerciseRoutine>({
     id: event.id,
     title: event.title,
@@ -114,7 +111,7 @@ async function saveHandler () {
   })
 
   const exerciseSets = computed(() => {
-    return editRoutineModel.value.exercises.map((exercise) => {
+    return editRoutineModel.value.exercises.flatMap((exercise) => {
       const sets = exercise.sets?.map((set) => ({
         id: generateGUID(),
         reps: set.reps || null,
@@ -129,7 +126,7 @@ async function saveHandler () {
     })
   })
   await routinesService.insertRoutine(routine.value)
-  await routinesService.insertSets(exerciseSets.value.flat())
+  await routinesService.insertSets(exerciseSets.value)
   await routinesService.deleteRoutineSets(currentRoute as string)
   await routinesService.deleteRoutine(currentRoute as string)
 
