@@ -8,7 +8,7 @@
           class="w-[200px]"
           type="primary"
           :disabled="!isValid"
-          @click="saveHandler"
+          @click="editHandler"
         >
           Edit Routine
         </ElButton>
@@ -17,7 +17,7 @@
       <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
           <ElInput
-            v-model="title"
+            v-model="editRoutine.title"
             class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
             placeholder="Routine Title"
           />
@@ -34,24 +34,16 @@
               : index === exercises.length - 1 }"
             @addSet="exercise.sets.push({} as ISetRoutine)"
             @deleteSet="exercise.sets?.splice($event, 1)"
-            @deleteExercise="exercises.splice($event, 1)"
+            @deleteExercise="deleteExercise"
             @setUpdate="exercise.sets[$event.idx] = $event.set"
             @setRestTime="exercise.rest_time = $event"
           />
         </div>
-        <div
-          v-else
-          class="flex flex-col justify-center items-center h-full my-auto"
-        >
+
+        <div v-else class="flex flex-col justify-center items-center h-full my-auto">
           <IconNoItems />
-
-          <p class="text-lg font-bold mt-4">
-            Get started
-          </p>
-
-          <p class="mt-1">
-            Start by adding an exercise to your routine.
-          </p>
+          <p class="text-lg font-bold mt-4">Get started</p>
+          <p class="mt-1">Start by adding an exercise to your routine.</p>
         </div>
       </div>
     </div>
@@ -64,86 +56,76 @@
 </template>
 
 <script lang="ts" setup>
-const emits = defineEmits(['save'])
-
 const exercisesStore = useExercisesStore()
 const { hashedExerciseTypes } = storeToRefs(exercisesStore)
-
-const title = ref('')
-const exercises = ref<IExerciseRoutine[]>([])
-const loading = ref(false)
-
 const router = useRouter()
-const currentRoute = router.currentRoute.value.params.id
+const editingRoutineId = ref(router.currentRoute.value.params.id as string)
 const { generateGUID } = useHelpers()
-
 const { userId } = storeToRefs(useGeneralStore())
 
-function addExercise (event: IExerciseRoutine) {
-  const exercise = ref<IExerciseRoutine>({
-    id: event.id,
-    title: event.title,
-    sets: event.sets,
-    exercise_type: event.exercise_type as string,
-    equipment_category: event.equipment_category,
-    muscle_group: event.muscle_group,
-    thumbnails_url: event.thumbnails_url,
-    is_public: event.is_public
+const exercises = ref<IExerciseRoutine[]>([])
+const loading = ref(false)
+const initialExercisesValue = ref<IExerciseRoutine[]>([])
+const initialTitle = ref('')
+
+const editRoutine = ref({
+  id: generateGUID(),
+  created_at: new Date(),
+  user: userId.value,
+  title: ''
+} as IRoutine)
+
+const exerciseSets = computed(() => {
+  return exercises.value.flatMap((exercise: IExerciseRoutine) => {
+    return exercise.sets.map((set: ISetRoutine) => ({
+      id: generateGUID(),
+      reps: set.reps || null,
+      rest_time: exercise.rest_time || null,
+      duration: set.duration || null,
+      weight: Number(set.weight) || null,
+      exercise_id: exercise.id,
+      routine_id: editRoutine.value.id
+    }))
   })
-
-  exercises.value.push(exercise.value)
-}
-
-const editRoutineModel = computed(() => {
-  return {
-    title: title.value,
-    exercises: exercises.value
-  }
 })
 
-async function saveHandler () {
-  emits('save')
-  const routine = ref({
-    id: generateGUID(),
-    created_at: new Date(),
-    user: userId.value,
-    title: title.value
-  })
-
-  const exerciseSets = computed(() => {
-    return editRoutineModel.value.exercises.flatMap((exercise) => {
-      const sets = exercise.sets?.map((set) => ({
-        id: generateGUID(),
-        reps: set.reps || null,
-        rest_time: exercise.rest_time || null,
-        duration: set.duration || null,
-        weight: Number(set.weight) || null,
-        exercise_id: exercise.id,
-        routine_id: routine.value.id
-      }))
-
-      return sets
-    })
-  })
-  await routinesService.insertRoutine(routine.value)
-  await routinesService.insertSets(exerciseSets.value)
-  await routinesService.deleteRoutineSets(currentRoute as string)
-  await routinesService.deleteRoutine(currentRoute as string)
-
-  console.log(exerciseSets.value.flat())
+function addExercise (exercise: IExerciseRoutine) {
+  exercises.value.push(exercise)
 }
 
-watch(editRoutineModel.value, () => {
-  console.log(editRoutineModel.value)
-}, { deep: true })
+function deleteExercise (exerciseId: string) {
+  exercises.value = exercises.value.filter((e) => e.id !== exerciseId)
+}
+
+async function editHandler () {
+  try {
+    const { error: insertRoutineErr } = await routinesService.insertRoutine(editRoutine.value)
+    const { error: insertSetsErr } = await routinesService.insertSets(exerciseSets.value)
+    const { error: deleteRoutineSetsErr } = await routinesService.deleteRoutineSets(editingRoutineId.value)
+    const { error: deleteRoutineErr } = await routinesService.deleteRoutine(editingRoutineId.value)
+    if (insertRoutineErr || insertSetsErr || deleteRoutineSetsErr || deleteRoutineErr) throw new Error('Error saving routine')
+    ElNotification({
+      title: 'Success',
+      message: 'Routine edited successfully',
+      type: 'success'
+    })
+    await router.push({ name: 'routines' })
+  } catch (err: any) {
+    ElNotification({
+      title: 'Error',
+      message: err.message,
+      type: 'error'
+    })
+  }
+}
 
 onMounted(async () => {
   try {
     loading.value = true
 
     const [routine, routineSets] = await Promise.all([
-      routinesService.getRoutine(currentRoute as string),
-      routinesService.getSetsByRoutineId(currentRoute as string)
+      routinesService.getRoutine(editingRoutineId.value),
+      routinesService.getSetsByRoutineId(editingRoutineId.value)
     ])
 
     if (routine.error || routineSets.error) throw new Error('Error fetching routine')
@@ -158,49 +140,65 @@ onMounted(async () => {
 
     exercises.value = exercisesFetched.map((item: IExerciseExchange) => {
       return {
-        id: item.id,
-        title: item.title,
+        ...item,
         exercise_type: hashedExerciseTypes.value[item.exercise_type],
-        equipment_category: item.equipment_category,
-        muscle_group: item.muscle_group,
-        thumbnails_url: item.thumbnails_url,
-        sets: routineSets.data.filter((set) => set.exercise_id === item.id)
+        sets: routineSets.data.filter((set) => set.exercise_id === item.id),
+        rest_time: routineSets.data.find((set) => set.exercise_id === item.id)?.rest_time
       } as IExerciseRoutine
     })
-    title.value = routine.data[0].title
-    console.log('routine', routine)
-    console.log('routineSets', routineSets)
-    console.log('exercises', exercises)
-    console.log('exercisesFetched', exercisesFetched)
-    console.log('editRoutineModel', editRoutineModel.value)
+    editRoutine.value.title = routine.data[0].title
+    initialTitle.value = routine.data[0].title
+    initialExercisesValue.value = JSON.parse(JSON.stringify(exercises.value))
   } catch (error) {
     console.log(error)
   } finally {
     loading.value = false
   }
 })
-function validateExerciseObject (obj) {
-  // Перевірка наявності title
-  if (!obj.title || obj.title.trim() === '') {
-    return false
-  }
 
-  // Перевірка наявності хоча б однієї вправи
-  if (!obj.exercises || obj.exercises.length === 0) {
-    return false
-  }
-
-  // Перевірка наявності заповнених наборів даних у всіх вправах
-  for (const exercise of obj.exercises) {
-    if (!exercise.sets || exercise.sets.length === 0) {
-      return false
-    }
-  }
-
-  return true
-}
 const isValid = computed(() => {
-  return validateExerciseObject(editRoutineModel.value)
+  const validationConditions = {
+    title: editRoutine.value.title.trim() !== '',
+    exercises: exercises.value.length && exercises.value.every((exercise) => {
+      return exercise.sets.length && exercise.sets.every((set) => {
+        if (exercise.exercise_type === 'weight reps' || exercise.exercise_type === 'weighted bodyweight') {
+          return set.weight && set.reps
+        } else if (exercise.exercise_type === 'reps only' || exercise.exercise_type === 'assisted bodyweight') {
+          return !!set.reps
+        } else if (exercise.exercise_type === 'duration' || exercise.exercise_type === 'distance duration') {
+          return !!set.duration
+        } else if (exercise.exercise_type === 'weight distance') {
+          return set.weight && set.duration
+        }
+      })
+    })
+  }
+  return validationConditions.title && validationConditions.exercises
+})
+
+onBeforeRouteLeave(async (to, from, next) => {
+  const isModified = JSON.stringify(exercises.value) !== JSON.stringify(initialExercisesValue.value) ||
+  initialTitle.value !== editRoutine.value.title
+
+  if (isModified) {
+    await ElMessageBox.confirm(
+      'You have unsaved changes, are you sure you want to leave?',
+      'Warning',
+      {
+        confirmButtonText: 'Leave',
+        cancelButtonText: 'Stay',
+        type: 'warning'
+      }
+    )
+      .then(() => {
+        next()
+      })
+      .catch(() => {
+        next(false)
+      })
+  } else {
+    next()
+  }
 })
 </script>
 

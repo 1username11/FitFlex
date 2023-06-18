@@ -17,7 +17,7 @@
       <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
           <ElInput
-            v-model="routineTitle"
+            v-model="routine.title"
             class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
             placeholder="Routine Title"
           />
@@ -54,29 +54,23 @@
 </template>
 
 <script lang="ts" setup>
-const emits = defineEmits(['save'])
-
-const router = useRouter()
-const routineTitle = ref('')
-const exercises = ref<IExerciseRoutine[]>([])
-const createdRoutineModel = computed(() => ({
-  title: routineTitle.value,
-  exercises: exercises.value
-}))
+import { fa } from 'element-plus/es/locale/index.js'
 
 const { generateGUID } = useHelpers()
-
 const { userId } = storeToRefs(useGeneralStore())
 
+const router = useRouter()
+const exercises = ref<IExerciseRoutine[]>([])
+
 const routine = ref({
-  id: generateGUID(),
+  id: generateGUID(), // we generate this id for exercises sets
   created_at: new Date(),
   user: userId.value,
-  title: routineTitle.value
+  title: ''
 } as IRoutine)
 
 const exerciseSets = computed(() => {
-  return createdRoutineModel.value.exercises.flatMap((exercise: IExerciseRoutine) => {
+  return exercises.value.flatMap((exercise: IExerciseRoutine) => {
     return exercise.sets.map((set: ISetRoutine) => ({
       id: generateGUID(),
       reps: set.reps || null,
@@ -112,7 +106,7 @@ function deleteExercise (exerciseId: string) {
 
 const isValid = computed(() => {
   const validationConditions = {
-    title: routineTitle.value.trim() !== '',
+    title: routine.value.title.trim() !== '',
     exercises: exercises.value.length && exercises.value.every((exercise) => {
       return exercise.sets.length && exercise.sets.every((set) => {
         if (exercise.exercise_type === 'weight reps' || exercise.exercise_type === 'weighted bodyweight') {
@@ -128,6 +122,30 @@ const isValid = computed(() => {
     })
   }
   return validationConditions.title && validationConditions.exercises
+})
+
+onBeforeRouteLeave(async (to, from, next) => {
+  const isModified = JSON.stringify(exercises.value) !== '[]'
+
+  if (isModified) {
+    await ElMessageBox.confirm(
+      'You have unsaved changes, are you sure you want to leave?',
+      'Warning',
+      {
+        confirmButtonText: 'Leave',
+        cancelButtonText: 'Stay',
+        type: 'warning'
+      }
+    )
+      .then(() => {
+        next()
+      })
+      .catch(() => {
+        next(false)
+      })
+  } else {
+    next()
+  }
 })
 </script>
 

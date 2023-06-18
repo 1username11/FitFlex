@@ -222,7 +222,7 @@ onBeforeRouteLeave(async (to, from, next) => {
         submit()
         next()
       })
-      .catch((action) => {
+      .catch((action: string) => {
         ElMessage({
           type: 'info',
           message:
@@ -236,6 +236,38 @@ onBeforeRouteLeave(async (to, from, next) => {
     next()
   }
 })
+
+// onBeforeRouteUpdate(async (to, from, next) => {
+//   const isModified = JSON.stringify(profileModel) !== JSON.stringify(profile.value?.data)
+//   if (isModified) {
+//     await ElMessageBox.confirm(
+//       'You have unsaved changes, save and proceed?',
+//       'Confirm',
+//       {
+//         distinguishCancelAndClose: true,
+//         confirmButtonText: 'Save',
+//         cancelButtonText: 'Discard Changes'
+//       }
+//     )
+//       .then(() => {
+//         submit()
+//         next()
+//       })
+//       .catch((action: string) => {
+//         ElMessage({
+//           type: 'info',
+//           message:
+//           action === 'cancel'
+//             ? 'Changes discarded. Proceeding to a new route.'
+//             : 'Stay in the current route'
+//         })
+//         action === 'cancel' ? next() : next(false)
+//       })
+//   } else {
+//     next()
+//   }
+// })
+
 </script>
 
 <style lang="scss">

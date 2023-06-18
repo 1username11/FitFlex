@@ -1,10 +1,10 @@
 interface ISetRoutine {
   id: string
   created_at?: string
-  reps?: number
-  rest_time?: number
-  weight?: number
-  duration?: number
+  reps?: number | null
+  rest_time?: number | null
+  weight?: number | null
+  duration?: number | null
   exercise_id?: string
   routine_id?: string
   set_done?: boolean
@@ -31,8 +31,8 @@ interface IRoutine {
   id: string
   title: string
   exercises?: IExerciseRoutine[]
-  user: IProfile
-  created_at: string
+  user: string
+  created_at: Date
 }
 
 interface IExerciseDetails {
