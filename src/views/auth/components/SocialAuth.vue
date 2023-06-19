@@ -16,7 +16,8 @@
 const router = useRouter()
 async function signUpWithGoogle () {
   try {
-    await authService.signInWithOAuth()
+    const { error: oAuthErr } = await authService.signInWithOAuth()
+    if (oAuthErr) throw oAuthErr
   } catch (error) {
     console.log(error)
   }

@@ -32,7 +32,7 @@
           <div class="avatar-wrapper pr-1">
             <el-image
               class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
-              :src="userAvatar"
+              :src="profile?.data.avatar_url || ''"
             >
               <template #error>
                 <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
@@ -94,12 +94,10 @@ const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 
 const userRole = ref('')
-const userAvatar = ref('')
 
 onMounted(async () => {
   try {
     userRole.value = localStorage.getItem('role') || ''
-    userAvatar.value = profile.value?.data.avatar_url || ''
     localStorage.setItem('body_weight', profile.value?.data.body_weight?.toString() || '')
   } catch (error: any) {
     ElNotification({

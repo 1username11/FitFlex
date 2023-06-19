@@ -108,24 +108,39 @@ const signUpRules = reactive({
   ]
 })
 
+const baseProfile = {
+  username: 'new username',
+  full_name: 'full name',
+  avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?2015032720354'
+}
+
 function submit () {
   signUpRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
       try {
         const { email, password } = signUpModel
-        await authService.signUp({
+        const { data: signUpData, error } = await authService.signUp({
           email,
           password
-        }).then(() => {
-          ElNotification({
-            title: 'Email Verification',
-            message: 'Check your email to verify your account',
-            type: 'info'
-          })
-          router.push({ name: routeNames.login })
         })
-      } catch (error) {
-        console.log(error)
+        if (error) throw error
+        console.log(signUpData)
+
+        const { error: createBaseProfileError } =
+        await profileService.updateProfile(signUpData.user?.id as string, baseProfile)
+        if (createBaseProfileError) throw createBaseProfileError
+        ElNotification({
+          title: 'Success',
+          message: 'Check your email to verify your account',
+          type: 'success'
+        })
+        router.push({ name: routeNames.login })
+      } catch (error: any) {
+        ElNotification({
+          title: 'Error',
+          message: error.message,
+          type: 'error'
+        })
       }
     } else {
       ElNotification({
