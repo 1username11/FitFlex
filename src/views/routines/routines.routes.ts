@@ -1,11 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router'
-import RoutinesList from './RoutinesList.vue'
-import RoutineDetail from './components/RoutineDetail.vue'
-import Exercise from './components/Exercise.vue'
-import CreateRoutine from './components/CreateRoutine.vue'
-import EditRoutine from './components/EditRoutine.vue'
-import Workout from './Workout.vue'
-import FinishWorkout from './components/FinishWorkout.vue'
 
 export const routinesViewRouteNames = {
   routinesList: 'routines',
@@ -22,7 +15,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/routines',
     name: routinesViewRouteNames.routinesList,
-    component: RoutinesList,
+    component: () => import('./RoutinesList.vue'),
     meta: {
       requiresAuth: true
     }
@@ -30,7 +23,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/routine-detail/:id',
     name: routinesViewRouteNames.routineDetail,
-    component: RoutineDetail,
+    component: () => import('./components/RoutineDetail.vue'),
     meta: {
       requiresAuth: true
     }
@@ -38,7 +31,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/exercise',
     name: routinesViewRouteNames.exercise,
-    component: Exercise,
+    component: () => import('./components/Exercise.vue'),
     meta: {
       requiresAuth: true
     }
@@ -46,7 +39,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/create-routine',
     name: routinesViewRouteNames.createRoutine,
-    component: CreateRoutine,
+    component: () => import('./components/CreateRoutine.vue'),
     meta: {
       requiresAuth: true
     }
@@ -54,7 +47,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/edit-routine/:id',
     name: routinesViewRouteNames.editRoutine,
-    component: EditRoutine,
+    component: () => import('./components/EditRoutine.vue'),
     meta: {
       requiresAuth: true
     }
@@ -62,7 +55,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/start-workout/:id',
     name: routinesViewRouteNames.startWorkout,
-    component: Workout,
+    component: () => import('./Workout.vue'),
     meta: {
       requiresAuth: true
     }
@@ -70,7 +63,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
   {
     path: '/finish-workout/:id',
     name: routinesViewRouteNames.finishWorkout,
-    component: FinishWorkout,
+    component: () => import('./components/FinishWorkout.vue'),
     meta: {
       requiresAuth: true
     }

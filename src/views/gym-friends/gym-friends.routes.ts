@@ -1,5 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router'
-import GymFriends from './GymFriends.vue'
 import { supabase } from '@/supabase'
 
 export const gymFriendsRouteNames = {
@@ -10,7 +9,7 @@ export const gymFriendsRoutes: Array<RouteRecordRaw> = [
   {
     path: '/gym-friends',
     name: gymFriendsRouteNames.gymFriends,
-    component: GymFriends,
+    component: () => import('./GymFriends.vue'),
     meta: {
       requiresAuth: true
     },
