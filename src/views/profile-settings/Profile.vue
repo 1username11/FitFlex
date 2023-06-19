@@ -23,7 +23,7 @@
             ref="fileInput"
             type="file"
             style="display: none"
-            accept=".jpg, .jpeg, .png, .gif, .mp4"
+            accept=".jpg, .jpeg, .png"
             @change="handleFileUpload"
           >
         </div>
@@ -246,7 +246,7 @@ window.addEventListener('beforeunload', (e) => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('beforeunload', () => {})
+  window.removeEventListener('beforeunload', () => '')
 })
 </script>
 

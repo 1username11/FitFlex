@@ -183,8 +183,6 @@ function calculateDistance (lat1: number, lon1: number, lat2: number, lon2: numb
 
   const distance = R * c
 
-  console.log('distance', distance)
-
   return distance
 }
 
@@ -210,8 +208,6 @@ onMounted(async () => {
     lat: myLocation.value.lat,
     lng: myLocation.value.lng
   }
-  console.log(profiles.value)
-  console.log('myLoc', myLocation.value)
 })
 
 </script>

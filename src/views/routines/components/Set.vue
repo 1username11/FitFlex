@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between items-center h-[45px]"
+    class="flex justify-between items-center h-[45px] px-2"
     :class="{'bg-gray-200': serial % 2 === 0}"
   >
     <div class="flex justify-center bg-white rounded-md items-center border border-gray-200 w-[30px] h-[30px]">
@@ -8,17 +8,30 @@
     </div>
 
     <template v-for="(value, key) in setsColumns" :key="key">
-      <div v-if="value" class="input-wrapper">
+      <div
+        v-if="value"
+        class="input-wrapper"
+        :class="{
+          'ml-9': key === 'weight',
+          'ml-8 mr-2': key === 'reps',
+          'ml-7': key === 'duration',
+        }"
+      >
         <el-input
           v-model="setModel[key]"
-          class="w-fit mr-11"
+          class="w-fit"
           type="number"
           placeholder="-"
         />
       </div>
     </template>
 
-    <button @click="$emit('deleteSet')">
+    <button
+      :class="{
+        '-ml-1': setsColumns.weight,
+      }"
+      @click="$emit('deleteSet')"
+    >
       <IconDelete />
     </button>
   </div>
@@ -49,7 +62,7 @@ watchDebounced(setModel, () => {
 .input-wrapper {
   .el-input {
     .el-input__wrapper {
-      box-shadow: none;
+      width: 80px;
       background-color: transparent;
     }
     .el-input__inner {

@@ -59,7 +59,7 @@
           ref="fileInputRef"
           type="file"
           class="hidden"
-          accept=".jpg, .jpeg, .png, .gif, .mp4"
+          accept=".jpg, .jpeg, .png"
           @change="handleFileUpload"
         >
       </div>
@@ -95,7 +95,6 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const currentRouteParam = router.currentRoute.value.params.id
 const fileInputRef = ref()
 const loading = ref(false)
 const currentUser = ref()
@@ -134,10 +133,9 @@ const finishWorkoutModel = computed(() => {
   return {
     feed_id: generateGUID(),
     user_id: currentUser.value?.id,
-    // routine_id: currentRouteParam,
     description: description.value,
     media_url: exerciseMediaURL.value,
-    created_at: date.value,
+    created_at: date.value as number,
     duration: props.duration,
     json_data: JSON.stringify(props.completedWorkout)
   }
@@ -168,43 +166,6 @@ async function getResizedImageForThumbnails (fileName: string) {
   }
 }
 
-function getVideoCover (file: File, fileName: string, seekTo = 0.5) {
-  return new Promise((resolve, reject) => {
-    // load the file to a video player
-    const videoPlayer = document.createElement('video')
-    videoPlayer.setAttribute('src', URL.createObjectURL(file))
-    videoPlayer.load()
-    videoPlayer.addEventListener('error', (ex) => {
-      reject(new Error(ex?.message))
-    })
-    // load metadata of the video to get video duration and dimensions
-    videoPlayer.addEventListener('loadedmetadata', () => {
-      // seek to user defined timestamp (in seconds) if possible
-      if (videoPlayer.duration < seekTo) {
-        reject(new Error('video is too short.'))
-        return
-      }
-      // delay seeking or else 'seeked' event won't fire on Safari
-      setTimeout(() => { videoPlayer.currentTime = seekTo }, 200)
-      // extract video thumbnail once seeking is complete
-      videoPlayer.addEventListener('seeked', () => {
-        // define a canvas to have the same dimension as the video
-        const canvas = document.createElement('canvas')
-        canvas.width = videoPlayer.videoWidth
-        canvas.height = videoPlayer.videoHeight
-        // draw the video frame to canvas
-        const ctx = canvas.getContext('2d')
-        ctx?.drawImage(videoPlayer, 0, 0, canvas.width, canvas.height)
-        // return the canvas image as a blob
-        ctx?.canvas.toBlob((blob) => {
-          const file = new File([blob as Blob], `${fileName}.jpeg`, { type: 'image/jpeg' })
-          resolve(file)
-        })
-      })
-    })
-  })
-}
-
 function handleErrors (err: unknown) {
   if (err instanceof Error) {
     throw Error(err.message)
@@ -218,16 +179,10 @@ async function uploadExerciseMedia (file: File) {
   const fileName = `exercise-media-${Date.now()}`
 
   try {
-    let cover: File | null = null
-
-    if (fileExt === 'mp4') {
-      cover = await getVideoCover(file, fileName) as File
-    }
     await Promise.all([
       exercisesService.uploadExercisesMedia(`${fileName}.${fileExt}`, file, 'exercises'),
-      exercisesService.uploadExercisesMedia(`${fileName}.jpeg`, cover || file, 'thumbnails')
+      exercisesService.uploadExercisesMedia(`${fileName}.jpeg`, file, 'thumbnails')
     ])
-    console.log(cover)
   } catch (err) {
     handleErrors(err)
   }

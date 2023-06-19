@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white p-4 w-full">
     <div class="flex justify-between mb-6">
-      <div class="flex space-x-2">
+      <div class="flex space-x-2 items-center">
         <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">
           <template #error>
             <ImagePlaseholder />
@@ -48,7 +48,7 @@
         </el-select>
       </div>
 
-      <div class="flex justify-between px-2">
+      <div class="flex justify-between px-2 text-lg font-medium">
         <p>Set</p>
         <template v-for="(value, key) in setsColumns" :key="key">
           <p v-if="value" class="capitalize">{{ key }}</p>

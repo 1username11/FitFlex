@@ -1,17 +1,17 @@
 <template>
   <div v-if="!isWorkoutFinished" v-loading="loading">
     <div class="flex justify-between bg-white p-4 rounded-lg mb-4 border border-gray-300">
-      <div>
-        <p>Duration</p>
-        <p>{{ formatTime }}</p>
+      <div clas="flex flex-col">
+        <p class="text-xl font-semibold">Duration</p>
+        <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ formatTime }}</p>
       </div>
-      <div>
-        <p>Volume</p>
-        <p>{{ volume }}</p>
+      <div clas="flex flex-col">
+        <p class="text-xl font-semibold">Total Volume</p>
+        <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ volume }}</p>
       </div>
-      <div>
-        <p>Current Volume</p>
-        <p>{{ currentVolume }}</p>
+      <div clas="flex flex-col">
+        <p class="text-xl font-semibold">Current Volume</p>
+        <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ currentVolume }}</p>
       </div>
     </div>
     <div class="lg:flex lg:flex-row-reverse justify-between gap-4">
@@ -120,10 +120,13 @@ function pauseTimer () {
 }
 
 const volume = computed(() => {
-  return exercises.value.reduce((acc, curr) => {
-    return acc + curr.sets.reduce((acc, curr) => {
-      return acc + (curr.reps || 0) * (curr.weight || 0)
-    }, 0)
+  return exercises.value.reduce((acc, exercise) => {
+    return (
+      acc +
+      exercise.sets.reduce((acc, set) => {
+        return acc + (set.reps || set.duration as number) * (set.weight || bodyweight.value)
+      }, 0)
+    )
   }, 0)
 })
 
@@ -137,10 +140,7 @@ function setComplete (set: ISetRoutine) {
       }
     })
   })
-
-  console.log('completedSet', exercises.value)
-
-  currentVolume.value += (set.reps || 0) * (set.weight || 0)
+  currentVolume.value += (set.reps || set.duration as number) * (set.weight || bodyweight.value)
 }
 
 function checkAllSetDone () {
@@ -202,6 +202,12 @@ const confirmDiscard = () => {
       console.log(e)
     })
 }
+window.addEventListener('beforeunload', (e) => {
+  if (formatTime.value !== '00:00:00') {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+})
 
 async function exerciseCompleted (exercise: IExerciseStatistics) {
   console.log('exercise completed', exercise)
@@ -239,15 +245,15 @@ onMounted(async () => {
       } as IExerciseRoutine
     })
     bodyweight.value = localStorage.getItem('bodyweight') ? Number(localStorage.getItem('bodyweight')) : 1
-    console.log('hashedExerciseTypes', hashedExerciseTypes.value)
-    console.log('routineSets', routineSets)
-
-    console.log('exercises', exercises.value)
   } catch (e) {
     console.log(e)
   } finally {
     loading.value = false
   }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', () => {})
 })
 </script>
 

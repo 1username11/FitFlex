@@ -68,7 +68,6 @@ const routine = ref({
   title: ''
 } as IRoutine)
 
-
 const exerciseSets = computed(() => {
   return exercises.value.flatMap((exercise: IExerciseRoutine) => {
     return exercise.sets.map((set: ISetRoutine) => ({
@@ -158,7 +157,7 @@ window.addEventListener('beforeunload', (e) => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('beforeunload', () => {})
+  window.removeEventListener('beforeunload', () => '')
 })
 </script>
 

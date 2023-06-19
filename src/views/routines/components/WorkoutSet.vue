@@ -7,38 +7,15 @@
       {{ props.serial }}
     </div>
 
-    <div
-      v-if="['weight reps', 'weight distance', 'weighted bodyweight'].includes(exerciseType)"
-      class="input-wrapper"
-    >
-      <!-- <el-input
-        v-model="setModel.weight" class="w-fit ml-16" type="text" placeholder="-"
-      /> -->
-      {{ setModel.weight }}
-    </div>
-
-    <div
-      v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(exerciseType)"
-      class="input-wrapper"
-    >
-      <!-- <el-input
-        v-model="setModel.reps" class="w-fit mr-11" type="text" placeholder="-"
-      /> -->
-      {{ setModel.reps }}
-    </div>
-
-    <div
-      v-if="['duration', 'distance duration'].includes(exerciseType)"
-      class="input-wrapper"
-    >
-      <!-- <el-input
-        v-model="setModel.duration" class="w-fit mr-11" type="text" placeholder="-"
-      /> -->
-      {{ setModel.duration }}
-    </div>
+    <template v-for="(value, key) in setsColumns" :key="key">
+      <div v-if="value" class="input-wrapper">
+        <p>{{ props.set[key] }}</p>
+      </div>
+    </template>
 
     <button
-      class="w-[30px] h-[30px] bg-white border border-gray-200 rounded-md flex justify-center items-center"
+      class="w-[30px] h-[30px] bg-white border border-gray-200 rounded-md flex justify-center items-center
+      hover:bg-[#8CB6E5]"
       :class="{'bg-[#1D83EA]': setDone}"
       :disabled="setDone || !props.isWorokoutStarted"
       @click="done()"
@@ -47,29 +24,24 @@
 </template>
 
 <script lang="ts" setup>
+const { setsColumnsConditions } = useHelpers()
+
 const props = defineProps<{
   set: ISetRoutine
   serial: number
   isWorokoutStarted: boolean
   exerciseType: string
 }>()
+const setsColumns = setsColumnsConditions(props.exerciseType)
+
 const emits = defineEmits(['deleteSet', 'setComplete', 'setUpdate'])
 const setDone = ref<boolean>(false)
 
-const setModel = ref<ISetRoutine>({
-  weight: props.set.weight,
-  reps: props.set.reps,
-  duration: props.set.duration
-} as ISetRoutine)
-
 function done () {
   setDone.value = true
-  emits('setComplete', setModel.value)
+  emits('setComplete', props.set)
+  console.log(props.set)
 }
-
-watch(setModel.value, () => {
-  emits('setUpdate', setModel.value)
-})
 </script>
 
 <style lang="scss">

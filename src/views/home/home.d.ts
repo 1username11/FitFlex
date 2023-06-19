@@ -9,7 +9,7 @@ interface IJsonData {
 }
 
 interface IFeed {
-  created_at: string
+  created_at: number
   user_id: string
   description: string
   media_url: string

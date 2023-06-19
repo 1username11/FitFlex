@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="flex items-center">
+    <div class="flex items-center font-normal text-lg">
       <IconTimer />
 
       <p class="text-[#1d83ea] ml-1 mr-2">Rest timer</p>
@@ -20,27 +20,25 @@
       <p>{{ isLastSetDone ? 'Exercise Done': formattedRestTime }}</p>
     </div>
 
-    <div class="flex justify-between">
+    <div class="flex justify-between px-2 text-lg font-medium">
       <p>Set</p>
+      <template v-for="(value, key) in setsColumns" :key="key">
+        <p
+          v-if="value" class="capitalize"
+          :class="{
+            '-mr-5': key === 'weight',
+            'mr-5': key === 'reps',
+            'mr-1': key === 'duration',
+          }"
+        >
+          {{ key }}
+        </p>
+      </template>
       <p
-        v-if="['weighted bodyweight', 'weight reps', 'weight distance']
-          .includes(exercise.exercise_type)"
-      >
-        KG
-      </p>
-
-      <p
-        v-if="['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only']
-          .includes(exercise.exercise_type)"
-      >
-        Reps
-      </p>
-
-      <p v-if="['duration', 'distance duration'].includes(exercise.exercise_type)">
-        Duration
-      </p>
-
-      <p />
+        :class="{
+          'ml-1': setsColumns.weight,
+        }"
+      />
     </div>
 
     <WorkoutSet
@@ -67,8 +65,10 @@ const props = defineProps<{
 const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete', 'exerciseCompleted'])
 
 const { generateGUID } = useHelpers()
+const { setsColumnsConditions } = useHelpers()
+const setsColumns = setsColumnsConditions(props.exercise.exercise_type)
 
-let timerId = null
+let timerId: any = null
 const isLastSetDone = ref(false)
 const restTime = ref(props.sets[0]?.rest_time || 0)
 
@@ -106,6 +106,7 @@ function startRestCountdown (idx: number) {
 
 function lastSetComplete (idx: number) {
   emit('setComplete', props.sets[idx])
+  emit('exerciseCompleted', exerciseStatistic.value)
   isLastSetDone.value = true
 }
 
@@ -117,9 +118,16 @@ function setComplete (idx: number, set: ISetRoutine) {
     startRestCountdown(idx)
   }
 }
+console.log('setsColumns', setsColumns)
 
 const exerciseStatistic = computed(() => {
-  if (['weight reps', 'weight distance', 'weighted bodyweight'].includes(props.exercise.exercise_type)) {
+  if (setsColumns.weight) {
+    const maxSet = props.sets.reduce((set, acc) => {
+      (set.weight as number) > (acc.weight as number) ? acc = set : acc
+      return acc
+    }
+    , {} as ISetRoutine)
+
     return {
       id: generateGUID(),
       user_id: localStorage.getItem('userId'),
@@ -127,9 +135,10 @@ const exerciseStatistic = computed(() => {
       exercise_id: props.exercise.id,
       avarage_weight: props.sets.reduce((acc, set) => acc + (set.weight as number), 0) / props.sets.length,
       max_weight: props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0),
-      one_reps_max: props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0) / 0.033
+      one_reps_max: Math.round((100 * (maxSet.weight as number)) /
+      Math.abs(101.3 - (2.67123 * (maxSet.reps as number))))
     }
-  } else if (['assisted bodyweight', 'reps only'].includes(props.exercise.exercise_type)) {
+  } else if (setsColumns.reps) {
     return {
       id: generateGUID(),
       user_id: localStorage.getItem('userId'),
@@ -139,7 +148,7 @@ const exerciseStatistic = computed(() => {
       avarage_reps: props.sets.reduce((acc, set) => acc + (set.reps as number), 0) / props.sets.length,
       volume: props.sets.reduce((acc, set) => acc + (props.bodyweight as number) * (set.reps as number), 0)
     }
-  } else if (['duration', 'distance duration'].includes(props.exercise.exercise_type)) {
+  } else if (setsColumns.duration) {
     return {
       id: generateGUID(),
       user_id: localStorage.getItem('userId'),
@@ -149,12 +158,6 @@ const exerciseStatistic = computed(() => {
       avarage_duration: props.sets.reduce((acc, set) => acc + (set.duration as number), 0) / props.sets.length,
       volume: props.sets.reduce((acc, set) => acc + (props.bodyweight as number) * (set.duration as number), 0)
     }
-  }
-})
-
-watch(isLastSetDone, (value) => {
-  if (value) {
-    emit('exerciseCompleted', exerciseStatistic.value)
   }
 })
 </script>

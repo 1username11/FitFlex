@@ -89,11 +89,9 @@ const routes = [
 
 const generalStore = useGeneralStore()
 const { logout, navigateTo } = generalStore
-const { userId } = storeToRefs(generalStore)
 
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
-const { getProfile } = profileStore
 
 const userRole = ref('')
 const userAvatar = ref('')
@@ -101,10 +99,6 @@ const userAvatar = ref('')
 onMounted(async () => {
   try {
     userRole.value = localStorage.getItem('role') || ''
-    await getProfile(userId.value)
-    if (profile.value?.error) {
-      throw new Error(profile.value.error)
-    }
     userAvatar.value = profile.value?.data.avatar_url || ''
     localStorage.setItem('body_weight', profile.value?.data.body_weight?.toString() || '')
   } catch (error: any) {
