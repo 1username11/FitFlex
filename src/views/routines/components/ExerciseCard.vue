@@ -48,7 +48,7 @@
         </el-select>
       </div>
 
-      <div class="flex justify-between">
+      <div class="flex justify-between px-2">
         <p>Set</p>
         <template v-for="(value, key) in setsColumns" :key="key">
           <p v-if="value" class="capitalize">{{ key }}</p>

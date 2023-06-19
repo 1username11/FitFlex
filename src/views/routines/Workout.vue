@@ -48,17 +48,16 @@
           Discard
         </button>
       </div>
+
       <div class="w-full border border-gray-300 rounded-md overflow-hidden">
         <WorkoutCard
-          v-for="(exercise, index) in exercises"
+          v-for="exercise in exercises"
           :key="exercise.id"
           :exercise="exercise"
           :sets="exercise.sets"
           :bodyweight="bodyweight"
           :isWorokoutStarted="isRunning"
-          :class="{'border-b border-gray-300'
-            : index !== exercises.length - 1, 'border-none'
-            : index === exercises.length - 1}"
+          class="border-b border-gray-300 last:border-none"
           @addSet="exercise.sets.push({} as ISetRoutine)"
           @deleteSet="exercise.sets.splice($event, 1)"
           @setComplete="setComplete($event)"

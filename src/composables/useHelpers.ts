@@ -9,7 +9,7 @@ export function useHelpers () {
 
   function setsColumnsConditions (exerciseType: string) {
     return {
-      kg: ['weight reps', 'weight distance', 'weighted bodyweight'].includes(exerciseType),
+      weight: ['weight reps', 'weight distance', 'weighted bodyweight'].includes(exerciseType),
       reps: ['weight reps', 'weighted bodyweight', 'assisted bodyweight', 'reps only'].includes(exerciseType),
       duration: ['duration', 'distance duration'].includes(exerciseType)
     }

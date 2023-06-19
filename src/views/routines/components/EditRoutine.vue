@@ -25,13 +25,11 @@
 
         <div v-if="exercises.length">
           <ExerciseCard
-            v-for="(exercise, index) in exercises"
+            v-for="exercise in exercises"
             :key="exercise.id"
             :exercise="exercise"
             :sets="exercise.sets"
-            :class="{ 'border-b border-gray-300'
-              : index !== exercises.length - 1, 'border-none'
-              : index === exercises.length - 1 }"
+            class="border-b border-gray-300 last:border-none"
             @addSet="exercise.sets.push({} as ISetRoutine)"
             @deleteSet="exercise.sets?.splice($event, 1)"
             @deleteExercise="deleteExercise"
@@ -63,6 +61,7 @@ const editingRoutineId = ref(router.currentRoute.value.params.id as string)
 const { generateGUID } = useHelpers()
 const { userId } = storeToRefs(useGeneralStore())
 
+let shouldCheckUnsavedChanges = true
 const exercises = ref<IExerciseRoutine[]>([])
 const loading = ref(false)
 const initialExercisesValue = ref<IExerciseRoutine[]>([])
@@ -109,6 +108,7 @@ async function editHandler () {
       message: 'Routine edited successfully',
       type: 'success'
     })
+    shouldCheckUnsavedChanges = false
     await router.push({ name: 'routines' })
   } catch (err: any) {
     ElNotification({
@@ -180,7 +180,7 @@ onBeforeRouteLeave(async (to, from, next) => {
   const isModified = JSON.stringify(exercises.value) !== JSON.stringify(initialExercisesValue.value) ||
   initialTitle.value !== editRoutine.value.title
 
-  if (isModified) {
+  if (isModified && shouldCheckUnsavedChanges) {
     await ElMessageBox.confirm(
       'You have unsaved changes, are you sure you want to leave?',
       'Warning',

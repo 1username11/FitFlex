@@ -54,20 +54,20 @@
 </template>
 
 <script lang="ts" setup>
-import { fa } from 'element-plus/es/locale/index.js'
-
 const { generateGUID } = useHelpers()
 const { userId } = storeToRefs(useGeneralStore())
 
 const router = useRouter()
-const exercises = ref<IExerciseRoutine[]>([])
 
+let shouldCheckUnsavedChanges = true
+const exercises = ref<IExerciseRoutine[]>([])
 const routine = ref({
   id: generateGUID(), // we generate this id for exercises sets
   created_at: new Date(),
   user: userId.value,
   title: ''
 } as IRoutine)
+
 
 const exerciseSets = computed(() => {
   return exercises.value.flatMap((exercise: IExerciseRoutine) => {
@@ -87,6 +87,10 @@ function addExercise (exercise: IExerciseRoutine) {
   exercises.value.push(exercise)
 }
 
+function deleteExercise (exerciseId: string) {
+  exercises.value = exercises.value.filter((e) => e.id !== exerciseId)
+}
+
 async function saveHandler () {
   try {
     const { error: insertRoutineErr } = await routinesService.insertRoutine(routine.value)
@@ -94,14 +98,11 @@ async function saveHandler () {
 
     if (insertRoutineErr || insertSetsErr) throw new Error('Error while inserting routine')
     ElNotification({ title: 'Success', message: 'Routine created successfully', type: 'success' })
+    shouldCheckUnsavedChanges = false
     await router.push({ name: 'routines' })
   } catch (error: any) {
     ElNotification({ title: 'Error', message: error.message, type: 'error' })
   }
-}
-
-function deleteExercise (exerciseId: string) {
-  exercises.value = exercises.value.filter((e) => e.id !== exerciseId)
 }
 
 const isValid = computed(() => {
@@ -127,7 +128,7 @@ const isValid = computed(() => {
 onBeforeRouteLeave(async (to, from, next) => {
   const isModified = JSON.stringify(exercises.value) !== '[]'
 
-  if (isModified) {
+  if (isModified && shouldCheckUnsavedChanges) {
     await ElMessageBox.confirm(
       'You have unsaved changes, are you sure you want to leave?',
       'Warning',
@@ -159,7 +160,6 @@ window.addEventListener('beforeunload', (e) => {
 onUnmounted(() => {
   window.removeEventListener('beforeunload', () => {})
 })
-
 </script>
 
 <style lang="scss">

@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <div v-if="!isLargeScreen">
+  <div v-else>
     <el-button
       type="primary"
       class="absolute bottom-10 -right-11 h-6"
@@ -213,6 +213,7 @@ const {
 } = storeToRefs(exerciseStore)
 
 function emitExercise (exercise: IExerciseRoutine) {
+  console.log('exercise', exercise)
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }
@@ -234,6 +235,7 @@ onBeforeMount(async () => {
     })
   } finally {
     loading.value = false
+    console.log(exercises.value)
   }
 })
 </script>

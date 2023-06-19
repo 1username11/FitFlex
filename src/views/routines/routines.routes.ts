@@ -28,7 +28,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/routine-deatil/:id',
+    path: '/routine-detail/:id',
     name: routinesViewRouteNames.routineDetail,
     component: RoutineDetail,
     meta: {
@@ -44,7 +44,7 @@ export const routinesViewRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/createRoutine',
+    path: '/create-routine',
     name: routinesViewRouteNames.createRoutine,
     component: CreateRoutine,
     meta: {
