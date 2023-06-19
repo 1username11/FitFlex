@@ -12,15 +12,14 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex items-center">
       <IconTimer />
 
-      <p class="text-[#1d83ea] ml-1 mr-2">
-        Rest timer
-      </p>
+      <p class="text-[#1d83ea] ml-1 mr-2">Rest timer</p>
 
       <p>{{ isLastSetDone ? 'Exercise Done': formattedRestTime }}</p>
     </div>
+
     <div class="flex justify-between">
       <p>Set</p>
       <p
@@ -40,7 +39,10 @@
       <p v-if="['duration', 'distance duration'].includes(exercise.exercise_type)">
         Duration
       </p>
+
+      <p />
     </div>
+
     <WorkoutSet
       v-for="(set, idx) in sets"
       :key="set.id"
@@ -48,7 +50,7 @@
       :serial="idx+1"
       :exerciseType="exercise.exercise_type"
       class="mb-3"
-      :isWorokoutStarted="isWorokoutStarted"
+      :isWorokoutStarted="isWorkoutStarted"
       @setComplete="setComplete(idx, set)"
     />
   </div>
@@ -58,7 +60,7 @@
 const props = defineProps<{
   exercise: IExerciseRoutine
   sets: ISetRoutine[]
-  isWorokoutStarted: boolean
+  isWorkoutStarted: boolean
   bodyweight?: number
 }>()
 
@@ -66,8 +68,10 @@ const emit = defineEmits(['addSet', 'deleteSet', 'deleteExercise', 'setComplete'
 
 const { generateGUID } = useHelpers()
 
+let timerId = null
 const isLastSetDone = ref(false)
 const restTime = ref(props.sets[0]?.rest_time || 0)
+
 const formattedRestTime = computed(() => {
   const minutes = Math.floor(restTime.value / 60)
   const seconds = restTime.value % 60
@@ -80,13 +84,22 @@ function padZero (value: number) {
 }
 
 function startRestCountdown (idx: number) {
-  restTime.value = props.sets[0]?.rest_time || 0
-  const interval = setInterval(() => {
+  const delay = 1000
+
+  if (restTime.value !== props.sets[idx]?.rest_time) {
+    clearTimeout(timerId)
+    restTime.value = props.sets[idx]?.rest_time || 0
+  }
+
+  timerId = setTimeout(function tick () {
     restTime.value -= 1
-    if (restTime.value === 0) {
-      clearInterval(interval)
+    timerId = setTimeout(tick, delay)
+
+    if (!restTime.value) {
+      clearTimeout(timerId)
+      restTime.value = props.sets[idx + 1]?.rest_time || 0
     }
-  }, 1000)
+  }, delay)
 
   emit('setComplete', props.sets[idx])
 }

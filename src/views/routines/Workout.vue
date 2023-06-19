@@ -56,7 +56,7 @@
           :exercise="exercise"
           :sets="exercise.sets"
           :bodyweight="bodyweight"
-          :isWorokoutStarted="isRunning"
+          :isWorkoutStarted="isRunning"
           class="border-b border-gray-300 last:border-none"
           @addSet="exercise.sets.push({} as ISetRoutine)"
           @deleteSet="exercise.sets.splice($event, 1)"
