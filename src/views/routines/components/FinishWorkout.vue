@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:flex lg:flex-row-reverse lg:justify-between gap-4">
+  <div class="lg:flex lg:flex-row-reverse lg:justify-between gap-4 pb-4">
     <div class="flex flex-row space-x-3 mb-3 lg:flex lg:flex-col lg:justify-start lg:space-y-3 lg:space-x-0">
       <button
         class="w-full lg:w-[300px] h-9 rounded-md bg-[#1D83EA] text-white cursor-pointer hover:bg-[#056DD7]"
