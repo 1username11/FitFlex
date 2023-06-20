@@ -115,7 +115,7 @@ async function detectElementByIntersection (userId: string) {
             isAllFeedsLoaded.value = !isAllFeedsLoaded.value
           }
 
-          feeds.value = [...feeds.value, ...data]
+          feeds.value = [...feeds.value, ...data] as IFeed[]
         }
       })
     }, {})

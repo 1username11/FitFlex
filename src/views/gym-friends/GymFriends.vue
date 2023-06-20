@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full bg-white rounded-lg border border-gray-300 p-5">
+  <div class="w-full h-fit bg-white rounded-lg border border-gray-300 p-5">
     <div>
       <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-600">Welcome to GymFriends</h1>
@@ -45,7 +45,7 @@
             <InfoWindow>
               <el-card>
                 <div class="flex items-center space-x-5">
-                  <div class="p-4">
+                  <div class="p-4 avatar-wrapper">
                     <el-image
                       class="w-[80px] h-[80px] rounded-full overflow-hidden"
                       :src="profile.avatar_url"
@@ -211,3 +211,13 @@ onMounted(async () => {
 })
 
 </script>
+
+<style lang="scss">
+.avatar-wrapper {
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
+  }
+}
+</style>

@@ -92,7 +92,7 @@
   <div v-else>
     <el-button
       type="primary"
-      class="absolute bottom-10 -right-11 h-6"
+      class="bottom-12 -right-9 h-6 z-50 fixed"
       :class="currentRoute === '/exercise' ? 'left-0 routate-90' : 'right-0 -rotate-90'"
       @click="drawer = true"
     >

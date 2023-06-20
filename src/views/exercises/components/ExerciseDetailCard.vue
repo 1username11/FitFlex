@@ -76,6 +76,7 @@
     <div
       v-for="statisticsItem in formatedStatistics"
       :key="statisticsItem.label"
+      class="max-w-[660px]"
     >
       <div v-if="statisticsItem.data.length > 1" class="flex flex-col mt-4">
         <div class="border border-gray-300 rounded-lg overflow-hidden">

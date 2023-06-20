@@ -1,11 +1,13 @@
 <template>
   <div
     v-loading="loading"
-    class="w-fit h-fit flex flex-col border border-gray-300 rounded-lg bg-white p-10 form-wrapper mx-auto"
+    class="h-fit flex flex-col border border-gray-300 rounded-lg bg-white p-10 form-wrapper mx-auto"
+    :class="isLargeScreen ? 'w-fit' : 'w-full'"
   >
     <el-form
       ref="profileRef"
-      label-position="right"
+      :label-position="labelPositon"
+      :class="isLargeScreen ? '' : 'w-full'"
       :rules="profileRules"
       :model="profileModel"
       @submit.prevent="submit"
@@ -84,6 +86,10 @@ const { userId } = storeToRefs(generalStore)
 const loading = ref(false)
 const fileInput = ref<HTMLInputElement>()
 const profileRef = ref()
+const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+const labelPositon = computed(() => {
+  return isLargeScreen.value ? 'left' : 'top'
+})
 
 const profileRules = reactive({
   avatar_url: [{ required: true, message: 'Please select an image', trigger: 'blur' }],
@@ -263,6 +269,9 @@ onUnmounted(() => {
 }
 
 .form-wrapper {
+  align-items: center;
+  display: flex;
+
   .el-form-item__content {
     display: flex;
     flex-direction: column;
@@ -296,8 +305,5 @@ onUnmounted(() => {
   .el-button {
     width: 30%;
   }
-}
-.form-wrapper{
-  align-items: center;
 }
 </style>

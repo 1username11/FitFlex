@@ -1,6 +1,6 @@
 <template>
   <GChart
-    class="w-full h-full"
+    class="w-full h-full max-w-[660px]"
     type="LineChart"
     :data="chartData"
     :options="chartOptions.chart"
@@ -22,8 +22,6 @@ const chartOptions = ref({
     curveType: 'function',
     legend: { position: 'none' },
     hAxis: {
-      title: 'Date',
-      
     }
   }
 })
