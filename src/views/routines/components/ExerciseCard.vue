@@ -2,13 +2,15 @@
   <div class="bg-white p-4 w-full">
     <div class="flex justify-between mb-6">
       <div class="flex space-x-2 items-center">
-        <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">
-          <template #error>
-            <ImagePlaseholder />
-          </template>
-        </el-image>
+        <div class="thumbnail-wrapper">
+          <el-image class="w-[40px] h-[40px] rounded-full overflow-hidden" :src="exercise.thumbnails_url">
+            <template #error>
+              <ImagePlaseholder />
+            </template>
+          </el-image>
+        </div>
 
-        <p class="font-bold text-lg truncate">{{ exercise.title }}</p>
+        <p class="font-bold text-lg">{{ exercise.title }}</p>
       </div>
 
       <el-dropdown trigger="click">
@@ -100,3 +102,13 @@ function deleteSet (idx: number) {
   }
 }
 </script>
+
+<style lang="scss">
+.thumbnail-wrapper{
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
+  }
+}
+</style>

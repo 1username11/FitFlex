@@ -71,7 +71,7 @@ const props = defineProps<{
 }>()
 
 const exercisesStore = useExercisesStore()
-const { hashedMuscleGroups, hashedExerciseTypes, hashedEquipment } = storeToRefs(exercisesStore)
+const { hashedMuscleGroups, hashedExerciseTypes, hashedEquipment, exercises } = storeToRefs(exercisesStore)
 
 const generalStore = useGeneralStore()
 const { userId } = storeToRefs(generalStore)
@@ -149,14 +149,12 @@ async function uploadExerciseMedia (file: File) {
       exercisesService.uploadExercisesMedia(`${fileName}.${fileExt}`, file, 'exercises'),
       exercisesService.uploadExercisesMedia(`${fileName}.jpeg`, cover || file, 'thumbnails')
     ])
-    console.log(cover)
   } catch (err) {
     handleErrors(err)
   }
   await getResizedImageForThumbnails(`${fileName}.jpeg`)
   const { data } = await exercisesService.getExerciseMedia(`${fileName}.${fileExt}`)
   exerciseMediaURL.value = data?.signedUrl as string
-  console.log(exerciseMediaURL.value)
 }
 
 async function getResizedImageForThumbnails (fileName: string) {
@@ -182,7 +180,6 @@ async function handleFileUpload (event: Event) {
   }
 }
 
-console.log(hashedMuscleGroups.value, hashedExerciseTypes.value, hashedEquipment.value)
 const router = useRouter()
 
 const exerciseTypes = ref(Object.entries(hashedExerciseTypes.value)
@@ -239,6 +236,17 @@ async function upsertHandler () {
 }
 onMounted(() => {
   userRole.value = localStorage.getItem('role') as string
+  if (props.exerciseId) {
+    const exercise = exercises.value.find((exercise) => exercise.id === props.exerciseId) as IExerciseRoutine
+    if (exercise as IExerciseRoutine) {
+      title.value = exercise.title
+      equipment.value = hashedEquipment.value[exercise.equipment_category]
+      primary.value = hashedMuscleGroups.value[exercise.muscle_group]
+      type.value = hashedExerciseTypes.value[exercise.exercise_type]
+      fileURL.value = exercise.thumbnails_url || ''
+      exerciseMediaURL.value = exercise.exercise_media_url || ''
+    }
+  }
 })
 </script>
 
@@ -247,6 +255,7 @@ onMounted(() => {
   .el-input__wrapper {
     box-shadow: none !important;
     padding: 1px 0px 1px 0px !important;
+
   }
 }
 </style>

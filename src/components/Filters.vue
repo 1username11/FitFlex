@@ -66,15 +66,16 @@
           })"
         >
           <IconPlus />
-
-          <el-image
-            :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden"
-            lazy
-          >
-            <template #error>
-              <ImagePlaseholder />
-            </template>
-          </el-image>
+          <div class="thumbnail-wrapper">
+            <el-image
+              :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden"
+              lazy
+            >
+              <template #error>
+                <ImagePlaseholder />
+              </template>
+            </el-image>
+          </div>
 
           <div class="ml-2">
             <div>
@@ -93,7 +94,7 @@
     <el-button
       type="primary"
       class="bottom-12 -right-9 h-6 z-50 fixed"
-      :class="currentRoute === '/exercise' ? 'left-0 routate-90' : 'right-0 -rotate-90'"
+      :class="currentRoute === '/exercise' ? 'routate-90' : '-rotate-90'"
       @click="drawer = true"
     >
       Show Filters
@@ -157,17 +158,17 @@
             })"
           >
             <IconPlus />
-            <el-image :src="exercise.thumbnails_url" class="w-8 h-8 rounded-full overflow-hidden">
-              <template #error>
-                <ImagePlaseholder />
-              </template>
-            </el-image>
+            <div class="thumbnail-wrapper">
+              <el-image :src="exercise.thumbnails_url" class="w-10 h-10 rounded-full overflow-hidden" cover="cover">
+                <template #error>
+                  <ImagePlaseholder />
+                </template>
+              </el-image>
+            </div>
 
             <div class="ml-2">
               <div>
                 {{ exercise.title }}
-                {{ exercise.is_public }}
-                <div v-if="!exercise.is_public">Custom</div>
               </div>
               <div class="text-gray-400">
                 <p>{{ exercise.muscle_group }}</p>
@@ -213,7 +214,6 @@ const {
 } = storeToRefs(exerciseStore)
 
 function emitExercise (exercise: IExerciseRoutine) {
-  console.log('exercise', exercise)
   emits('seeDetails', exercise)
   emits('addExercise', exercise)
 }
@@ -235,7 +235,6 @@ onBeforeMount(async () => {
     })
   } finally {
     loading.value = false
-    console.log(exercises.value)
   }
 })
 </script>
@@ -258,7 +257,7 @@ onBeforeMount(async () => {
   position: absolute;
     inset: 50% auto auto 50%;
     border: 1px solid rgb(204, 204, 204);
-    background: rgb(252, 252, 252);
+    background: white;
     overflow: auto;
     border-radius: 8px;
     outline: none;
@@ -289,5 +288,12 @@ onBeforeMount(async () => {
 }
 .el-drawer.fade-enter-active, .el-drawer.fade-leave-active {
   z-index: 500 !important;
+}
+.thumbnail-wrapper{
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
+  }
 }
 </style>

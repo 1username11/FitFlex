@@ -14,7 +14,6 @@
           <p class="text-gray-400 text-sm">{{ formatTimestamp(parsedFeed.created_at) }}</p>
         </div>
       </div>
-      <!-- <div class="text-xl font-bold mb-4">{{ feed.title }}</div> -->
 
       <div class="text-gray-400 mb-4">{{ parsedFeed.description }}</div>
 
@@ -60,7 +59,7 @@
           :key="exercise.id"
           class="flex mb-4"
         >
-          <div class="flex w-full">
+          <div class="flex w-full truncate">
             <div v-if="!showMore" class="flex space-x-1 items-center">
               <el-image class="w-12 h-12 mr-4 rounded-full overflow-hidden" :src="exercise.thumbnails_url">
                 <template #error>
@@ -85,7 +84,7 @@
                       <ImagePlaseholder />
                     </template>
                   </el-image>
-                  <p class="text-lg font-semibold">
+                  <p class="text-lg font-semibold truncate">
                     {{ `${exercise.title } (${hashedEquipment[exercise.equipment_category]})` }}
                   </p>
                 </div>
@@ -184,7 +183,7 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  feed: IFeed
+  feed: IFeedResponse
   user: IProfile
   hashedEquipment: TIndexedObject<string>
   hashedExerciseTypes: TIndexedObject<string>
@@ -196,9 +195,8 @@ const parsedFeed = ref({
   ...props.feed,
   json_data: JSON.parse(props.feed.json_data)
 } as IFeed)
-console.log('parsedFeed', parsedFeed.value)
 
-function formatTimestamp (timestamp) {
+function formatTimestamp (timestamp: number) {
   const date = new Date(timestamp)
 
   const day = date.getDate().toString().padStart(2, '0')
@@ -210,7 +208,7 @@ function formatTimestamp (timestamp) {
   return `${day} ${month} ${year} ${hours}:${minutes}`
 }
 
-function getMonthName (monthIndex) {
+function getMonthName (monthIndex: number) {
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'

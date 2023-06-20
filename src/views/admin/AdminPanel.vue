@@ -4,7 +4,7 @@
       <UsersTable />
     </el-tab-pane>
 
-    <el-tab-pane label="Config">
+    <el-tab-pane label="Exercises">
       <ExerciseTable />
     </el-tab-pane>
   </el-tabs>

@@ -39,7 +39,7 @@ class RoutinesService {
       .insert([statistics])
   }
 
-  saveWorkout (workout: IFeed) {
+  saveWorkout (workout: IFeedResponse) {
     return supabase
       .from('feed')
       .insert([workout])

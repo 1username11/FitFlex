@@ -134,7 +134,8 @@ const exerciseStatistic = computed(() => {
       avarage_weight: props.sets.reduce((acc, set) => acc + (set.weight as number), 0) / props.sets.length,
       max_weight: props.sets.reduce((acc, set) => Math.max(acc, set.weight as number), 0),
       one_reps_max: Math.round((100 * (maxSet.weight as number)) /
-      Math.abs(101.3 - (2.67123 * (maxSet.reps as number))))
+      Math.abs(101.3 - (2.67123 * (maxSet.reps as number)))),
+      volume: props.sets.reduce((acc, set) => acc + (set.weight as number) * (set.reps as number), 0)
     }
   } else if (setsColumns.reps) {
     return {

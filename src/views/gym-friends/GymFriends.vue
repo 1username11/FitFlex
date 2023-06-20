@@ -1,106 +1,121 @@
 <template>
   <div class="w-full h-fit bg-white rounded-lg border border-gray-300 p-5">
-    <div>
-      <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-600">Welcome to GymFriends</h1>
-        <el-select v-model="distance" class="m-2" placeholder="Select">
-          <el-option
-            v-for="distanceItem in distanceOptions"
-            :key="distanceItem.value"
-            :label="distanceItem.label"
-            :value="distanceItem.value"
-          />
-        </el-select>
+    <div v-if="isProfilePublic">
+      <div>
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl font-bold text-gray-600">Welcome to GymFriends</h1>
+          <el-select v-model="distance" class="m-2" placeholder="Select">
+            <el-option
+              v-for="distanceItem in distanceOptions"
+              :key="distanceItem.value"
+              :label="distanceItem.label"
+              :value="distanceItem.value"
+            />
+          </el-select>
+        </div>
+
+        <div class="text-xl text-gray-500 mb-6">
+          <p class="mt-4">
+            Connect with like-minded sports enthusiasts and find your perfect workout buddy on our web service.
+          </p>
+          <p class="mt-4">
+            Discover a community of friends who share your passion for fitness and enjoy engaging in various sports
+          </p>
+          <p class="mt-4">
+            activities together.
+          </p>
+          <p class="mt-4">
+            Join us today and embark on a journey to a healthier and more active lifestyle.
+          </p>
+        </div>
       </div>
+      <div class="rounded-lg overflow-hidden border border-gray-300">
+        <GoogleMap
+          api-key="AIzaSyCbiNabGYz8by7q1cnbWStUL0QYLDZORtk"
+          style="width: 100%; height: 500px" :center="center" :zoom="15"
+        >
+          <MarkerCluster>
+            <Marker
+              v-for="profile in filteredAthlete"
+              :key="profile.id"
+              :options="{ position: {
+                lat: profile.lat,
+                lng: profile.lng
+              }}"
+            >
+              <InfoWindow>
+                <el-card>
+                  <div class="flex items-center space-x-5">
+                    <div class="p-4 avatar-wrapper">
+                      <el-image
+                        class="w-[80px] h-[80px] rounded-full overflow-hidden"
+                        :src="profile.avatar_url"
+                      >
+                        <template #error>
+                          <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
+                        </template>
+                      </el-image>
+                    </div>
+                    <div class="border-l border-l-100 pl-4">
+                      <div>
+                        <p class="text-xl font-semibold">{{ profile.username }}</p>
+                        <p class="text-lg font-medium text-gray-400">{{ profile.additional_info }}</p>
+                      </div>
+
+                      <p class="text-lg font-semibold">Contacts</p>
+
+                      <p
+                        v-if="profile.e_mail"
+                        class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
+                        @click="copyContact(profile.e_mail)"
+                      >
+                        Email: {{ profile.e_mail }}
+                      </p>
+
+                      <p
+                        v-if="profile.telegram_link"
+                        class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
+                        @click="openLink(profile.telegram_link)"
+                      >
+                        Telegram: {{ profile.telegram_link }}
+                      </p>
+
+                      <p
+                        v-if="profile.phone_number"
+                        class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
+                        @click="copyContact(profile.phone_number)"
+                      >
+                        Phone: {{ profile.phone_number }}
+                      </p>
+
+                      <p
+                        v-if="profile.other_contact_info"
+                        class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
+                        @click="copyContact(profile.other_contact_info)"
+                      >
+                        Other contact information: {{ profile.other_contact_info }}
+                      </p>
+                    </div>
+                  </div>
+                </el-card>
+              </InfoWindow>
+            </Marker>
+          </MarkerCluster>
+        </GoogleMap>
+      </div>
+    </div>
+
+    <div v-else>
+      <h1 class="text-2xl font-bold text-gray-600">Welcome to GymFriends</h1>
 
       <div class="text-xl text-gray-500 mb-6">
         <p class="mt-4">
-          Connect with like-minded sports enthusiasts and find your perfect workout buddy on our web service.
+          To use GymFriends, you need to make your profile public, to do this, go to the profile settings by clicking
         </p>
         <p class="mt-4">
-          Discover a community of friends who share your passion for fitness and enjoy engaging in various sports
-        </p>
-        <p class="mt-4">
-          activities together.
-        </p>
-        <p class="mt-4">
-          Join us today and embark on a journey to a healthier and more active lifestyle.
+          on the upper right corner
         </p>
       </div>
-    </div>
-    <div class="rounded-lg overflow-hidden border border-gray-300">
-      <GoogleMap
-        api-key="AIzaSyCbiNabGYz8by7q1cnbWStUL0QYLDZORtk"
-        style="width: 100%; height: 500px" :center="center" :zoom="15"
-      >
-        <MarkerCluster>
-          <Marker
-            v-for="profile in filteredAthlete"
-            :key="profile.id"
-            :options="{ position: {
-              lat: profile.lat,
-              lng: profile.lng
-            }}"
-          >
-            <InfoWindow>
-              <el-card>
-                <div class="flex items-center space-x-5">
-                  <div class="p-4 avatar-wrapper">
-                    <el-image
-                      class="w-[80px] h-[80px] rounded-full overflow-hidden"
-                      :src="profile.avatar_url"
-                    >
-                      <template #error>
-                        <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
-                      </template>
-                    </el-image>
-                  </div>
-                  <div class="border-l border-l-100 pl-4">
-                    <div>
-                      <p class="text-xl font-semibold">{{ profile.username }}</p>
-                      <p class="text-lg font-medium text-gray-400">{{ profile.additional_info }}</p>
-                    </div>
-
-                    <p class="text-lg font-semibold">Contacts</p>
-
-                    <p
-                      v-if="profile.e_mail"
-                      class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                      @click="copyContact(profile.e_mail)"
-                    >
-                      Email: {{ profile.e_mail }}
-                    </p>
-
-                    <p
-                      v-if="profile.telegram_link"
-                      class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                      @click="openLink(profile.telegram_link)"
-                    >
-                      Telegram: {{ profile.telegram_link }}
-                    </p>
-
-                    <p
-                      v-if="profile.phone_number"
-                      class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                      @click="copyContact(profile.phone_number)"
-                    >
-                      Phone: {{ profile.phone_number }}
-                    </p>
-
-                    <p
-                      v-if="profile.other_contact_info"
-                      class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                      @click="copyContact(profile.other_contact_info)"
-                    >
-                      Other contact information: {{ profile.other_contact_info }}
-                    </p>
-                  </div>
-                </div>
-              </el-card>
-            </InfoWindow>
-          </Marker>
-        </MarkerCluster>
-      </GoogleMap>
     </div>
   </div>
 </template>
@@ -110,7 +125,16 @@ import { GoogleMap, Marker, MarkerCluster, InfoWindow } from 'vue3-google-map'
 
 const gymFriendsStore = useGymFriendsStore()
 const { getPublicProfiles } = gymFriendsStore
-const { profiles, myLocation, distance } = storeToRefs(gymFriendsStore)
+const { profiles, distance } = storeToRefs(gymFriendsStore)
+
+const { profile } = storeToRefs(useProfileStore())
+const myLocation = ref({
+  lat: profile.value?.data.lat,
+  lng: profile.value?.data.lng
+})
+console.log(profile)
+
+const isProfilePublic = computed(() => profile.value?.data.is_public)
 
 const distanceOptions = [
   {
@@ -205,8 +229,8 @@ const filteredAthlete = computed(() => {
 onMounted(async () => {
   await getPublicProfiles()
   center.value = {
-    lat: myLocation.value.lat,
-    lng: myLocation.value.lng
+    lat: myLocation.value.lat || 0,
+    lng: myLocation.value.lng || 0
   }
 })
 

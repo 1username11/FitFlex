@@ -2,15 +2,15 @@
   <div v-if="!isWorkoutFinished" v-loading="loading">
     <div class="flex justify-between bg-white p-4 rounded-lg mb-4 border border-gray-300">
       <div clas="flex flex-col">
-        <p class="text-xl font-semibold">Duration</p>
+        <p class="font-semibold">Duration</p>
         <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ formatTime }}</p>
       </div>
       <div clas="flex flex-col">
-        <p class="text-xl font-semibold">Total Volume</p>
+        <p class="font-semibold">Total Volume</p>
         <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ volume }}</p>
       </div>
       <div clas="flex flex-col">
-        <p class="text-xl font-semibold">Current Volume</p>
+        <p class="font-semibold">Current Volume</p>
         <p class="flex justify-center text-lg text-gray-400 font-semibold">{{ currentVolume }}</p>
       </div>
     </div>
@@ -21,7 +21,7 @@
           class="w-full lg:w-[300px] h-9 rounded-md bg-[#1D83EA] text-white cursor-pointer hover:bg-[#056DD7]"
           @click="startTimer"
         >
-          Start
+          {{ time === initialTime ? 'Start' : 'Resume' }}
         </button>
 
         <button
@@ -126,7 +126,6 @@ const volume = computed(() => {
 
 const currentVolume = ref(0)
 function setComplete (set: ISetRoutine) {
-  console.log('set complete', set)
   exercises.value.forEach((item) => {
     item.sets.forEach((setItem) => {
       if (setItem.id === set.id) {

@@ -1,11 +1,11 @@
 <template>
-  <div class="flex gap-4 justify-between">
+  <div class="flex lg:gap-4 justify-between">
     <div class="grow">
       <div class="flex justify-between mb-4">
         <p class="font-bold text-xl">Create routine</p>
 
         <ElButton
-          class="w-[200px]"
+          class="max-w-[200px]"
           type="primary"
           :disabled="!isValid"
           @click="saveHandler"
@@ -14,7 +14,7 @@
         </ElButton>
       </div>
 
-      <div class="bg-white p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
+      <div class="bg-white md:p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
         <div class="title-wrapper">
           <ElInput
             v-model="routine.title"

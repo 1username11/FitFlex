@@ -117,8 +117,7 @@ const {
   avarageWeight,
   maxWeight,
   oneRepsMax,
-  volume,
-  duration
+  volume
 } = storeToRefs(exerciseStore)
 const { getExercises, getMuscleGroups, getExerciseTypes, getEquipment } = exerciseStore
 
@@ -173,26 +172,7 @@ const formatedStatistics = computed(() => {
   ]
 })
 
-const timeOptions = ref([
-  {
-    label: 'Last week',
-    value: 'week'
-  },
-  {
-    label: 'Last month',
-    value: 'month'
-  },
-  {
-    label: 'Last year',
-    value: 'year'
-  },
-  {
-    label: 'All time',
-    value: 'all'
-  }
-])
 const videoError = ref(false)
-
 
 const handleError = () => {
   videoError.value = true
@@ -207,7 +187,6 @@ watch(action, async (value) => {
     modalVisible.value = true
     action.value = ''
   } else if (value === 'delete') {
-    console.log('delete', props.exercise.id)
     await deleteExercise(props.exercise.id).then(() => {
       action.value = ''
     })

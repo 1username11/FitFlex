@@ -12,21 +12,21 @@
       <p class="text-lg font-bold pb-2 pt-4">{{ exercise.title }}</p>
 
       <div class="flex space-x-2 mb-2">
-        <div class="border border-gray-300 bg-white rounded-lg w-fit pr-2">
+        <div class="border border-gray-300 bg-white rounded-lg w-fit pr-2 truncate">
           <IconSets />
           {{ exercise.sets.length }} {{ exercise.sets?.length > 1 ? 'sets' : 'set' }}
         </div>
 
         <div
           v-if="exercise.sets[0].reps"
-          class="border border-gray-300 bg-white rounded-lg w-fit pr-2"
+          class="border border-gray-300 bg-white rounded-lg w-fit pr-2 truncate"
         >
           <IconReps />
           {{ minReps === maxReps ? minReps : `${minReps} - ${maxReps}` }} reps
         </div>
         <div
           v-if="exercise.sets[0].weight"
-          class="border border-gray-300 bg-white rounded-lg w-fit pr-2"
+          class="hidden md:block border border-gray-300 bg-white rounded-lg w-fit pr-2 truncate"
         >
           <IconEquipment />
           {{ minWeight === maxWeight ? minWeight : `${minWeight} - ${maxWeight}` }} kg
@@ -34,7 +34,7 @@
 
         <div
           v-if="exercise.sets[0].duration"
-          class="border border-gray-300 bg-white rounded-lg w-fit pr-2"
+          class="border border-gray-300 bg-white rounded-lg w-fit pr-2 truncate"
         >
           <IconDuration />
           {{ minDuration === maxDuration ? minDuration : `${minDuration} - ${maxDuration}` }}

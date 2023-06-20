@@ -2,59 +2,98 @@
   <div>
     <el-input v-model="search" placeholder="Type to search" />
 
-    <el-table
-      v-loading="loading"
-      :data="filterTableData"
-      style="height: auto"
-    >
-      <el-table-column
-        fixed
-        label="Avatar URL"
-        prop="avatar_url"
-        min-width="100"
-        max-width="200"
-      >
-        <template #header>
-          Avatar URL
-        </template>
+    <el-table :data="filterTableData" style="width: 100%">
+      <el-table-column type="expand">
+        <template #default="props">
+          <div class="flex flex-col-reverse lg:flex-row lg:justify-between p-3">
+            <div class="flex space-x-4">
+              <div class="hidden home-avatar-wrapper sm:flex items-center">
+                <el-image
+                  :src="props.row.avatar_url"
+                  class="w-[100px] h-[100px] rounded-full overflow-hidden mr-4"
+                >
+                  <template #error>
+                    <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
+                  </template>
+                </el-image>
+              </div>
 
-        <template #default="scope">
-          <el-image :src="scope.row.avatar_url" />
-        </template>
-      </el-table-column>
+              <div>
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Username:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.username }}</p>
+                </div>
 
-      <el-table-column label="Username" prop="username" />
-      <el-table-column label="Full Name" prop="full_name" />
-      <el-table-column label="Role" prop="role" />
-      <el-table-column label="Bio" prop="bio" />
-      <el-table-column label="Is Banned" prop="is_banned" />
-      <el-table-column label="Telegram" prop="telegram_link" />
-      <el-table-column label="Email" prop="e_mail" />
-      <el-table-column label="Other contacts" prop="other_contact_info" />
-      <el-table-column label="Addition Info" prop="additionalInfo" />
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Full Name:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.full_name }}</p>
+                </div>
 
-      <el-table-column fixed="right" min-wight="200">
-        <template #default="scope">
-          <div class="flex flex-col space-y-3">
-            <el-button
-              :size="$elComponentSize.small"
-              @click="handleBan(scope.row)"
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Role:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.role }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Bio:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.bio || 'No Data' }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Is Banned:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.is_banned ? 'Banned' : 'Not yet' }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Telegram:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.telegram_link || 'No Data' }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Email:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.e_mail || 'No Data' }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Other Contact:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.other_contact_info || 'No Data' }}</p>
+                </div>
+
+                <div class="flex space-x-2">
+                  <p class="font-semibold text-gray-600">Additional Info:</p>
+                  <p class="underline font-medium text-gray-600">{{ props.row.additional_info || 'No Data' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex space-x-3 mb-3
+             lg:space-x-0 lg:mb-0 lg:flex-col lg:justify-center lg:items-end lg:space-y-3"
             >
-              Ban
-            </el-button>
+              <div class="button-wrapper">
+                <el-button
+                  :size="$elComponentSize.small"
+                  @click="handleBan(props.row)"
+                >
+                  Ban
+                </el-button>
+              </div>
 
-            <div class="button-wrapper">
-              <el-button
-                :size="$elComponentSize.small"
-                :type="$elComponentType.primary" class="ml-0"
-                @click="handleAdmin(scope.row)"
-              >
-                Make admin
-              </el-button>
+              <div class="button-wrapper">
+                <el-button
+                  :size="$elComponentSize.small"
+                  :type="$elComponentType.primary" class="ml-0"
+                  @click="handleAdmin(props.row)"
+                >
+                  Make admin
+                </el-button>
+              </div>
             </div>
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="ID" prop="id" />
+      <el-table-column label="Full Name" prop="full_name" />
     </el-table>
   </div>
 </template>
@@ -158,9 +197,15 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
-.button-wrapper{
-  .el-button--small{
-    width: 100%;
+.button-wrapper .el-button--small{
+  width: 120px !important;
+}
+.home-avatar-wrapper{
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
   }
 }
+
 </style>

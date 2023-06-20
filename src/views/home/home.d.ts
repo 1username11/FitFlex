@@ -15,5 +15,15 @@ interface IFeed {
   media_url: string
   duration: string
   feed_id: string
-  json_data: string | IJsonData[]
+  json_data: IJsonData[]
+}
+
+interface IFeedResponse {
+  created_at: number
+  user_id: string
+  description: string
+  media_url: string
+  duration: string
+  feed_id: string
+  json_data: string
 }

@@ -1,6 +1,5 @@
 export const useGymFriendsStore = defineStore('gymFriendsStore', () => {
   const profiles = ref<IProfile[]>([])
-  const myLocation = ref()
   const distance = ref(1000000)
 
   async function getPublicProfiles() {
@@ -8,14 +7,12 @@ export const useGymFriendsStore = defineStore('gymFriendsStore', () => {
     if (error) {
       throw new Error(error.message)
     }
-    myLocation.value = data.find((profile) => profile.id === localStorage.getItem('userId'))
-    profiles.value = data.filter((profile) => profile.id !== localStorage.getItem('userId'))
+    profiles.value = data.filter((profile) => profile.id !== localStorage.getItem('userId')) as IProfile[]
   }
 
   return {
     getPublicProfiles,
     profiles,
-    myLocation,
     distance
   }
 })

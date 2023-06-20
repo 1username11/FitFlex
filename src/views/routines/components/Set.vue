@@ -64,6 +64,7 @@ watchDebounced(setModel, () => {
     .el-input__wrapper {
       width: 80px;
       background-color: transparent;
+      box-shadow: none !important;
     }
     .el-input__inner {
       text-align: center;

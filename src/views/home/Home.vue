@@ -21,9 +21,11 @@
           </div>
 
           <div class="text-sm w-fit">
-            <p class="flex text-gray-400">Last workout duration</p>
+            <p class="flex text-gray-400">Last workout</p>
 
-            <p class="flex justify-center">{{ chartData.length > 1 ? chartData[chartData.length - 1][1] : 0 }}</p>
+            <p class="flex justify-center">
+              {{ chartData.length > 1 ? `${chartData[chartData.length - 1][1]} sec` : 0 }}
+            </p>
           </div>
         </div>
       </div>
@@ -36,7 +38,7 @@
         <div v-if="feeds.length" class="flex flex-col items-center lg:mr-4">
           <WorkoutLog
             v-for="feed in feeds"
-            :key="feed.id"
+            :key="feed.feed_id"
             :user="currentProfile"
             :feed="feed"
             :hashedEquipment="hashedEquipment"
@@ -86,7 +88,7 @@ const isAllFeedsLoaded = ref(false)
 const { userId } = storeToRefs(useGeneralStore())
 const { profile } = storeToRefs(useProfileStore())
 
-const feeds = ref<IFeed[]>([])
+const feeds = ref<IFeedResponse[]>([])
 
 const exerciseStore = useExercisesStore()
 const { hashedEquipment, hashedExerciseTypes } = storeToRefs(exerciseStore)
@@ -115,7 +117,7 @@ async function detectElementByIntersection (userId: string) {
             isAllFeedsLoaded.value = !isAllFeedsLoaded.value
           }
 
-          feeds.value = [...feeds.value, ...data] as IFeed[]
+          feeds.value = [...feeds.value, ...data] as IFeedResponse[]
         }
       })
     }, {})
@@ -142,7 +144,7 @@ function getShortWeekdayName (timestamp: number) {
 async function getInitialFeed (userId: string) {
   const { data, error } = await homeService.getFeeds(userId, 0, 1)
   if (error) throw Error(error.message)
-  feeds.value = data as IFeed[]
+  feeds.value = data as IFeedResponse[]
 }
 
 async function homePageInit () {

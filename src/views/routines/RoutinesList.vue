@@ -1,6 +1,6 @@
 <template>
-  <div class="lg:flex gap-5">
-    <div>
+  <div class="md:flex gap-5">
+    <div class="flex items-center justify-between w-full md:block md:w-fit">
       <p class="mb-5 text-xl font-bold">My Routines</p>
 
       <button
@@ -36,7 +36,7 @@
         </draggable>
       </template>
 
-      <p v-else class="text-xl mt-2.5">
+      <p v-else class="text-xl mt-2.5 font-semibold text-gray-600">
         You don't have any routines yet. Create new one!
       </p>
     </div>
@@ -86,7 +86,7 @@ async function duplicateWorkout (routine: IRoutine) {
       routine_id: duplicatedRoutine.id
     }))
 
-    const { error: insertRoutineError } = await routinesService.insertRoutine(duplicatedRoutine)
+    const { error: insertRoutineError } = await routinesService.insertRoutine(duplicatedRoutine as any)
     const { error: insertSetsError } = await routinesService.insertSets(routineSets)
 
     if (insertRoutineError || insertSetsError) {

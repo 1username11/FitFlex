@@ -63,6 +63,8 @@ class ExercisesService {
   }
 
   updateExercise(id: string, exercise: Partial<IExerciseExchange>) {
+    console.log(id)
+
     return supabase
       .from('exercises')
       .update(exercise)

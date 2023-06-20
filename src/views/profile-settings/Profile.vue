@@ -210,9 +210,6 @@ watch(() => profileModel.value.is_public, async (value) => {
     const { coords } = await getCurrentPosition()
     profileModel.value.lat = coords.latitude
     profileModel.value.lng = coords.longitude
-  } else {
-    profileModel.value.lat = -1
-    profileModel.value.lng = -1
   }
 })
 

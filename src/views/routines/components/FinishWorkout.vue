@@ -138,7 +138,7 @@ const finishWorkoutModel = computed(() => {
     created_at: date.value as number,
     duration: props.duration,
     json_data: JSON.stringify(props.completedWorkout)
-  }
+  } as IFeedResponse
 })
 
 function getCurrentDate () {
@@ -189,7 +189,6 @@ async function uploadExerciseMedia (file: File) {
   await getResizedImageForThumbnails(`${fileName}.jpeg`)
   const { data } = await exercisesService.getExerciseMedia(`${fileName}.${fileExt}`)
   exerciseMediaURL.value = data?.signedUrl as string
-  console.log(exerciseMediaURL.value)
 }
 
 async function handleFileUpload (event: Event) {
@@ -248,13 +247,8 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-
-  console.log('completedWorkout: ', props.completedWorkout)
 })
 
-watch(finishWorkoutModel, () => {
-  console.log(finishWorkoutModel.value)
-})
 </script>
 
 <style lang="scss">
