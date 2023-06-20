@@ -95,7 +95,6 @@ const props = defineProps<{
 const router = useRouter()
 const fileInputRef = ref()
 const loading = ref(false)
-const currentUser = ref()
 const avatar = ref()
 const username = ref()
 const description = ref('')
@@ -131,7 +130,7 @@ const { profile } = storeToRefs(useProfileStore())
 const finishWorkoutModel = computed(() => {
   return {
     feed_id: generateGUID(),
-    user_id: currentUser.value?.id,
+    user_id: profile.value?.data.id,
     description: description.value,
     media_url: exerciseMediaURL.value,
     created_at: date.value as number,
