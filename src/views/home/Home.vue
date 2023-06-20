@@ -12,7 +12,7 @@
 
       <div>
         <p class="text-xl font-bold mb-2">{{ currentProfile.full_name }}</p>
-        <p class="text-lg font-semibold mt-2"> {{ currentProfile.bio }}</p>
+        <p class="text-lg font-semibold mb-2"> {{ currentProfile.bio }}</p>
 
         <div class="flex space-x-5">
           <div class="text-sm w-fit">
