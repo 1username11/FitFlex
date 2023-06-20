@@ -153,7 +153,11 @@ function finishRoutine () {
       isWorkoutFinished.value = true
     })
       .catch((e: any) => {
-        console.log(e)
+        ElNotification({
+          title: 'Error',
+          message: e.message,
+          type: 'error'
+        })
       })
   } else {
     ElMessageBox.confirm(
@@ -168,7 +172,11 @@ function finishRoutine () {
       router.push({ name: 'routines' })
     })
       .catch((e: any) => {
-        console.log(e)
+        ElNotification({
+          title: 'Error',
+          message: e.message,
+          type: 'error'
+        })
       })
   }
 }
@@ -186,7 +194,11 @@ const confirmDiscard = () => {
     router.push({ name: 'routines' })
   })
     .catch((e: any) => {
-      console.log(e)
+      ElNotification({
+        title: 'Error',
+        message: e.message,
+        type: 'error'
+      })
     })
 }
 
@@ -232,7 +244,11 @@ onMounted(async () => {
     })
     bodyweight.value = localStorage.getItem('bodyweight') ? Number(localStorage.getItem('bodyweight')) : 1
   } catch (e) {
-    console.log(e)
+    ElNotification({
+      title: 'Error',
+      message: e.message,
+      type: 'error'
+    })
   } finally {
     loading.value = false
   }

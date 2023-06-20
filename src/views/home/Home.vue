@@ -12,22 +12,23 @@
 
       <div>
         <p class="text-xl font-bold mb-2">{{ currentProfile.full_name }}</p>
-        
+
         <div class="flex space-x-5">
           <div class="text-sm w-fit">
             <p class="flex text-gray-400">Workouts</p>
-            
+
             <p class="flex justify-center">{{ chartData.length - 1 }}</p>
           </div>
-          
+
           <div class="text-sm w-fit">
             <p class="flex text-gray-400">Last workout</p>
-            
+
             <p class="flex justify-center">
               {{ chartData.length > 1 ? `${chartData[chartData.length - 1][1]} sec` : 0 }}
             </p>
           </div>
         </div>
+        
         <p class="font-semibold mt-4 text-gray-400"> {{ currentProfile.bio }}</p>
       </div>
     </div>

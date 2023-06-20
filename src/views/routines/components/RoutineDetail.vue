@@ -77,7 +77,6 @@ const copyLink = () => {
     duration: 2000
   })
 }
-console.log(router.currentRoute.value.params.id.toString())
 
 onMounted(async () => {
   try {
@@ -127,8 +126,13 @@ onMounted(async () => {
 
       return result
     }, [] as IExerciseDetails[])
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    ElNotification({
+      title: 'Error',
+      message: error.message,
+      type: 'error',
+      duration: 2000
+    })
   } finally {
     loading.value = false
   }

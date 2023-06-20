@@ -216,7 +216,7 @@ const confirmDiscard = () => {
     router.push({ name: 'routines' })
   })
     .catch((e: any) => {
-      console.log(e)
+      ElNotification({ title: 'Error', message: e.message, type: 'error' })
     })
 }
 
@@ -240,7 +240,7 @@ onMounted(async () => {
     avatar.value = profile.value?.data.avatar_url
     username.value = profile.value?.data.username
   } catch (error) {
-    console.log(error)
+    ElNotification({ title: 'Error', message: error.message, type: 'error' })
   } finally {
     loading.value = false
   }
