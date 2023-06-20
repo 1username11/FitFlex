@@ -45,7 +45,7 @@
             :type="$elComponentType.primary"
             :disabled="!(loginModel.email || loginModel.password)"
           >
-            Sign Up
+            Sign In
           </el-button>
         </el-form-item>
       </el-form>
