@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isWorkoutFinished" v-loading="loading">
+  <div v-if="!isWorkoutFinished" v-loading="loading" class="pb-4">
     <div class="flex justify-between bg-white p-4 rounded-lg mb-4 border border-gray-300">
       <div clas="flex flex-col">
         <p class="font-semibold">Duration</p>

@@ -87,8 +87,6 @@
 </template>
 
 <script lang="ts" setup>
-import { supabase } from '@/supabase'
-
 const props = defineProps<{
   completedWorkout: any
   duration: any
@@ -128,6 +126,7 @@ const numberOfSets = computed(() => {
 })
 
 const { generateGUID } = useHelpers()
+const { profile } = storeToRefs(useProfileStore())
 
 const finishWorkoutModel = computed(() => {
   return {
@@ -239,9 +238,8 @@ const saveWorkout = async () => {
 onMounted(async () => {
   try {
     loading.value = true
-    currentUser.value = (await supabase.auth.getUser()).data.user
-    avatar.value = currentUser.value.user_metadata.avatar_url
-    username.value = currentUser.value.user_metadata.full_name
+    avatar.value = profile.value?.data.avatar_url
+    username.value = profile.value?.data.username
   } catch (error) {
     console.log(error)
   } finally {

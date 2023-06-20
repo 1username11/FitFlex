@@ -1,5 +1,5 @@
 interface ISetRoutine {
-  id: string
+  id?: string
   created_at?: string
   reps?: number | null
   rest_time?: number | null

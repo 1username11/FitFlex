@@ -50,10 +50,8 @@
 
 <script lang="ts" setup>
 import { routeNames } from '@/router/route-names'
-import { supabase } from '@/supabase'
 
 const loading = ref(false)
-const currentUser = ref()
 const avatar = ref()
 const username = ref()
 const routineDetailsWithExercises = ref()
@@ -61,6 +59,8 @@ const routineDetailsWithExercises = ref()
 const routinesStore = useRoutinesStore()
 const { routine, routineDetails } = storeToRefs(routinesStore)
 const { getRoutineDetails } = routinesStore
+
+const { profile } = storeToRefs(useProfileStore())
 
 const router = useRouter()
 function navigate (name: string) {
@@ -85,9 +85,8 @@ onMounted(async () => {
     const { data, error } = await routinesService.getRoutine(router.currentRoute.value.params.id.toString())
     if (error) throw new Error(error.message)
     routine.value = data[0] as IRoutine
-    currentUser.value = (await supabase.auth.getUser()).data.user
-    avatar.value = currentUser.value.user_metadata.avatar_url
-    username.value = currentUser.value.user_metadata.full_name
+    avatar.value = profile?.value?.data.avatar_url
+    username.value = profile?.value?.data.username
 
     await getRoutineDetails(router.currentRoute.value.params.id.toString())
     const exerciseIds = routineDetails.value.data.map((item: ISetRoutine) => item.exercise_id)
@@ -133,15 +132,5 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-
-  console.log('routineDetailsWithExercises', routineDetailsWithExercises.value)
-
-  console.log('routineDetails', routineDetails.value)
-
-  console.log(avatar.value)
-  console.log(username.value)
-
-  console.log(currentUser.value)
-  console.log('routine', routine.value)
 })
 </script>
