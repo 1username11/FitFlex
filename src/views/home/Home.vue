@@ -12,7 +12,6 @@
 
       <div>
         <p class="text-xl font-bold mb-2">{{ currentProfile.full_name }}</p>
-        <p class="text-lg font-semibold text-gray-400 mb-2"> {{ currentProfile.bio }}</p>
 
         <div class="flex space-x-5">
           <div class="text-sm w-fit">
@@ -28,6 +27,8 @@
               {{ chartData.length > 1 ? `${chartData[chartData.length - 1][1]} sec` : 0 }}
             </p>
           </div>
+
+        <p class="text-lg font-semibold mt-2"> {{ currentProfile.bio }}</p>
         </div>
       </div>
     </div>
