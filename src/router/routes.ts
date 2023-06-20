@@ -5,6 +5,7 @@ import { routeNames } from './route-names'
 import { authRoutes } from '@/views/auth/auth.routes'
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+
 import { homeViewRoutes } from '@/views/home/home.routes'
 import { routinesViewRoutes } from '@/views/routines/routines.routes'
 import { exercisesViewRoutes } from '@/views/exercises/exercises.routes'

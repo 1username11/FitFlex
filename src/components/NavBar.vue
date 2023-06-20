@@ -35,7 +35,7 @@
               :src="profile?.data.avatar_url || ''"
             >
               <template #error>
-                <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
+                <el-image :src="avatarPlaceholder" />
               </template>
             </el-image>
           </div>
@@ -48,18 +48,18 @@
                 @click="navigateTo(routeNames.profile)"
               >
                 <IconSettings />
-                <p>
-                  Settings
-                </p>
+                Settings
               </el-dropdown-item>
+
               <el-dropdown-item
                 class="flex items-center py-1.5 px-6
               hover:bg-gray-200 cursor-pointer text-gray-500 text-base"
-                @click="logout()"
+                @click="logout"
               >
                 <IconLogout />
-                <p>Logout</p>
+                Logout
               </el-dropdown-item>
+
               <el-dropdown-item
                 v-if="userRole === 'admin'"
                 class="flex items-center py-1.5 px-[19px]
@@ -67,7 +67,7 @@
                 @click="navigateTo(routeNames.adminPanel)"
               >
                 <IconAdmin />
-                <p>Adimn Panel</p>
+                Admin Panel
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -87,13 +87,23 @@ const routes = [
   { name: routeNames.gymFriends }
 ]
 
-const generalStore = useGeneralStore()
-const { logout, navigateTo } = generalStore
-
+const router = useRouter()
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 
 const userRole = ref('')
+
+const avatarPlaceholder = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'
+
+function navigateTo (routeName: string) {
+  router.push({ name: routeName })
+}
+
+async function logout () {
+  navigateTo(routeNames.login)
+  localStorage.clear()
+  await authService.signOut()
+}
 
 onMounted(async () => {
   try {

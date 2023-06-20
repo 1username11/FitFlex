@@ -73,8 +73,6 @@
 </template>
 
 <script lang="ts" setup>
-import FinishWorkout from '@/views/routines/components/FinishWorkout.vue'
-
 const exerciseStore = useExercisesStore()
 const { getExerciseTypes } = exerciseStore
 const { hashedExerciseTypes } = storeToRefs(exerciseStore)
@@ -92,12 +90,8 @@ const totalVolume = ref(0)
 const bodyweight = ref(0)
 
 const formatTime = computed(() => {
-  const hours = Math.floor(time.value / 3600)
-    .toString()
-    .padStart(2, '0')
-  const minutes = Math.floor((time.value % 3600) / 60)
-    .toString()
-    .padStart(2, '0')
+  const hours = Math.floor(time.value / 3600).toString().padStart(2, '0')
+  const minutes = Math.floor((time.value % 3600) / 60).toString().padStart(2, '0')
   const seconds = (time.value % 60).toString().padStart(2, '0')
   return `${hours}:${minutes}:${seconds}`
 })
@@ -140,19 +134,13 @@ function setComplete (set: ISetRoutine) {
       }
     })
   })
-  currentVolume.value += (set.reps || set.duration as number) * (set.weight || bodyweight.value)
-}
-
-function checkAllSetDone () {
-  return exercises.value.every((item) => {
-    return item.sets.every((setItem) => {
-      return setItem.set_done === true
-    })
-  })
+  currentVolume.value += (set.reps || set.duration || 0) * (set.weight || bodyweight.value)
 }
 
 function finishRoutine () {
-  if (checkAllSetDone()) {
+  const checkAllSetDone = exercises.value.every((item) => item.sets.every((setItem) => setItem.set_done))
+
+  if (checkAllSetDone) {
     ElMessageBox.confirm(
       'Congratulations! You have completed this workout.',
       'Success!',
@@ -202,6 +190,7 @@ const confirmDiscard = () => {
       console.log(e)
     })
 }
+
 window.addEventListener('beforeunload', (e) => {
   if (formatTime.value !== '00:00:00') {
     e.preventDefault()
@@ -210,15 +199,14 @@ window.addEventListener('beforeunload', (e) => {
 })
 
 async function exerciseCompleted (exercise: IExerciseStatistics) {
-  console.log('exercise completed', exercise)
   totalVolume.value += exercise.volume
-  return await routinesService.insertExerciseStatistics(exercise)
+  await routinesService.insertExerciseStatistics(exercise)
 }
 
 onMounted(async () => {
   try {
     loading.value = true
-    getExerciseTypes()
+    await getExerciseTypes()
     const { data, error } = await routinesService.getSetsByRoutineId(currentRoute as string)
     if (error) throw new Error(error.message)
 
@@ -227,7 +215,6 @@ onMounted(async () => {
     const exercisePromises = [...new Set(routineSets.map((set) => set.exercise_id))]
       .map((id: string) => routinesService.getExerciseById(id))
 
-    console.log('exercisePromises', exercisePromises)
     const exercisesFetched = (await Promise.all(exercisePromises)).map((item) => {
       if (item.error) throw new Error('Error fetching exercises')
       return item.data[0] as IExerciseExchange
@@ -253,7 +240,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('beforeunload', () => {})
+  window.removeEventListener('beforeunload', () => ({}))
 })
 </script>
 
@@ -266,7 +253,5 @@ onUnmounted(() => {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 99;
-}
-.el-message-box{
 }
 </style>

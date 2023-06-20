@@ -118,15 +118,13 @@ function setComplete (idx: number, set: ISetRoutine) {
     startRestCountdown(idx)
   }
 }
-console.log('setsColumns', setsColumns)
 
 const exerciseStatistic = computed(() => {
   if (setsColumns.weight) {
     const maxSet = props.sets.reduce((set, acc) => {
       (set.weight as number) > (acc.weight as number) ? acc = set : acc
       return acc
-    }
-    , {} as ISetRoutine)
+    }, {} as ISetRoutine)
 
     return {
       id: generateGUID(),

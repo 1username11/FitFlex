@@ -10,7 +10,7 @@
       >
         <IconNewRoutine />
 
-        <p>New Routine</p>
+        New Routine
       </button>
     </div>
 
@@ -19,20 +19,26 @@
         {{ routineList.length > 1 ? `My Routines(${routineList.length})` : 'My Routine' }}
       </p>
 
-      <draggable
-        v-model="routineList"
-        :animation="300"
-        item-key="id"
-        class="cursor-move"
-      >
-        <template #item="{ element: workout }">
-          <RoutinesItem
-            :routine="workout"
-            @duplicate="duplicateWorkout(workout)"
-            @delete="deleteWorkout(workout)"
-          />
-        </template>
-      </draggable>
+      <template v-if="routineList.length">
+        <draggable
+          v-model="routineList"
+          :animation="300"
+          item-key="id"
+          class="cursor-move"
+        >
+          <template #item="{ element: workout }">
+            <RoutinesItem
+              :routine="workout"
+              @duplicate="duplicateWorkout(workout)"
+              @delete="deleteWorkout(workout)"
+            />
+          </template>
+        </draggable>
+      </template>
+
+      <p v-else class="text-xl mt-2.5">
+        You don't have any routines yet. Create new one!
+      </p>
     </div>
   </div>
 </template>
