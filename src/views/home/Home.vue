@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex bg-white border border-gray-300 rounded-xl mb-4 p-5 home-avatar-wrapper">
+    <div class="flex items-center bg-white border border-gray-300 rounded-xl mb-4 p-5 home-avatar-wrapper">
       <el-image
         :src="currentProfile.avatar_url"
         class="w-[100px] h-[100px] rounded-full overflow-hidden mr-4"
@@ -12,23 +12,23 @@
 
       <div>
         <p class="text-xl font-bold mb-2">{{ currentProfile.full_name }}</p>
-        <p class="text-lg font-semibold mb-2"> {{ currentProfile.bio }}</p>
-
+        
         <div class="flex space-x-5">
           <div class="text-sm w-fit">
             <p class="flex text-gray-400">Workouts</p>
-
+            
             <p class="flex justify-center">{{ chartData.length - 1 }}</p>
           </div>
-
+          
           <div class="text-sm w-fit">
             <p class="flex text-gray-400">Last workout</p>
-
+            
             <p class="flex justify-center">
               {{ chartData.length > 1 ? `${chartData[chartData.length - 1][1]} sec` : 0 }}
             </p>
           </div>
         </div>
+        <p class="font-semibold mt-4 text-gray-400"> {{ currentProfile.bio }}</p>
       </div>
     </div>
 
