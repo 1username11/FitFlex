@@ -239,7 +239,7 @@ onMounted(async () => {
     loading.value = true
     avatar.value = profile.value?.data.avatar_url
     username.value = profile.value?.data.username
-  } catch (error) {
+  } catch (error: any) {
     ElNotification({ title: 'Error', message: error.message, type: 'error' })
   } finally {
     loading.value = false

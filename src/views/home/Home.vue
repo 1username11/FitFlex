@@ -28,7 +28,7 @@
             </p>
           </div>
         </div>
-        
+
         <p class="font-semibold mt-4 text-gray-400"> {{ currentProfile.bio }}</p>
       </div>
     </div>

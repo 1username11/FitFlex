@@ -243,7 +243,7 @@ onMounted(async () => {
       } as IExerciseRoutine
     })
     bodyweight.value = localStorage.getItem('bodyweight') ? Number(localStorage.getItem('bodyweight')) : 1
-  } catch (e) {
+  } catch (e: any) {
     ElNotification({
       title: 'Error',
       message: e.message,
