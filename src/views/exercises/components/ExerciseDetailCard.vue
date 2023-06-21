@@ -64,25 +64,26 @@
     <div class="flex justify-between mt-4">
       <p class="text-lg font-bold mb-4">Statistics</p>
 
-      <!-- <el-select v-model="duration">
-        <el-option
-          v-for="timeOption in timeOptions"
-          :key="timeOption"
-          :value="timeOption.value"
-        />
-      </el-select> -->
     </div>
 
-    <div
-      v-for="statisticsItem in formatedStatistics"
-      :key="statisticsItem.label"
-      class="max-w-[660px]"
-    >
-      <div v-if="statisticsItem.data.length > 1" class="flex flex-col mt-4">
-        <div class="border border-gray-300 rounded-lg overflow-hidden">
-          <Chart :chartData="statisticsItem.data" :label="statisticsItem.label" />
+    <div v-if="!isStatisticsEmpty">
+      <div
+        v-for="statisticsItem in formatedStatistics"
+        :key="statisticsItem.label"
+        class="max-w-[660px]"
+      >
+        <div v-if="statisticsItem.data.length > 1" class="flex flex-col mt-4">
+          <div class="border border-gray-300 rounded-lg overflow-hidden">
+            <Chart :chartData="statisticsItem.data" :label="statisticsItem.label" />
+          </div>
         </div>
       </div>
+    </div>
+    <div
+      v-else
+      class="flex justify-center items-center w-full h-[500px] text-gray-400 text-2xl font-semibold"
+    >
+      No Data
     </div>
   </div>
 
@@ -170,6 +171,10 @@ const formatedStatistics = computed(() => {
       data: volume.value as [string, number | string][]
     }
   ]
+})
+
+const isStatisticsEmpty = computed(() => {
+  return formatedStatistics.value.every((item) => item.data.length === 1)
 })
 
 const videoError = ref(false)
