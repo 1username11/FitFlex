@@ -57,9 +57,6 @@
       <el-form-item prop="additional_info" label="Additional information">
         <el-input v-model="profileModel.additional_info" label="Additional information" />
       </el-form-item>
-      <el-form-item prop="additional_info" label="Additional information">
-        <el-input v-model="profileModel.additional_info" label="Additional information" />
-      </el-form-item>
       <el-form-item prop="body_weight" label="Bodyweight">
         <el-input v-model="profileModel.body_weight" label="Bodyweight" />
       </el-form-item>
@@ -261,10 +258,6 @@ window.addEventListener('beforeunload', (e) => {
 
 onUnmounted(() => {
   window.removeEventListener('beforeunload', () => '')
-})
-
-onMounted(() => {
-  console.log('profileModel', profileModel.value)
 })
 </script>
 
