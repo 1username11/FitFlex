@@ -89,6 +89,8 @@ const loginModel = reactive({
   password: ''
 })
 
+const { userId } = storeToRefs(useGeneralStore())
+
 const loginRules = ref({
   email: [useRequiredRule(), useEmailRule()],
   password: [useRequiredRule(), useMinLenRule(6)]
@@ -97,13 +99,13 @@ const loginRules = ref({
 function submit () {
   loginRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
-      console.log('form is valid')
       try {
         const { email, password } = loginModel
         await authService.signInWithPassword({
           email,
           password
         }).then(() => {
+          userId.value = localStorage.getItem('userId') || ''
           router.push({ name: routeNames.home })
         })
       } catch (error) {

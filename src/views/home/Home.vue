@@ -176,9 +176,9 @@ async function getDataForChart () {
 onMounted(async () => {
   try {
     loading.value = true
-    feeds.value = []
     await homePageInit()
     await detectElementByIntersection(userId.value)
+
     await getDataForChart()
   } catch (err: any) {
     ElNotification({
@@ -191,9 +191,6 @@ onMounted(async () => {
   }
 })
 
-onUnmounted(() => {
-  feeds.value = []
-})
 </script>
 
 <style lang="scss">

@@ -32,7 +32,7 @@
           <div class="avatar-wrapper pr-1">
             <el-image
               class="w-[34px] h-[34px] rounded-full overflow-hidden cursor-pointer"
-              :src="profile?.data.avatar_url || ''"
+              :src="profile?.data?.avatar_url || ''"
             >
               <template #error>
                 <el-image :src="avatarPlaceholder" />
@@ -104,7 +104,12 @@ function navigateTo (routeName: string) {
 async function logout () {
   navigateTo(routeNames.login)
   localStorage.clear()
+  console.log('feeds', feeds.value)
+
   feeds.value = []
+
+  console.log('feeds', feeds.value)
+
   await authService.signOut()
 }
 
