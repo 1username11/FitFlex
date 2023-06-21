@@ -257,6 +257,29 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('beforeunload', () => ({}))
 })
+
+onBeforeRouteLeave(async (to, from, next) => {
+  if (formatTime.value !== '00:00:00' && !isWorkoutFinished.value) {
+    await ElMessageBox.confirm(
+      'Are you sure you want to discard this workout?',
+      'Warning',
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }
+    )
+      .then(() => {
+        next()
+      })
+      .catch(() => {
+        next(false)
+      })
+  } else {
+    next()
+  }
+})
+
 </script>
 
 <style lang="scss">

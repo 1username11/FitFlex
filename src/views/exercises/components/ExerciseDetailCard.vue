@@ -63,7 +63,6 @@
 
     <div class="flex justify-between mt-4">
       <p class="text-lg font-bold mb-4">Statistics</p>
-
     </div>
 
     <div v-if="!isStatisticsEmpty">
