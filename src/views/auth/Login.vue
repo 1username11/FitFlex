@@ -51,12 +51,12 @@
       </el-form>
 
       <div class="flex flex-col justify-center items-center space-y-3">
-        <router-link
+        <!-- <router-link
           :to="{name: $routeNames.forgotPassword}"
           class="bg-gray-50 border-none underline text-primary hover:bg-gray-50"
         >
           Forgot password?
-        </router-link>
+        </router-link> -->
 
         <div class="space-x-1">
           <span>
