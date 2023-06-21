@@ -90,7 +90,7 @@ const isAllFeedsLoaded = ref(false)
 const { userId } = storeToRefs(useGeneralStore())
 const { profile } = storeToRefs(useProfileStore())
 
-const feeds = ref<IFeedResponse[]>([])
+const { feeds } = storeToRefs(useHomeStore())
 
 const exerciseStore = useExercisesStore()
 const { hashedEquipment, hashedExerciseTypes } = storeToRefs(exerciseStore)
@@ -175,6 +175,7 @@ async function getDataForChart () {
 onMounted(async () => {
   try {
     loading.value = true
+    feeds.value = []
     await homePageInit()
     await detectElementByIntersection(userId.value)
     await getDataForChart()

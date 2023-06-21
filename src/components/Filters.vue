@@ -241,6 +241,9 @@ onBeforeMount(async () => {
 
 <style lang="scss">
 .select-wrapper {
+  .el-popper{
+    z-index: 10 !important;
+  }
   .el-select {
     .el-input__wrapper {
       background: white;
@@ -265,7 +268,7 @@ onBeforeMount(async () => {
     margin-right: -50%;
     transform: translate(-50%, -50%);
     max-height: 90vh;
-    z-index: 1000;
+    z-index: 2007;
 }
 .overlay {
   position: fixed;
@@ -274,7 +277,7 @@ onBeforeMount(async () => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 2006;
 }
 
 .drawer-sm {
@@ -295,5 +298,25 @@ onBeforeMount(async () => {
       @apply w-full h-full;
     }
   }
+}
+.el-scrollbar__bar {
+  display: none !important;
+  :first-child{
+    display: none !important;
+  }
+  .is-vertical{
+    display: none !important;
+  }
+}
+
+.el-scrollbar__thumb{
+  display: none !important;
+}
+
+.el-scrollbar__bar {
+  display: none !important;
+}
+.el-scrollbar__wrap{
+  overflow: auto !important;
 }
 </style>

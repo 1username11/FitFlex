@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 z-10 w-full bg-white border-b border-gray-300">
+  <div class="sticky top-0 nav-bar w-full bg-white border-b border-gray-300">
     <div class="flex justify-between mx-auto h-[60px] max-w-[1024px] px-2">
       <nav class="flex items-center">
         <Logo />
@@ -91,6 +91,8 @@ const router = useRouter()
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
 
+const { feeds } = storeToRefs(useHomeStore())
+
 const userRole = ref('')
 
 const avatarPlaceholder = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'
@@ -102,6 +104,7 @@ function navigateTo (routeName: string) {
 async function logout () {
   navigateTo(routeNames.login)
   localStorage.clear()
+  feeds.value = []
   await authService.signOut()
 }
 
@@ -132,5 +135,9 @@ onMounted(async () => {
       height: 100%;
     }
   }
+}
+
+.nav-bar {
+  z-index: 2005;
 }
 </style>

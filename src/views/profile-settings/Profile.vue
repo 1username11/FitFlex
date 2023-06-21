@@ -105,7 +105,6 @@ const profileRules = reactive({
     { pattern: /^\d{10}$/, message: 'Please enter a valid phone number', trigger: 'blur' }
   ],
   telegram_link: [
-    { required: true, message: 'Please your telegram link', trigger: 'blur' },
     { pattern: /^(https?:\/\/)?(www\.)?t.me\/[a-zA-Z0-9_]{5,32}\/?$/, message: 'Please enter a valid Telegram link', trigger: 'blur' }
   ],
   e_mail: [

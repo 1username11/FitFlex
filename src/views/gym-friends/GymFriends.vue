@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-fit bg-white rounded-lg border border-gray-300 p-5">
-    <div v-if="isProfilePublic">
+    <div v-if="isProfileValidForGymFriends">
       <div>
         <div class="flex justify-between items-center">
           <h1 class="text-2xl font-bold text-gray-600">Welcome to GymFriends</h1>
@@ -110,10 +110,10 @@
 
       <div class="text-xl text-gray-500 mb-6">
         <p class="mt-4">
-          To use GymFriends, you need to make your profile public, to do this, go to the profile settings by clicking
+          To use GymFriends, you need to make your profile public and specify your contacts, 
         </p>
         <p class="mt-4">
-          on the upper right corner
+          to do this, go to the profile settings by clicking on the upper right corner
         </p>
       </div>
     </div>
@@ -134,7 +134,11 @@ const myLocation = ref({
 })
 console.log(profile)
 
-const isProfilePublic = computed(() => profile.value?.data.is_public)
+const isProfileValidForGymFriends = computed(() => {
+  return profile.value?.data.is_public &&
+  (profile.value.data.telegram_link || profile.value.data.phone_number ||
+  profile.value.data.e_mail || profile.value.data.other_contact_info)
+})
 
 const distanceOptions = [
   {

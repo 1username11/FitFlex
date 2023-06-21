@@ -16,7 +16,7 @@ class ProfileService {
   }
 
   getPublicProfiles () {
-    return supabase.from('profiles').select('*').eq('is_public', true)
+    return supabase.from('profiles').select('*').eq('is_public', true).eq('is_banned', false)
   }
 }
 

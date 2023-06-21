@@ -192,6 +192,7 @@ declare global {
   const useGymFriendsStore: typeof import('../src/views/gym-friends/gym-friends.store')['useGymFriendsStore']
   const useHead: typeof import('@vueuse/head')['useHead']
   const useHelpers: typeof import('../src/composables/useHelpers')['useHelpers']
+  const useHomeStore: typeof import('../src/views/home/home.store')['useHomeStore']
   const useHttp: typeof import('../src/composables/http/index')['useHttp']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useIdle: typeof import('@vueuse/core')['useIdle']

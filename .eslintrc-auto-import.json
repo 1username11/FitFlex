@@ -195,6 +195,7 @@
     "useGymFriendsStore": true,
     "useHead": true,
     "useHelpers": true,
+    "useHomeStore": true,
     "useHttp": true,
     "useI18n": true,
     "useIdle": true,

@@ -28,7 +28,7 @@
       >
     </div>
 
-    <div class="border-b border-b-gray-300 py-6 w-full element-input-wrapper">
+    <div class="border-b border-b-gray-300 py-6 w-full create-exercise-element-input-wrapper">
       <el-input
         v-model="title"
         class="text-xl text-gray-400"
@@ -47,7 +47,7 @@
         Equipment
       </p>
 
-      <el-select-v2 v-model="equipment" :options="equipments" class="ml-2" />
+      <el-select-v2 v-model="equipment" :options="equipments" class="ml-2"/>
     </div>
 
     <div class="flex justify-between w-full py-4 border-b border-b-gray-300">
@@ -251,7 +251,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-.element-input-wrapper{
+.create-exercise-element-input-wrapper{
+  .el-input {
+    font-size: x-large;
+  }
   .el-input__wrapper {
     box-shadow: none !important;
     padding: 1px 0px 1px 0px !important;

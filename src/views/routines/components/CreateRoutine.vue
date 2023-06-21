@@ -15,7 +15,7 @@
       </div>
 
       <div class="bg-white md:p-4 rounded-lg border border-gray-200 flex flex-col min-h-[780px]">
-        <div class="title-wrapper">
+        <div class="create-routine-title-wrapper">
           <ElInput
             v-model="routine.title"
             class="text-3xl text-gray-400 w-full py-4 pr-4 border-b-2 border-b-200"
@@ -162,8 +162,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
-.title-wrapper {
+.create-routine-title-wrapper {
   .el-input {
+    font-size: x-large;
     .el-input__wrapper {
       box-shadow: none
     }

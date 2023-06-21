@@ -248,7 +248,7 @@ onMounted(async () => {
     margin-right: -50%;
     transform: translate(-50%, -50%);
     max-height: 90vh;
-    z-index: 1000;
+    z-index: 2007;
 }
 .overlay {
   position: fixed;
@@ -257,7 +257,7 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 2006;
 }
 .el-tabs__content{
   overflow: visible;

@@ -7,7 +7,10 @@ export const useGymFriendsStore = defineStore('gymFriendsStore', () => {
     if (error) {
       throw new Error(error.message)
     }
-    profiles.value = data.filter((profile) => profile.id !== localStorage.getItem('userId')) as IProfile[]
+    profiles.value = data.filter((profile) => profile.id !== localStorage.getItem('userId') &&
+      (profile.telegram_link || profile.phone_number || profile.e_mail || profile.other_contact_info)) as IProfile[]
+
+    console.log('profiles', profiles.value)
   }
 
   return {
