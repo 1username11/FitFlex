@@ -36,11 +36,11 @@
         >
           <MarkerCluster>
             <Marker
-              v-for="profile in filteredAthlete"
-              :key="profile.id"
+              v-for="item in filteredAthlete"
+              :key="item.id"
               :options="{ position: {
-                lat: profile.lat,
-                lng: profile.lng
+                lat: item.lat,
+                lng: item.lng
               }}"
             >
               <InfoWindow>
@@ -49,7 +49,7 @@
                     <div class="p-4 avatar-wrapper">
                       <el-image
                         class="w-[80px] h-[80px] rounded-full overflow-hidden"
-                        :src="profile.avatar_url"
+                        :src="item.avatar_url"
                       >
                         <template #error>
                           <el-image src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" />
@@ -58,42 +58,42 @@
                     </div>
                     <div class="border-l border-l-100 pl-4">
                       <div>
-                        <p class="text-xl font-semibold">{{ profile.username }}</p>
-                        <p class="text-lg font-medium text-gray-400">{{ profile.additional_info }}</p>
+                        <p class="text-xl font-semibold">{{ item.username }}</p>
+                        <p class="text-lg font-medium text-gray-400">{{ item.additional_info }}</p>
                       </div>
 
                       <p class="text-lg font-semibold">Contacts</p>
 
                       <p
-                        v-if="profile.e_mail"
+                        v-if="item.e_mail"
                         class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                        @click="copyContact(profile.e_mail)"
+                        @click="copyContact(item.e_mail)"
                       >
-                        Email: {{ profile.e_mail }}
+                        Email: {{ item.e_mail }}
                       </p>
 
                       <p
-                        v-if="profile.telegram_link"
+                        v-if="item.telegram_link"
                         class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                        @click="openLink(profile.telegram_link)"
+                        @click="openLink(item.telegram_link)"
                       >
-                        Telegram: {{ profile.telegram_link }}
+                        Telegram: {{ item.telegram_link }}
                       </p>
 
                       <p
-                        v-if="profile.phone_number"
+                        v-if="item.phone_number"
                         class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                        @click="copyContact(profile.phone_number)"
+                        @click="copyContact(item.phone_number)"
                       >
-                        Phone: {{ profile.phone_number }}
+                        Phone: {{ item.phone_number }}
                       </p>
 
                       <p
-                        v-if="profile.other_contact_info"
+                        v-if="item.other_contact_info"
                         class="flex space-x-1 font-medium text-base cursor-pointer hover:underline mt-2"
-                        @click="copyContact(profile.other_contact_info)"
+                        @click="copyContact(item.other_contact_info)"
                       >
-                        Other contact information: {{ profile.other_contact_info }}
+                        Other contact information: {{ item.other_contact_info }}
                       </p>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
 
       <div class="text-xl text-gray-500 mb-6">
         <p class="mt-4">
-          To use GymFriends, you need to make your profile public and specify your contacts, 
+          To use GymFriends, you need to make your profile public and specify your contacts,
         </p>
         <p class="mt-4">
           to do this, go to the profile settings by clicking on the upper right corner

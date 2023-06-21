@@ -59,7 +59,7 @@ const updatePasswordModel = reactive({
   confirmPassword: ''
 })
 
-const confirmPasswordValidator = (_, value: string, callback) => {
+const confirmPasswordValidator = (_: any, value: string, callback: any) => {
   if (value !== updatePasswordModel.newPassword) {
     callback(new Error('Password does not match'))
   } else {

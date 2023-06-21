@@ -87,8 +87,6 @@
 </template>
 
 <script lang="ts" setup>
-import { supabase } from '@/supabase'
-
 const props = defineProps<{
   completedWorkout: any
   duration: any
@@ -253,7 +251,14 @@ onMounted(async () => {
     loading.value = false
   }
 })
+window.addEventListener('beforeunload', (e) => {
+  e.preventDefault()
+  e.returnValue = ''
+})
 
+onUnmounted(() => {
+  window.removeEventListener('beforeunload', () => '')
+})
 </script>
 
 <style lang="scss">

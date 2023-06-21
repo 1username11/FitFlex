@@ -40,7 +40,7 @@
       <div class="rounded-lg overflow-hidden">
         <el-image :src="feed.media_url">
           <template #error>
-            <div class="none" />
+            <div class="hidden" />
           </template>
         </el-image>
       </div>
