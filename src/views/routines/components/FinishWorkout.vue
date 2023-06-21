@@ -192,12 +192,12 @@ async function uploadExerciseMedia (file: File) {
 
 async function handleFileUpload (event: Event) {
   try {
-    if (finishWorkoutModel.value.media_url) {
-      const deletedFileName = finishWorkoutModel.value.media_url?.split('/')[8].split('?')[0]
-      console.log(deletedFileName)
-      const { error: deleteError } = await supabase.storage.from('exercises').remove([deletedFileName])
-      if (deleteError) throw deleteError
-    }
+    // if (finishWorkoutModel.value.media_url) {
+    //   const deletedFileName = finishWorkoutModel.value.media_url?.split('/')[8].split('?')[0]
+    //   console.log(deletedFileName)
+    //   const { error: deleteError } = await supabase.storage.from('exercises').remove([deletedFileName])
+    //   if (deleteError) throw deleteError
+    // }
 
     files.value = (event.target as HTMLInputElement).files
     loading.value = true

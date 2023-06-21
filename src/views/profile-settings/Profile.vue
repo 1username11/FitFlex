@@ -126,7 +126,7 @@ const profileRules = reactive({
 })
 
 const profileModel = ref(Object.assign({}, profile.value?.data))
-const deletedFileName = profileModel.value.avatar_url?.split('/')[8].split('?')[0]
+// const deletedFileName = profileModel.value.avatar_url?.split('/')[8].split('?')[0]
 
 const openFileInput = () => {
   fileInput.value?.click()
@@ -135,11 +135,11 @@ const openFileInput = () => {
 const handleFileUpload = async (event: Event) => {
   try {
     loading.value = true
-    const { error: deleteError } = await supabase
-      .storage
-      .from('avatars')
-      .remove([`storage/v1/object/public/avatars/${deletedFileName}`])
-    if (deleteError) throw deleteError
+    // const { error: deleteError } = await supabase
+    //   .storage
+    //   .from('avatars')
+    //   .remove([`storage/v1/object/public/avatars/${deletedFileName}`])
+    // if (deleteError) throw deleteError
 
     const files = (event.target as HTMLInputElement).files
     if (!files.length) {
