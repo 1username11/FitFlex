@@ -120,6 +120,7 @@ async function detectElementByIntersection (userId: string) {
           }
 
           feeds.value = [...feeds.value, ...data] as IFeedResponse[]
+          console.log('data', data)
         }
       })
     }, {})
@@ -188,6 +189,10 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+})
+
+onUnmounted(() => {
+  feeds.value = []
 })
 </script>
 
