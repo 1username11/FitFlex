@@ -126,15 +126,22 @@ const profileRules = reactive({
 })
 
 const profileModel = ref(Object.assign({}, profile.value?.data))
+const deletedFileName = profileModel.value.avatar_url?.split('/')[8].split('?')[0]
 
 const openFileInput = () => {
   fileInput.value?.click()
 }
 
 const handleFileUpload = async (event: Event) => {
-  const files = (event.target as HTMLInputElement).files
   try {
     loading.value = true
+    const { error: deleteError } = await supabase
+      .storage
+      .from('avatars')
+      .remove([`storage/v1/object/public/avatars/${deletedFileName}`])
+    if (deleteError) throw deleteError
+
+    const files = (event.target as HTMLInputElement).files
     if (!files.length) {
       throw new Error('You must select an image to upload.')
     }
@@ -254,6 +261,10 @@ window.addEventListener('beforeunload', (e) => {
 
 onUnmounted(() => {
   window.removeEventListener('beforeunload', () => '')
+})
+
+onMounted(() => {
+  console.log('profileModel', profileModel.value)
 })
 </script>
 

@@ -26,7 +26,7 @@
     <div v-loading="loading" class="bg-white p-4 border border-gray-300 rounded-lg w-full mr-3">
       <p class="pb-4 text-3xl font-bold">{{ routine?.title }}</p>
 
-      <div class="flex space-x-3">
+      <div class="flex space-x-3 avatar-wrapper">
         <el-image class="w-10 h-10 rounded-full overflow-hidden" :src="avatar">
           <template #error>
             <ImagePlaseholder />
@@ -138,3 +138,13 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style lang="scss">
+.avatar-wrapper {
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
+  }
+}
+</style>

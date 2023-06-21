@@ -18,7 +18,7 @@
     </div>
 
     <div v-loading="loading" class="bg-white p-4 border border-gray-300 rounded-lg grow">
-      <div class="flex space-x-3">
+      <div class="flex space-x-3 avatar-wrapper">
         <el-image class="w-10 h-10 rounded-full overflow-hidden" :src="avatar">
           <template #error>
             <ImagePlaseholder />
@@ -87,6 +87,8 @@
 </template>
 
 <script lang="ts" setup>
+import { supabase } from '@/supabase'
+
 const props = defineProps<{
   completedWorkout: any
   duration: any
@@ -175,7 +177,6 @@ function handleErrors (err: unknown) {
 async function uploadExerciseMedia (file: File) {
   const fileExt = file.name.split('.').pop() as string
   const fileName = `exercise-media-${Date.now()}`
-
   try {
     await Promise.all([
       exercisesService.uploadExercisesMedia(`${fileName}.${fileExt}`, file, 'exercises'),
@@ -190,8 +191,15 @@ async function uploadExerciseMedia (file: File) {
 }
 
 async function handleFileUpload (event: Event) {
-  files.value = (event.target as HTMLInputElement).files
   try {
+    if (finishWorkoutModel.value.media_url) {
+      const deletedFileName = finishWorkoutModel.value.media_url?.split('/')[8].split('?')[0]
+      console.log(deletedFileName)
+      const { error: deleteError } = await supabase.storage.from('exercises').remove([deletedFileName])
+      if (deleteError) throw deleteError
+    }
+
+    files.value = (event.target as HTMLInputElement).files
     loading.value = true
     if (!files.value || !files.value.length) return
 
@@ -253,6 +261,14 @@ onMounted(async () => {
   .el-input__wrapper {
     box-shadow: none !important;
     padding: 1px 0px 1px 0px !important;
+  }
+}
+
+.avatar-wrapper{
+  .el-image {
+    &__inner {
+      @apply w-full h-full;
+    }
   }
 }
 </style>
